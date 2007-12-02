@@ -58,11 +58,7 @@ void parse_args(int argc,char **argv)
 				printf("interactive selected....to be developped");
 				break;
 			case 't':
-				s1=(char*)malloc(MAX_STR*sizeof(char));
-				printf("file type selected\n");
-				s1=file_probe();
-				printf("%s\n",s1);
-				free(s1);
+				printf("file_probe()\n");
 				break;
 			case 'x':
 				printf("input script file:%s\n",optarg);
@@ -119,5 +115,7 @@ int main(int argc,char **argv)
 	if(optind<argc) {strncpy(filename,argv[optind],MAX_FILENAME);}
 	else{strncpy(filename,"<NULL>",MAX_FILENAME);}
 	if(ilook_debug) look_debug();
+	
+	close(fd);
 	return 0;
 }

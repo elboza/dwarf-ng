@@ -9,6 +9,9 @@
 
 void look_debug()
 {
-	printf("this is look debug:%s\n",filename);
-	exit(1);
+	int a;
+	a=0xf;
+	printf("look_debug function !!!!!!!!!!!!!!!!!!!!!!!!\n");
+	file_probe();
+	printf("%d %d\n",file_type,a);
 }
