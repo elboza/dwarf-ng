@@ -74,6 +74,7 @@ void parse_args(int argc,char **argv)
 				if((strcmp(optarg,"elf"))==0) forced=FT_ELF;
 				if((strcmp(optarg,"mach-o"))==0) forced=FT_MACHO;
 				if((strcmp(optarg,"mz"))==0) forced=FT_MZ;
+				file_type=forced;
 				break;
 			case 'r':
 				
