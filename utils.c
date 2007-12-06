@@ -13,6 +13,9 @@
 #include"macho.h"
 #include"elf.h"
 #include"utils.h"
+#include"lang.h"
+
+extern FILE *yyin;
 
 void file_open(char *s)
 {
@@ -67,4 +70,19 @@ char* rl_gets ()
     add_history (line_read);
 
   return (line_read);
+}
+void execute(char *s)
+{
+	int pipedesc[2],r,len;
+	FILE  *fp;
+	len=strlen(s);
+	r=pipe(pipedesc);
+	if(r!=0){die("pipe error\n");}
+	r=write(pipedesc[1],s,len);
+	if(r!=len){die("pipe write error");}
+	close(pipedesc[1]);
+	fp=fdopen(pipedesc[0],"r");
+	yyin=fp;
+	yyparse();
+	fclose(fp);
 }

@@ -34,10 +34,10 @@ void get_defaults_arg()
 	ilook_debug=0;
 	forced=FT_NULL;
 	file_type=FT_NULL;
+	cmd=(char*)malloc(1024);
 }
 void parse_args(int argc,char **argv)
 {
-	char xx1[255];
 	char *s1;
 	int c;
 	while (1)
@@ -89,8 +89,8 @@ void parse_args(int argc,char **argv)
 				ilook_debug=1;
 				break;
 			case 'c':
-				strcpy(xx1,optarg);
-				printf("to execute:%s ....to develop..\n",xx1);
+				printf("to execute:%s ....testing..\n",optarg);
+				strncpy(cmd,optarg,1024);
 				break;
 			case 'h':
 			case '?':
@@ -116,7 +116,9 @@ int main(int argc,char **argv)
 	if(optind<argc) {strncpy(filename,argv[optind],MAX_FILENAME);}
 	else{strncpy(filename,"<NULL>",MAX_FILENAME);}
 	if(ilook_debug) look_debug();
+	execute(cmd);
 	
-	close(fd);
+	printf("fine prog.\n");
+	free(cmd);
 	return 0;
 }
