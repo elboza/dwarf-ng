@@ -120,5 +120,6 @@ int main(int argc,char **argv)
 	
 	printf("fine prog.\n");
 	free(cmd);
+	close(fd);
 	return 0;
 }

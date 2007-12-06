@@ -4,7 +4,7 @@ int ilook_debug; /* if set perform the debug function only*/
 char filename[MAX_FILENAME],*cmd;
 int forced;  /*if set force a file to be treat as a given kind reguardless of what really kind is*/
 int file_type;
-//int fd;
+int fd;
 void *faddr;
 
 //file types
