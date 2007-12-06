@@ -10,8 +10,8 @@ utils.o: utils.h utils.c
 lang2.o: lang.l lang.y lang.h lang2.c
 	bison -y -d lang.y
 	flex lang.l
-	gcc -c y.tab.c lex.yy.c
-	gcc -c lang2.c
+	gcc -c y.tab.c lex.yy.c -ggdb
+	gcc -c lang2.c -ggdb
 
 clean:
 	rm dwarf *.o y.tab.*

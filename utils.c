@@ -30,6 +30,14 @@ void file_open(char *s)
 	faddr=(char*)mmap(NULL,(size_t)len,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fd,(off_t)0);
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
+void file_close()
+{
+	if(fd)
+	{
+		//munmap(faddr);
+		close(fd);
+	}
+}
 void file_probe()
 {
 	struct mach_header *mac;

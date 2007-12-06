@@ -35,6 +35,7 @@ void get_defaults_arg()
 	forced=FT_NULL;
 	file_type=FT_NULL;
 	cmd=(char*)malloc(1024);
+	fd=0;
 }
 void parse_args(int argc,char **argv)
 {
@@ -120,6 +121,6 @@ int main(int argc,char **argv)
 	
 	printf("fine prog.\n");
 	free(cmd);
-	close(fd);
+	file_close();
 	return 0;
 }
