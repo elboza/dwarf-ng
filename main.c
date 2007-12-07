@@ -59,7 +59,8 @@ void parse_args(int argc,char **argv)
 				printf("interactive selected....to be developped");
 				break;
 			case 't':
-				printf("file_probe()\n");
+				printf("type\n");
+				strncpy(cmd,"type;",1024);
 				break;
 			case 'x':
 				printf("input script file:%s\n",optarg);

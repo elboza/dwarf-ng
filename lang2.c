@@ -33,6 +33,10 @@ int ex(nodeType *p) {
         	printf("Ok.Quitting... bye.\n");
         	return 0;
         	break;
+        case TYPE:
+        	file_probe();
+        	return 0;
+        	break;
         }
     }
     return 0;

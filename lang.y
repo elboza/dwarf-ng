@@ -18,13 +18,16 @@ int sym[26];                    /* symbol table */
 
 %union {
     int iValue;                 /* integer value */
-    char sIndex;                /* symbol table index */
+    char *sVar;                /* symbol table variable */
+    char sWord;					/* internal variable */
     nodeType *nPtr;             /* node pointer */
 };
 
 %token <iValue> INTEGER
-%token <sIndex> VARIABLE
-%token WHILE IF PRINT QUIT
+%token <sVar>   VARIABLE
+%token <sWord>  WORD
+%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL
+%token ALIAS SHIFT MOVE REALLOC HELP
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -55,7 +58,20 @@ stmt:
         | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
         | '{' stmt_list '}'              { $$ = $2; }
-	| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
+		| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
+		| SAVE							{$$=opr(QUIT,2,NULL,NULL);}
+        | LOAD							{$$=opr(QUIT,2,NULL,NULL);}
+        | INFO							{$$=opr(QUIT,2,NULL,NULL);}
+        | TYPE							{$$=opr(QUIT,2,NULL,NULL);}
+        | FORCE							{$$=opr(QUIT,2,NULL,NULL);}
+        | SIZEOF						{$$=opr(QUIT,2,NULL,NULL);}
+        | CALL							{$$=opr(QUIT,2,NULL,NULL);}
+        | LOCAL							{$$=opr(QUIT,2,NULL,NULL);}
+        | ALIAS							{$$=opr(QUIT,2,NULL,NULL);}
+        | SHIFT							{$$=opr(QUIT,2,NULL,NULL);}
+        | MOVE							{$$=opr(QUIT,2,NULL,NULL);}
+        | REALLOC						{$$=opr(QUIT,2,NULL,NULL);}
+        | HELP							{$$=opr(QUIT,2,NULL,NULL);}
         ;
 
 stmt_list:
@@ -66,6 +82,7 @@ stmt_list:
 expr:
           INTEGER               { $$ = con($1); }
         | VARIABLE              { $$ = id($1); }
+        | WORD					{ $$ =id($1); }
         | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
         | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
         | expr '-' expr         { $$ = opr('-', 2, $1, $3); }

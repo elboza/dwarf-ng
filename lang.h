@@ -30,3 +30,4 @@ typedef struct nodeTypeTag {
 } nodeType;
 
 extern int sym[26];
+unsigned int lang_mx;
