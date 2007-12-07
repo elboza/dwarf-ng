@@ -55,7 +55,7 @@ stmt:
         | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
         | '{' stmt_list '}'              { $$ = $2; }
-        | QUIT							{$$= opr(QUIT,2,NULL,NULL);}
+	| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
         ;
 
 stmt_list:

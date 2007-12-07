@@ -28,9 +28,9 @@ void yyerror(char *);
 "while"         return WHILE;
 "if"            return IF;
 "else"          return ELSE;
-["print" "p"]        return PRINT;
+"print"       return PRINT;
 "quit"			return QUIT;
-
+"pp"		return PRINT;
 
 [ \t\n]+        ;       /* ignore whitespace */
 

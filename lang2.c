@@ -3,7 +3,7 @@
 #include "y.tab.h"
 
 int ex(nodeType *p) {
-    if (!p) return 0;
+	if (!p) return 0;
     switch(p->type) {
     case typeCon:       return p->con.value;
     case typeId:        return sym[p->id.i];

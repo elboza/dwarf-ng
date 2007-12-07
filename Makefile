@@ -14,6 +14,6 @@ lang2.o: lang.l lang.y lang.h lang2.c
 	gcc -c lang2.c -ggdb
 
 clean:
-	rm dwarf *.o y.tab.*
+	rm dwarf y.tab.* *.o
 
 
