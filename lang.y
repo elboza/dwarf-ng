@@ -6,20 +6,21 @@
 
 /* prototypes */
 nodeType *opr(int oper, int nops, ...);
-nodeType *id(int i);
+nodeType *id_var(char *s);
+nodeType *id_word(char *s);
 nodeType *con(int value);
 void freeNode(nodeType *p);
 int ex(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
-int sym[26];                    /* symbol table */
+//int sym[26];                    /* symbol table */
 %}
 
 %union {
     int iValue;                 /* integer value */
     char *sVar;                /* symbol table variable */
-    char sWord;					/* internal variable */
+    char *sWord;					/* internal variable */
     nodeType *nPtr;             /* node pointer */
 };
 
@@ -53,7 +54,8 @@ stmt:
           ';'                            { $$ = opr(';', 2, NULL, NULL); }
         | expr ';'                       { $$ = $1; }
         | PRINT expr ';'                 { $$ = opr(PRINT, 1, $2); }
-        | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id($1), $3); }
+        | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id_var($1), $3); }
+        | WORD '=' expr ';' 	         { $$ = opr('=', 2, id_word($1), $3); }
         | WHILE '(' expr ')' stmt        { $$ = opr(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
@@ -81,8 +83,8 @@ stmt_list:
 
 expr:
           INTEGER               { $$ = con($1); }
-        | VARIABLE              { $$ = id($1); }
-        | WORD					{ $$ =id($1); }
+        | VARIABLE              { $$ = id_var($1); }
+        | WORD					{ $$ =id_word($1); }
         | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
         | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
         | expr '-' expr         { $$ = opr('-', 2, $1, $3); }
@@ -117,7 +119,7 @@ nodeType *con(int value) {
     return p;
 }
 
-nodeType *id(int i) {
+nodeType *id_var(char *s) {
     nodeType *p;
     size_t nodeSize;
 
@@ -127,8 +129,24 @@ nodeType *id(int i) {
         yyerror("out of memory");
 
     /* copy information */
-    p->type = typeId;
-    p->id.i = i;
+    p->type = typeVar;
+    p->id.s = s;
+
+    return p;
+}
+
+nodeType *id_word(char *s) {
+    nodeType *p;
+    size_t nodeSize;
+
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(idNodeType);
+    if ((p = malloc(nodeSize)) == NULL)
+        yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeWord;
+    p->id.s = s;
 
     return p;
 }

@@ -58,7 +58,9 @@ void yyerror(char *);
 
 [a-zA-Z_]+       { 
                 	//yylval.inVar = *yytext - 'a';
-                	printf("Word %s\n",yytext);
+                	//printf("Word %s\n",yytext);
+                	yylval.sWord=strdup(yytext);
+					printf("internal word=%s %s\n",yytext,yylval);
                 	return WORD;
             	}
 

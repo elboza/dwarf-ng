@@ -1,4 +1,4 @@
-typedef enum { typeCon, typeId, typeOpr } nodeEnum;
+typedef enum { typeCon, typeVar, typeWord, typeOpr } nodeEnum;
 
 /* constants */
 typedef struct {
@@ -7,7 +7,7 @@ typedef struct {
 
 /* identifiers */
 typedef struct {
-    int i;                      /* subscript to sym array */
+    char *s;                      /* subscript to sym array */
 } idNodeType;
 
 /* operators */
@@ -29,5 +29,5 @@ typedef struct nodeTypeTag {
     };
 } nodeType;
 
-extern int sym[26];
+//extern int sym[26];
 unsigned int lang_mx;
