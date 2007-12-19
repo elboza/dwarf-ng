@@ -27,6 +27,7 @@ void yyerror(char *s);
 %token <iValue> INTEGER
 %token <sVar>   VARIABLE
 %token <sWord>  WORD
+%token <sWord>	FILENAME
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL
 %token ALIAS SHIFT MOVE REALLOC HELP
 %nonassoc IFX
@@ -62,7 +63,10 @@ stmt:
         | '{' stmt_list '}'              { $$ = $2; }
 	| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
 	| SAVE							{$$=opr(QUIT,2,NULL,NULL);}
-        | LOAD							{$$=opr(QUIT,2,NULL,NULL);}
+        | LOAD FILENAME						{$$=opr(LOAD,1,$2);}
+        | LOAD '(' FILENAME ')'					{$$=opr(LOAD,1,$3);}
+        | LOAD WORD						{$$=opr(LOAD,1,$2);}
+        | LOAD '(' WORD ')'					{$$=opr(LOAD,1,$3);}
         | INFO							{$$=opr(QUIT,2,NULL,NULL);}
         | TYPE							{$$=opr(QUIT,2,NULL,NULL);}
         | FORCE							{$$=opr(QUIT,2,NULL,NULL);}
@@ -85,6 +89,7 @@ expr:
           INTEGER               { $$ = con($1); }
         | VARIABLE              { $$ = id_var($1); }
         | WORD					{ $$ =id_word($1); }
+        | FILENAME					{ $$ =id_word($1); }
         | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
         | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
         | expr '-' expr         { $$ = opr('-', 2, $1, $3); }

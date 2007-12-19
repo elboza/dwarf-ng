@@ -5,3 +5,6 @@ char* rl_gets(char *prompt);
 void execute(char *s);
 void file_close(void);
 void shell(void);
+void load_headers(void);
+void load_macho_hd(void);
+void load_elf_hd(void);

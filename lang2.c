@@ -50,8 +50,16 @@ int ex(nodeType *p) {
         	break;
         case TYPE:
         	file_probe();
+        	load_headers();
         	return 0;
         	break;
+        case LOAD:
+        	printf("closing file\n");
+        	file_close();
+        	printf("file closed\n");
+        	printf("opening file %s\n",p->opr.op[0]->id.s);
+        	file_open(p->opr.op[0]->id.s);
+        	return 0;
         }
     }
     return 0;

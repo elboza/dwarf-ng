@@ -43,6 +43,7 @@ void yyerror(char *);
 "write"			return SAVE;
 "load"			return LOAD;
 "read"			return LOAD;
+"open"			return LOAD;
 "info"			return INFO;
 "type"			return TYPE;
 "force"			return FORCE;
@@ -60,8 +61,13 @@ void yyerror(char *);
                 	//yylval.inVar = *yytext - 'a';
                 	//printf("Word %s\n",yytext);
                 	yylval.sWord=strdup(yytext);
-					printf("internal word=%s %s\n",yytext,yylval);
+			printf("internal word=%s %s\n",yytext,yylval);
                 	return WORD;
+            	}
+[a-zA-Z_./]+	{
+			yylval.sWord=strdup(yytext);
+			printf("file type is=%s %s\n",yytext,yylval);
+                	return FILENAME;
             	}
 
 [ \t\n]+        ;       /* ignore whitespace */

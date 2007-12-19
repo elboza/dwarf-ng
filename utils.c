@@ -60,6 +60,31 @@ void file_probe()
 	//probe if it is a PE
 	//probe if it is a MZ
 }
+void load_headers()
+{
+	switch(file_type)
+	{
+	case FT_MACHO:
+		load_macho_hd();
+		break;
+	case FT_ELF:
+		load_elf_hd();
+		break;
+	default:
+		
+		break;
+	}
+}
+void load_macho_hd()
+{
+	printf("file type: mach-o\n");
+	
+}
+void load_elf_hd()
+{
+	printf("file type: elf\n");
+	
+}
 void die(char *s)
 {
 	printf("%s\n",s);
