@@ -20,7 +20,7 @@ void yyerror(char *);
 			
 \$[a-zA-Z_]+	{
 					yylval.sVar=strdup(yytext);
-					printf("var=%s %s\n",yytext,yylval);
+					//printf("var=%s %s\n",yytext,yylval);
 					return VARIABLE;
 				}
 

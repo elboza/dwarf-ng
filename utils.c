@@ -41,6 +41,7 @@ void file_close()
 void file_probe()
 {
 	struct mach_header *mac;
+	Elf32_Ehdr *elf;
 	file_open(filename);
 	//probe if is mach-o
 	mac=(struct mach_header*)faddr;
@@ -50,6 +51,12 @@ void file_probe()
 		return;
 	}
 	//probe if it is an ELF
+	elf=(Elf32_Ehdr*)faddr;
+	if((strncmp(ELFMAG,elf->e_ident,4))==0)
+	{
+		file_type=FT_ELF;
+		return;
+	}
 	//probe if it is a PE
 	//probe if it is a MZ
 }
@@ -58,7 +65,7 @@ void die(char *s)
 	printf("%s\n",s);
 	exit(1);
 }
-char* rl_gets ()
+char* rl_gets (char *prompt)
 {
 	static char *line_read = (char *)NULL;
   /* If the buffer has already been allocated,
@@ -70,7 +77,7 @@ char* rl_gets ()
     }
 
   /* Get a line from the user. */
-  line_read = readline ("dwarf>");
+  line_read = readline (prompt);
 
   /* If the line has any text in it,
      save it on the history. */
@@ -93,4 +100,14 @@ void execute(char *s)
 	yyin=fp;
 	yyparse();
 	fclose(fp);
+}
+void shell()
+{
+	char *cmd;
+	while(forced!=QUITTING)
+	{
+		cmd=rl_gets("dwarf>");
+		execute(cmd);
+	}
+	
 }

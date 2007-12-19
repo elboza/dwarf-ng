@@ -14,3 +14,5 @@ void *faddr;
 #define FT_MZ		2
 #define FT_MACHO	3
 #define FT_PE		4
+
+#define QUITTING	123

@@ -1,15 +1,16 @@
 #include <stdio.h>
+#include"main.h"
 #include "lang.h"
 #include "y.tab.h"
+#include"vars.h"
 
 int ex(nodeType *p) {
 	if (!p) return 0;
     switch(p->type) {
     case typeCon:       return p->con.value;
     case typeVar:
-    	printf("var is %s\n",p->id.s);
-    	//return sym[p->id.i];
-    	return 0;
+    	//printf("var is %s\n",p->id.s);
+    	return get_var(p->id.s);;
     	break;
     case typeWord:
     	printf("word is %s\n",p->id.s);
@@ -26,7 +27,11 @@ int ex(nodeType *p) {
                         return 0;
         case PRINT:     printf("%d\n", ex(p->opr.op[0])); return 0;
         case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
-        case '=':       ; //return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
+        case '=':
+               	set_var(p->opr.op[0]->id.s,ex(p->opr.op[1]));
+               	//return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
+               	return 0;
+               	break;
         case UMINUS:    return -ex(p->opr.op[0]);
         case '+':       return ex(p->opr.op[0]) + ex(p->opr.op[1]);
         case '-':       return ex(p->opr.op[0]) - ex(p->opr.op[1]);
@@ -39,7 +44,8 @@ int ex(nodeType *p) {
         case NE:        return ex(p->opr.op[0]) != ex(p->opr.op[1]);
         case EQ:        return ex(p->opr.op[0]) == ex(p->opr.op[1]);
         case QUIT:
-        	printf("Ok.Quitting... bye.\n");
+        	//printf("Ok.Quitting... bye.\n");
+        	forced=QUITTING;
         	return 0;
         	break;
         case TYPE:

@@ -5,6 +5,7 @@
 #include<string.h>
 #include<errno.h>
 #include"main.h"
+#include"vars.h"
 #include"look_debug.h"
 
 void usage()
@@ -36,6 +37,8 @@ void get_defaults_arg()
 	file_type=FT_NULL;
 	cmd=(char*)malloc(1024);
 	fd=0;
+	gv_first=NULL;
+	gv_last=NULL;
 }
 void parse_args(int argc,char **argv)
 {
@@ -56,7 +59,9 @@ void parse_args(int argc,char **argv)
 		switch(c)
 		{
 			case 'i':
-				printf("interactive selected....to be developped");
+				printf("entering shell-interactive mode....testing...\n");
+				shell();
+				strncpy(cmd,"quit;",1024);
 				break;
 			case 't':
 				printf("type\n");
@@ -120,7 +125,7 @@ int main(int argc,char **argv)
 	if(ilook_debug) look_debug();
 	execute(cmd);
 	
-	printf("fine prog.\n");
+	printf("Bye.\n");
 	free(cmd);
 	file_close();
 	return 0;
