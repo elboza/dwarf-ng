@@ -38,7 +38,7 @@ void yyerror(char *s);
 %left '*' '/'
 %nonassoc UMINUS
 
-%type <nPtr> stmt expr stmt_list
+%type <nPtr> stmt expr stmt_list filename
 
 %%
 
@@ -63,12 +63,10 @@ stmt:
         | '{' stmt_list '}'              { $$ = $2; }
 	| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
 	| SAVE							{$$=opr(QUIT,2,NULL,NULL);}
-        | LOAD FILENAME						{$$=opr(LOAD,1,$2);}
-        | LOAD '(' FILENAME ')'					{$$=opr(LOAD,1,$3);}
-        | LOAD WORD						{$$=opr(LOAD,1,$2);}
-        | LOAD '(' WORD ')'					{$$=opr(LOAD,1,$3);}
+        | LOAD filename						{$$=opr(LOAD,1,$2);}
+        | LOAD '(' filename ')'					{$$=opr(LOAD,1,$3);}
         | INFO							{$$=opr(QUIT,2,NULL,NULL);}
-        | TYPE							{$$=opr(QUIT,2,NULL,NULL);}
+        | TYPE							{$$=opr(TYPE,2,NULL,NULL);}
         | FORCE							{$$=opr(QUIT,2,NULL,NULL);}
         | SIZEOF						{$$=opr(QUIT,2,NULL,NULL);}
         | CALL							{$$=opr(QUIT,2,NULL,NULL);}
@@ -104,6 +102,10 @@ expr:
         | '(' expr ')'          { $$ = $2; }
         ;
 
+filename:
+		  FILENAME				{$$=id_word($1);}
+		| WORD					{$$=id_word($1);}
+		;
 %%
 
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)

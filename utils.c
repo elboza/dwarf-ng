@@ -42,7 +42,7 @@ void file_probe()
 {
 	struct mach_header *mac;
 	Elf32_Ehdr *elf;
-	file_open(filename);
+	//file_open(filename);
 	//probe if is mach-o
 	mac=(struct mach_header*)faddr;
 	if((mac->magic==MH_MAGIC)||(mac->magic==MH_CIGAM))
@@ -77,13 +77,13 @@ void load_headers()
 }
 void load_macho_hd()
 {
-	printf("file type: mach-o\n");
 	
+	printf("mach-o\n");
 }
 void load_elf_hd()
 {
-	printf("file type: elf\n");
 	
+	printf("elf\n");
 }
 void die(char *s)
 {
