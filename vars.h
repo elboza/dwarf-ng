@@ -1,4 +1,5 @@
 enum {TYPE_NULL,TYPE_STRING,TYPE_VAL};
+enum {S_MAIN,S_PH,S_SH,S_LC};
 struct _gv
 {
 	char *name;

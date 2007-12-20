@@ -55,9 +55,71 @@ int get_normal_var(char *name)
 	}
 	return 0;
 }
-void add_s_var(char *name,int val)
+void add_s_var(int s_type,char *name,int type,int val)
 {
-	
+	struct _s_var *newvar;
+	newvar=(struct _s_var*)malloc(sizeof(struct _s_var));
+	if(newvar==NULL) die("error allocating space for inVar");
+	newvar->name=strdup(name);
+	if(newvar->name==NULL) die("error allocating space for inVar name");
+	newvar->prev=NULL;
+	newvar->next=NULL;
+	newvar->type=type;
+	switch(type)
+	{
+		case TYPE_VAL:
+			newvar->val=val;
+			break;
+		case TYPE_STRING:
+			
+			break;
+		default:
+			break;
+	}
+	switch(s_type)
+	{
+		case S_MAIN:
+			if(s_first==NULL)
+			{
+				s_first=newvar;
+			}
+			else
+			{
+				newvar->prev=s_last;
+				s_last->next=newvar;
+			}
+			s_last=newvar;
+			break;
+		case S_PH:
+			break;
+		case S_SH:
+			break;
+		case S_LC:
+			break;
+		default:
+			break;
+	}
+}
+void set_s_var(int s_type,char *name,int type,int val)
+{
+
+}
+int get_s_var(int s_type,char *name)
+{
+	switch(s_type)
+	{
+		case S_MAIN:
+			
+			break;
+		case S_PH:
+			break;
+		case S_SH:
+			break;
+		case S_LC:
+			break;
+		default:
+			break;
+	}
 }
 void set_var(char *name,int val)
 {

@@ -14,6 +14,7 @@
 #include"elf.h"
 #include"utils.h"
 #include"lang.h"
+#include"vars.h"
 
 extern FILE *yyin;
 
@@ -77,7 +78,15 @@ void load_headers()
 }
 void load_macho_hd()
 {
-	
+	struct mach_header *mac;
+	mac=(struct mach_header*)faddr;
+	add_s_var(S_MAIN,"magic",TYPE_VAL,mac->magic);
+	add_s_var(S_MAIN,"cputype",TYPE_VAL,mac->cputype);
+	add_s_var(S_MAIN,"cpusubtype",TYPE_VAL,mac->cpusubtype);
+	add_s_var(S_MAIN,"filetype",TYPE_VAL,mac->filetype);
+	add_s_var(S_MAIN,"ncmds",TYPE_VAL,mac->ncmds);
+	add_s_var(S_MAIN,"sizeofcmds",TYPE_VAL,mac->sizeofcmds);
+	add_s_var(S_MAIN,"flags",TYPE_VAL,mac->flags);
 	printf("mach-o\n");
 }
 void load_elf_hd()
