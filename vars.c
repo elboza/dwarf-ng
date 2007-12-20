@@ -55,6 +55,10 @@ int get_normal_var(char *name)
 	}
 	return 0;
 }
+void add_s_var(char *name,int val)
+{
+	
+}
 void set_var(char *name,int val)
 {
 	if(name[0]=='$') set_normal_var(name,val);

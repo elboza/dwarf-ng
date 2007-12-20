@@ -57,14 +57,14 @@ void yyerror(char *);
 "realloc"		return REALLOC;
 "help"			return HELP;
 
-[a-zA-Z_]+       { 
+[a-zA-Z_\->\(\)\[\]0-9]+       { 
                 	//yylval.inVar = *yytext - 'a';
                 	//printf("Word %s\n",yytext);
                 	yylval.sWord=strdup(yytext);
 			printf("internal word=%s %s\n",yytext,yylval);
                 	return WORD;
             	}
-[a-zA-Z_./]+	{
+[0-9a-zA-Z_./]+	{
 			yylval.sWord=strdup(yytext);
 			printf("file type is=%s %s\n",yytext,yylval);
                 	return FILENAME;
