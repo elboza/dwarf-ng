@@ -29,7 +29,7 @@ void yyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL
-%token ALIAS SHIFT MOVE REALLOC HELP
+%token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -76,6 +76,10 @@ stmt:
         | MOVE							{$$=opr(QUIT,2,NULL,NULL);}
         | REALLOC						{$$=opr(QUIT,2,NULL,NULL);}
         | HELP							{$$=opr(QUIT,2,NULL,NULL);}
+        | INSERT						{$$=opr(QUIT,2,NULL,NULL);}
+        | POS							{$$=opr(QUIT,2,NULL,NULLL);}
+        | CREATH						{$$=opr(QUIT,2,NULL,NULL);}
+        | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
         ;
 
 stmt_list:

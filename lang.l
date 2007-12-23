@@ -56,6 +56,10 @@ void yyerror(char *);
 "move"			return MOVE;
 "realloc"		return REALLOC;
 "help"			return HELP;
+"insert"		return INSERT;
+"pos"			return POS;
+"createh"		return CREATEH;
+"show"			return SHOW;
 
 [a-zA-Z_\->\(\)\[\]0-9]+       { 
                 	//yylval.inVar = *yytext - 'a';
