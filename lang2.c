@@ -17,6 +17,10 @@ int ex(nodeType *p) {
     	//return sym[p->id.i];
     	return 0;
     	break;
+    case typeString:
+    	printf("string is %s\n",p->id.s);
+    	return p->id.s;
+    	break;
     case typeOpr:
         switch(p->opr.oper) {
         case WHILE:     while(ex(p->opr.op[0])) ex(p->opr.op[1]); return 0;

@@ -24,7 +24,7 @@ void yyerror(char *);
 					return VARIABLE;
 				}
 
-[-()<>=+*/;{}.!] {
+[-()<>=+*/;{}.!"] {
                 return *yytext;
              }
 
@@ -65,12 +65,12 @@ void yyerror(char *);
                 	//yylval.inVar = *yytext - 'a';
                 	//printf("Word %s\n",yytext);
                 	yylval.sWord=strdup(yytext);
-			printf("internal word=%s %s\n",yytext,yylval);
+			//printf("internal word=%s %s\n",yytext,yylval);
                 	return WORD;
             	}
 [0-9a-zA-Z_./]+	{
 			yylval.sWord=strdup(yytext);
-			printf("file type is=%s %s\n",yytext,yylval);
+			//printf("file type is=%s %s\n",yytext,yylval);
                 	return FILENAME;
             	}
 

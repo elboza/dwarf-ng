@@ -8,6 +8,7 @@
 nodeType *opr(int oper, int nops, ...);
 nodeType *id_var(char *s);
 nodeType *id_word(char *s);
+nodeType *id_string(char *s);
 nodeType *con(int value);
 void freeNode(nodeType *p);
 int ex(nodeType *p);
@@ -77,8 +78,8 @@ stmt:
         | REALLOC						{$$=opr(QUIT,2,NULL,NULL);}
         | HELP							{$$=opr(QUIT,2,NULL,NULL);}
         | INSERT						{$$=opr(QUIT,2,NULL,NULL);}
-        | POS							{$$=opr(QUIT,2,NULL,NULLL);}
-        | CREATH						{$$=opr(QUIT,2,NULL,NULL);}
+        | POS							{$$=opr(QUIT,2,NULL,NULL);}
+        | CREATEH						{$$=opr(QUIT,2,NULL,NULL);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
         ;
 
@@ -104,6 +105,7 @@ expr:
         | expr NE expr          { $$ = opr(NE, 2, $1, $3); }
         | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
         | '(' expr ')'          { $$ = $2; }
+        | '"' WORD '"'			{$$=id_string($2);}
         ;
 
 filename:
@@ -161,7 +163,21 @@ nodeType *id_word(char *s) {
 
     return p;
 }
+nodeType *id_string(char *s) {
+    nodeType *p;
+    size_t nodeSize;
 
+    /* allocate node */
+    nodeSize = SIZEOF_NODETYPE + sizeof(idNodeType);
+    if ((p = malloc(nodeSize)) == NULL)
+        yyerror("out of memory");
+
+    /* copy information */
+    p->type = typeString;
+    p->id.s = s;
+
+    return p;
+}
 nodeType *opr(int oper, int nops, ...) {
     va_list ap;
     nodeType *p;
