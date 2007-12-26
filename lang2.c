@@ -4,8 +4,8 @@
 #include "y.tab.h"
 #include"vars.h"
 
-int ex(nodeType *p) {
-	if (!p) return 0;
+void* ex(nodeType *p) {
+	if (!p) return NULL;
     switch(p->type) {
     case typeCon:       return p->con.value;
     case typeVar:
