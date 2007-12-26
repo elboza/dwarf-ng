@@ -11,7 +11,7 @@ nodeType *id_word(char *s);
 nodeType *id_string(char *s);
 nodeType *con(int value);
 void freeNode(nodeType *p);
-void* ex(nodeType *p);
+struct _val* ex(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
