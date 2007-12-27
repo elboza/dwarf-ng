@@ -14,15 +14,18 @@
 void add_var(char *name,int type,void *val)
 {
 	struct _gv *newvar;
+	int *x;
+	x=val;
 	newvar=(struct _gv*)malloc(sizeof(struct _gv));
 	if(newvar==NULL) die("error allocating space for a new variable");
 	newvar->prev=NULL;
 	newvar->next=NULL;
+	newvar->v.type=type;
 	newvar->v.name=strdup(name);
 	if(newvar->v.name==NULL) die("error allocating space for a new variable name");
 	if(newvar->v.type==TYPE_VAL)
 	{
-		newvar->v.val=(int)val;
+		newvar->v.val=*x;
 	}
 	if(newvar->v.type==TYPE_STRING)
 	{
@@ -42,33 +45,36 @@ void add_var(char *name,int type,void *val)
 }
 void set_normal_var(char *name,int type,void *val)
 {
+	int *x;
+	x=val;
 	for(gv_ptr=gv_first;gv_ptr;gv_ptr=gv_ptr->next)
 	{
 		if((strcmp(name,gv_ptr->v.name))==0)
 		{
-			gv_ptr->v.type=type;
-			if(gv_ptr->v.type==TYPE_VAL)
+			
+			if(type==TYPE_VAL)
 			{
-				gv_ptr->v.val=(int)val;
+				gv_ptr->v.val=*x;
 			}
-			if(gv_ptr->v.type==TYPE_STRING)
+			if(type==TYPE_STRING)
 			{
-				if(gv_ptr->v.s) free (gv_ptr->v.s);
+				if(gv_ptr->v.type==TYPE_STRING) if(gv_ptr->v.s) free (gv_ptr->v.s);
 				gv_ptr->v.s=strdup((char*)val);
 				if(gv_ptr->v.s==NULL){die("error allocating space for setting var str");}
 			}
+			gv_ptr->v.type=type;
 			return;
 		}
 	}
 	add_var(name,type,val);
 }
-struct _gv* get_normal_var(char *name)
+struct _var* get_normal_var(char *name)
 {
 	for(gv_ptr=gv_first;gv_ptr;gv_ptr=gv_ptr->next)
 	{
 		if((strcmp(name,gv_ptr->v.name))==0)
 		{
-			return gv_ptr;
+			return &gv_ptr->v;
 		}
 	}
 	return 0;
@@ -122,7 +128,7 @@ void set_s_var(int s_type,char *name,int type,int val)
 {
 
 }
-struct _gv* get_s_var(int s_type,char *name)
+struct _var* get_s_var(int s_type,char *name)
 {
 	switch(s_type)
 	{
@@ -143,7 +149,7 @@ void set_var(char *name,int type,void *val)
 {
 	if(name[0]=='$') set_normal_var(name,type,val);
 }
-struct _gv* get_var(char *name)
+struct _var* get_var(char *name)
 {
 	if(name[0]=='$') return (get_normal_var(name));
 }

@@ -11,7 +11,7 @@ nodeType *id_word(char *s);
 nodeType *id_string(char *s);
 nodeType *con(int value);
 void freeNode(nodeType *p);
-struct _val* ex(nodeType *p);
+struct _var* ex(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
@@ -55,7 +55,6 @@ function:
 stmt:
           ';'                            { $$ = opr(';', 2, NULL, NULL); }
         | expr ';'                       { $$ = $1; }
-        | PRINT '/' WORD expr ';'				{$$=opr(PRINT,2,$2,$3);}
         | PRINT expr ';'                 { $$ = opr(PRINT, 2,NULL, $2); }
         | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id_var($1), $3); }
         | WORD '=' expr ';' 	         { $$ = opr('=', 2, id_word($1), $3); }

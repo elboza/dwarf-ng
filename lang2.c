@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
 #include"main.h"
 #include "lang.h"
 #include "y.tab.h"
@@ -11,38 +14,69 @@
         		v[2]=(struct _var*)malloc(sizeof(struct _var));\
         		if(v[2]==NULL) {die("error allocating space for var");}\
         		v[2]->type=TYPE_VAL;\
-        		v[2]->name=NULL;\
-        		v[2]->val=v[0]->val == v[1]->val;\
-        		return v[2];
+        		v[2]->name=NULL;
 
-struct _val* ex(nodeType *p) {
-	struct _val *v[3];
+struct _var* ex(nodeType *p) {
+	struct _var *v[3];
 	char *name,*s;
 	int type,val,i;
 	if (!p) return NULL;
+	for(i=0;i<3;i++) v[i]=NULL;
     switch(p->type) {
-    case typeCon:       return p->con.value;
+    case typeCon:       
+    		v[0]=(struct _var*)malloc(sizeof(struct _var));
+    		if(v[0]==NULL) die("error creating malloc space");
+    		v[0]->name=NULL;
+    		v[0]->type=TYPE_VAL;
+    		v[0]->val=p->con.value;;
+    		return v[0];
+    		//return p->con.value;
     case typeVar:
     	//printf("var is %s\n",p->id.s);
-    	return get_var(p->id.s);;
-    	break;
+    	//v[0]=(struct _var*)malloc(sizeof(struct _var));
+    	//if(v[0]==NULL) die("error creating malloc space");
+    	//v[0]->name=NULL;
+    	//v[0]->type=TYPE_STRING;
+    	//v[0]->s=strdup(p->id.s);
+    	//if(v[0]->s==NULL) die("error creating malloc space");
+    	//return v[0];
+    	v[0]=get_var(p->id.s);;
+    	return v[0];
     case typeWord:
     	printf("word is %s\n",p->id.s);
+    	v[0]=(struct _var*)malloc(sizeof(struct _var));
+    	if(v[0]==NULL) die("error creating malloc space");
+    	v[0]->name=NULL;
+    	v[0]->type=TYPE_STRING;
+    	v[0]->s=strdup(p->id.s);
+    	if(v[0]->s==NULL) die("error creating malloc space");
+    	return v[0];
     	//return sym[p->id.i];
     	return 0;
     	break;
     case typeString:
     	printf("string is %s\n",p->id.s);
-    	return p->id.s;
-    	break;
+    	v[0]=(struct _var*)malloc(sizeof(struct _var));
+    	if(v[0]==NULL) die("error creating malloc space");
+    	v[0]->name=NULL;
+    	v[0]->type=TYPE_STRING;
+    	v[0]->s=strdup(p->id.s);
+    	if(v[0]->s==NULL) die("error creating malloc space");
+    	return v[0];
     case typeOpr:
         switch(p->opr.oper) {
-        case WHILE:     while(ex(p->opr.op[0])) ex(p->opr.op[1]); return 0;
-        case IF:        if (ex(p->opr.op[0]))
-                            ex(p->opr.op[1]);
+        case WHILE:     
+        		v[0]=ex(p->opr.op[0]);
+        		if(v[0]->val!=TYPE_VAL) printf("warning..testing not a number\n");
+        		while(v[0]->val) v[1]=ex(p->opr.op[1]); break;
+        case IF:        
+        		v[0]=ex(p->opr.op[0]);
+        		if(v[0]->type!=TYPE_VAL) printf("warning...testing not a number\n");
+        		if (v[0]->val)
+                            v[1]=ex(p->opr.op[1]);
                         else if (p->opr.nops > 2)
-                            ex(p->opr.op[2]);
-                        return 0;
+                            v[2]=ex(p->opr.op[2]);
+                        break;
         case PRINT:     
         		v[0]=ex(p->opr.op[1]);
         		if(p->opr.op[0]==NULL)
@@ -58,8 +92,8 @@ struct _val* ex(nodeType *p) {
         		break;
         case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
         case '=':
-        	v[0]=ex(p->por.op[1]);
-        	if(v[0]->type==TYPE_VAL) set_var(p->opr.op[0]->id.s,TYPE_VAL,v[0]->val);
+        	v[0]=ex(p->opr.op[1]);
+        	if(v[0]->type==TYPE_VAL) set_var(p->opr.op[0]->id.s,TYPE_VAL,&v[0]->val);
         	if(v[0]->type==TYPE_STRING) set_var(p->opr.op[0]->id.s,TYPE_STRING,v[0]->s);
                	//set_var(p->opr.op[0]->id.s,.........);
                	//return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
@@ -86,7 +120,7 @@ struct _val* ex(nodeType *p) {
         		return v[2];
         		//return ex(p->opr.op[0]) - ex(p->opr.op[1]);
         case '*':       
-        		ATIRH
+        		ARITH
         		v[2]->val=v[0]->val * v[1]->val;
         		return v[2];
         		//return ex(p->opr.op[0]) * ex(p->opr.op[1]);
@@ -97,74 +131,32 @@ struct _val* ex(nodeType *p) {
         		return v[2];
         		//return ex(p->opr.op[0]) / ex(p->opr.op[1]);
         case '<':       
-        		v[0]=ex(p->opr.op[0]);
-        		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[1]=ex(p->opr.op[1]);
-        		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[2]=(struct _var*)malloc(sizeof(struct _var));
-        		if(v[2]==NULL) {die("error allocating space for var");}
-        		v[2]->type=TYPE_VAL;
-        		v[2]->name=NULL;
+        		ARITH
         		v[2]->val=v[0]->val < v[1]->val;
         		return v[2];
         		//return ex(p->opr.op[0]) < ex(p->opr.op[1]);
         case '>':       
-        		v[0]=ex(p->opr.op[0]);
-        		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[1]=ex(p->opr.op[1]);
-        		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[2]=(struct _var*)malloc(sizeof(struct _var));
-        		if(v[2]==NULL) {die("error allocating space for var");}
-        		v[2]->type=TYPE_VAL;
-        		v[2]->name=NULL;
+        		ARITH
         		v[2]->val=v[0]->val > v[1]->val;
         		return v[2];
         		//return ex(p->opr.op[0]) > ex(p->opr.op[1]);
         case GE:        
-        		v[0]=ex(p->opr.op[0]);
-        		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[1]=ex(p->opr.op[1]);
-        		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[2]=(struct _var*)malloc(sizeof(struct _var));
-        		if(v[2]==NULL) {die("error allocating space for var");}
-        		v[2]->type=TYPE_VAL;
-        		v[2]->name=NULL;
+        		ARITH
         		v[2]->val=v[0]->val >= v[1]->val;
         		return v[2];
         		//return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
         case LE:        
-        		v[0]=ex(p->opr.op[0]);
-        		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[1]=ex(p->opr.op[1]);
-        		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[2]=(struct _var*)malloc(sizeof(struct _var));
-        		if(v[2]==NULL) {die("error allocating space for var");}
-        		v[2]->type=TYPE_VAL;
-        		v[2]->name=NULL;
+        		ARITH
         		v[2]->val=v[0]->val <= v[1]->val;
         		return v[2];
         		//return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
         case NE:        
-        		v[0]=ex(p->opr.op[0]);
-        		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[1]=ex(p->opr.op[1]);
-        		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[2]=(struct _var*)malloc(sizeof(struct _var));
-        		if(v[2]==NULL) {die("error allocating space for var");}
-        		v[2]->type=TYPE_VAL;
-        		v[2]->name=NULL;
+        		ARITH
         		v[2]->val=v[0]->val != v[1]->val;
         		return v[2];
         		//return ex(p->opr.op[0]) != ex(p->opr.op[1]);
         case EQ:        
-        		v[0]=ex(p->opr.op[0]);
-        		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[1]=ex(p->opr.op[1]);
-        		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");return NULL;}
-        		v[2]=(struct _var*)malloc(sizeof(struct _var));
-        		if(v[2]==NULL) {die("error allocating space for var");}
-        		v[2]->type=TYPE_VAL;
-        		v[2]->name=NULL;
+        		ARITH
         		v[2]->val=v[0]->val == v[1]->val;
         		return v[2];
         case QUIT:

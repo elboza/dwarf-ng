@@ -15,4 +15,4 @@ struct _gv
 	struct _gv *prev,*next;
 } *gv_first,*gv_last,*gv_ptr,*s_first,*s_last,*s_ptr;
 void set_var(char *name,int type,void *val);
-struct _gv* get_var(char *name);
+struct _var* get_var(char *name);
