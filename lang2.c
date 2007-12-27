@@ -8,8 +8,10 @@
 #include"vars.h"
 
 #define ARITH v[0]=ex(p->opr.op[0]);\
+			if(v[0]==NULL){printf("ARITH:no item\n");break;}\
         		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");break;}\
         		v[1]=ex(p->opr.op[1]);\
+        		if(v[1]==NULL){printf("ARITH:no item\n");break;}\
         		if(v[1]->type!=TYPE_VAL) {printf("error! not an integer type!\n");break;}\
         		v[2]=(struct _var*)malloc(sizeof(struct _var));\
         		if(v[2]==NULL) {die("error allocating space for var");}\
@@ -43,7 +45,7 @@ struct _var* ex(nodeType *p) {
     	v[0]=get_var(p->id.s);;
     	return v[0];
     case typeWord:
-    	printf("word is %s\n",p->id.s);
+    	//printf("word is %s\n",p->id.s);
     	v[0]=(struct _var*)malloc(sizeof(struct _var));
     	if(v[0]==NULL) die("error creating malloc space");
     	v[0]->name=NULL;
@@ -55,7 +57,7 @@ struct _var* ex(nodeType *p) {
     	return 0;
     	break;
     case typeString:
-    	printf("string is %s\n",p->id.s);
+    	//printf("string is %s\n",p->id.s);
     	v[0]=(struct _var*)malloc(sizeof(struct _var));
     	if(v[0]==NULL) die("error creating malloc space");
     	v[0]->name=NULL;
@@ -79,6 +81,7 @@ struct _var* ex(nodeType *p) {
                         break;
         case PRINT:     
         		v[0]=ex(p->opr.op[1]);
+        		if(v[0]==NULL) break;
         		if(p->opr.op[0]==NULL)
         		{
         			//standard print
@@ -93,6 +96,7 @@ struct _var* ex(nodeType *p) {
         case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
         case '=':
         	v[0]=ex(p->opr.op[1]);
+        	if(v[0]==NULL) break;
         	if(v[0]->type==TYPE_VAL) set_var(p->opr.op[0]->id.s,TYPE_VAL,&v[0]->val);
         	if(v[0]->type==TYPE_STRING) set_var(p->opr.op[0]->id.s,TYPE_STRING,v[0]->s);
                	//set_var(p->opr.op[0]->id.s,.........);
@@ -101,6 +105,7 @@ struct _var* ex(nodeType *p) {
                	break;
         case UMINUS:    
         		v[0]=ex(p->opr.op[0]);
+        		if(v[0]==NULL){printf("ATIRH:no item\n");break;}
         		if(v[0]->type!=TYPE_VAL) {printf("error! not an integer type!\n");break;}
         		v[2]=(struct _var*)malloc(sizeof(struct _var));
         		if(v[2]==NULL) {die("error allocating space for var");}

@@ -112,6 +112,7 @@ filename:
 		  FILENAME				{$$=id_word($1);}
 		| WORD					{$$=id_word($1);}
 		;
+		
 %%
 
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)

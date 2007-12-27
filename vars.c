@@ -82,6 +82,8 @@ struct _var* get_normal_var(char *name)
 void add_s_var(int s_type,char *name,int type,void *val)
 {
 	struct _gv *newvar;
+	int *x;
+	x=val;
 	newvar=(struct _gv*)malloc(sizeof(struct _gv));
 	if(newvar==NULL) die("error allocating space for inVar");
 	newvar->v.name=strdup(name);
@@ -92,10 +94,11 @@ void add_s_var(int s_type,char *name,int type,void *val)
 	switch(type)
 	{
 		case TYPE_VAL:
-			newvar->v.val=(int)val;
+			newvar->v.val=*x;
 			break;
 		case TYPE_STRING:
-			
+			newvar->v.s=strdup((char*)val);
+			if(newvar->v.s==NULL) {die("error allocating space for var val");}
 			break;
 		default:
 			break;

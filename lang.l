@@ -18,13 +18,13 @@ void yyerror(char *);
 				return INTEGER;
 			}
 			
-\$[a-zA-Z_]+	{
+\$[a-zA-Z_0-9]+	{
 					yylval.sVar=strdup(yytext);
 					//printf("var=%s %s\n",yytext,yylval);
 					return VARIABLE;
 				}
 
-[-()<>=+*/;{}.!"] {
+[-()<>=+*/;{}.!"\[\]] {
                 return *yytext;
              }
 
@@ -61,7 +61,7 @@ void yyerror(char *);
 "createh"		return CREATEH;
 "show"			return SHOW;
 
-[a-zA-Z_\->\(\)\[\]0-9]+       { 
+[a-zA-Z_0-9\-\(\)\[\]>]+       { 
                 	//yylval.inVar = *yytext - 'a';
                 	//printf("Word %s\n",yytext);
                 	yylval.sWord=strdup(yytext);
