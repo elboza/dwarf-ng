@@ -37,9 +37,9 @@ void yyerror(char *s);
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
 %left '*' '/'
-%nonassoc UMINUS
+%nonassoc UMINUS STRUCT
 
-%type <nPtr> stmt expr stmt_list filename
+%type <nPtr> stmt expr stmt_list filename ivar
 
 %%
 
@@ -55,9 +55,10 @@ function:
 stmt:
           ';'                            { $$ = opr(';', 2, NULL, NULL); }
         | expr ';'                       { $$ = $1; }
+        | PRINT '/' WORD expr ';'				{$$=opr(PRINT,2,id_word($3),$4);}
         | PRINT expr ';'                 { $$ = opr(PRINT, 2,NULL, $2); }
         | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id_var($1), $3); }
-        | WORD '=' expr ';' 	         { $$ = opr('=', 2, id_word($1), $3); }
+        | ivar '=' expr ';' 	         { $$ = opr('=', 2, $1, $3); }
         | WHILE '(' expr ')' stmt        { $$ = opr(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
@@ -113,6 +114,11 @@ filename:
 		| WORD					{$$=id_word($1);}
 		;
 		
+ivar:
+		  WORD '(' WORD ')'			{printf("-->%s %s\n",$1,$3);}
+		| WORD '[' expr ']'			{printf("++>%s %s\n",$1,$3);}
+		| WORD					{$$=id_word($1);}
+		;
 %%
 
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)

@@ -61,7 +61,7 @@ void yyerror(char *);
 "createh"		return CREATEH;
 "show"			return SHOW;
 
-[a-zA-Z_0-9\-\(\)\[\]>]+       { 
+[a-zA-Z_0-9]+       { 
                 	//yylval.inVar = *yytext - 'a';
                 	//printf("Word %s\n",yytext);
                 	yylval.sWord=strdup(yytext);

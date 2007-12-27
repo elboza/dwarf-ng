@@ -89,7 +89,7 @@ struct _var* ex(nodeType *p) {
         			if(v[0]->type==TYPE_STRING) {printf("%s\n",v[0]->s);break;}
         		}
         		// else printf .....formatted print
-        		
+        		printf("formatted output\n");
         		//printf("%d\n", ex(p->opr.op[0])); 
         		//return NULL;
         		break;
@@ -167,6 +167,9 @@ struct _var* ex(nodeType *p) {
         case QUIT:
         	//printf("Ok.Quitting... bye.\n");
         	forced=QUITTING;
+        	break;
+        case STRUCT:
+        	printf("struct\n");
         	break;
         case TYPE:
         	file_probe();
