@@ -29,6 +29,7 @@ void yyerror(char *s);
 %token <sVar>   VARIABLE
 %token <sWord>  WORD
 %token <sWord>	FILENAME
+%token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL
 %token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW
 %nonassoc IFX
@@ -106,7 +107,7 @@ expr:
         | expr NE expr          { $$ = opr(NE, 2, $1, $3); }
         | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
         | '(' expr ')'          { $$ = $2; }
-        | '"' WORD '"'			{$$=id_string($2);}
+        | STRING				{$$=id_string($1);}
         ;
 
 filename:

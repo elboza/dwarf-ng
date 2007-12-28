@@ -77,6 +77,14 @@ void yyerror(char *);
 			//printf("file type is=%s %s\n",yytext,yylval);
                 	return FILENAME;
             	}
+\"[^"\n]*["\n] { 
+               yylval.sWord = strdup(yytext+1); 
+               if (yylval.sWord[yyleng-2] != '"') 
+                   die("improperly terminated string"); 
+               else 
+                   yylval.sWord[yyleng-2] = 0;
+                   return STRING;
+                       } 
 
 [ \t\n]+        ;       /* ignore whitespace */
 
