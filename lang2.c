@@ -90,6 +90,7 @@ struct _var* ex(nodeType *p) {
         		}
         		// else printf .....formatted print
         		printf("formatted output\n");
+        		
         		//printf("%d\n", ex(p->opr.op[0])); 
         		//return NULL;
         		break;

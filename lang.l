@@ -1,3 +1,6 @@
+digit [0-9]
+letter [a-zA-Z_]
+hexletter [a-fA-F]
 %{
 #include <stdlib.h>
 #include "lang.h"
@@ -7,24 +10,25 @@ void yyerror(char *);
 
 %%
 
-[0-9]+      {
+{digit}+      {
                 yylval.iValue = atoi(yytext);
+                //printf("%d\n",yylval.iValue);
                 return INTEGER;
             }
 
-0x[0-9a-fA-F]+	{
+0x({digit}|{hexletter})+	{
 				sscanf(yytext+2, "%X", &lang_mx);
 				yylval.iValue=lang_mx;
 				return INTEGER;
 			}
 			
-\$[a-zA-Z_0-9]+	{
+\${letter}({letter}|{digit})*	{
 					yylval.sVar=strdup(yytext);
 					//printf("var=%s %s\n",yytext,yylval);
 					return VARIABLE;
 				}
 
-[-()<>=+*/;{}.!"\[\]] {
+[-()<>=%+*/;{}.!"\[\]] {
                 return *yytext;
              }
 
@@ -61,7 +65,7 @@ void yyerror(char *);
 "createh"		return CREATEH;
 "show"			return SHOW;
 
-[a-zA-Z_0-9]+       { 
+{letter}({letter}|{digit})*       { 
                 	//yylval.inVar = *yytext - 'a';
                 	//printf("Word %s\n",yytext);
                 	yylval.sWord=strdup(yytext);

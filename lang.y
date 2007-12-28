@@ -55,7 +55,7 @@ function:
 stmt:
           ';'                            { $$ = opr(';', 2, NULL, NULL); }
         | expr ';'                       { $$ = $1; }
-        | PRINT '/' WORD expr ';'				{$$=opr(PRINT,2,id_word($3),$4);}
+        | PRINT '%' WORD expr ';'				{$$=opr(PRINT,2,id_word($3),$4);}
         | PRINT expr ';'                 { $$ = opr(PRINT, 2,NULL, $2); }
         | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id_var($1), $3); }
         | ivar '=' expr ';' 	         { $$ = opr('=', 2, $1, $3); }
@@ -116,7 +116,7 @@ filename:
 		
 ivar:
 		  WORD '(' WORD ')'			{printf("-->%s %s\n",$1,$3);}
-		| WORD '[' expr ']'			{printf("++>%s %s\n",$1,$3);}
+		| WORD '[' expr ']'			{printf("++>%s %d\n",$1,$3);}
 		| WORD					{$$=id_word($1);}
 		;
 %%
