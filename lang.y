@@ -38,7 +38,7 @@ void yyerror(char *s);
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
 %left '*' '/'
-%nonassoc UMINUS STRUCT
+%nonassoc UMINUS STRUCT STRUCTS STRUCTW STRUCTE
 
 %type <nPtr> stmt expr stmt_list filename ivar
 
@@ -93,7 +93,7 @@ stmt_list:
 expr:
           INTEGER               { $$ = con($1); }
         | VARIABLE              { $$ = id_var($1); }
-        | WORD					{ $$ =id_word($1); }
+        | ivar					{ $$ =$1; }
         | FILENAME					{ $$ =id_word($1); }
         | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
         | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
@@ -116,9 +116,10 @@ filename:
 		;
 		
 ivar:
-		  WORD '(' WORD ')'			{printf("-->%s %s\n",$1,$3);}
-		| WORD '[' expr ']'			{printf("++>%s %d\n",$1,$3);}
-		| WORD					{$$=id_word($1);}
+		  WORD '(' WORD ')'			{$$=opr(STRUCTW,2,id_word($1),id_word($3));}
+		| WORD '[' expr ']'			{$$=opr(STRUCTE,2,id_word($1),$3);}
+		| WORD					{$$=opr(STRUCT,2,id_word($1),NULL);}
+		| ivar '-' '>' ivar		{$$=opr(STRUCTS,2,$1,$4);}
 		;
 %%
 
