@@ -97,6 +97,7 @@ struct _var* ex(nodeType *p) {
         case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
         case '=':
         	v[0]=ex(p->opr.op[1]);
+        	printf("(%s)\n",p->opr.op[0]->id.s);
         	if(v[0]==NULL) break;
         	if(v[0]->type==TYPE_VAL) set_var(p->opr.op[0]->id.s,TYPE_VAL,&v[0]->val);
         	if(v[0]->type==TYPE_STRING) set_var(p->opr.op[0]->id.s,TYPE_STRING,v[0]->s);

@@ -156,3 +156,37 @@ struct _var* get_var(char *name)
 {
 	if(name[0]=='$') return (get_normal_var(name));
 }
+void push(char *s)
+{
+	struct _stack_s *ptr;
+	ptr=(struct _stack_s *)malloc(sizeof(struct _stack_s));
+	if(ptr==NULL) die("error allocating new stack  item");
+	ptr->name=NULL;
+	ptr->name=strdup(s);
+	if(ptr->name==NULL) die("error allocating new stack item");
+	ptr->prev=last_stack;
+	last_stack=ptr;
+}
+struct _var* peek(void)
+{
+	return last_stack;
+}
+struct _var* pop(void)
+{
+	struct _stack_s *ptr;
+	ptr=last_stack;
+	if(ptr)
+	{
+		last_stack=ptr->prev;
+		//free(ptr);
+	}
+	return ptr;
+}
+void s_remove(void)
+{
+	if(last_stack)
+	{
+		
+	}
+}
+

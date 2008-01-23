@@ -39,6 +39,7 @@ void get_defaults_arg()
 	fd=0;
 	gv_first=NULL;
 	gv_last=NULL;
+	last_stack=NULL;
 }
 void parse_args(int argc,char **argv)
 {
