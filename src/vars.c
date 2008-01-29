@@ -79,9 +79,57 @@ struct _var* get_normal_var(char *name)
 	}
 	return 0;
 }
-void add_s_var(int s_type,char *name,int type,void *val)
+struct _p* get_struct_pointer(char *name,int num)
+{
+	struct _p *p;
+	struct _gv *ptr,*in_ptr;
+	int count;
+	p=(struct _p*)malloc(sizeof(struct _p));
+	if(p==NULL) die("error allocating _p struct");
+	if(name==NULL)
+	{
+		p->first=gv_first;
+		p->last=gv_last;
+	}
+	else
+	{
+		for(ptr=gv_first;ptr;ptr=ptr->next)
+		{
+			if(ptr->v.type>=TYPE_STRUCT)
+			{
+				if((strcmp(name,ptr->v.name))==0)
+				{
+					if(ptr->v.type==TYPE_NODE_STRUCT)
+					{
+						count=0;
+						for(in_ptr=ptr->v.p.first;in_ptr;in_ptr=in_ptr->next)
+						{
+							if(count==num)
+							{
+								p->first=in_ptr->v.p.first;
+								p->last=in_ptr->v.p.last;
+								return p;
+							}
+							count++;
+						}
+						if(p) free(p);p=NULL;
+					}
+					else
+					{
+						p->first=ptr->v.p.first;
+						p->last=ptr->v.p.last;
+						return p;
+					}
+				}
+			}
+		}
+	}
+	return p;
+}
+void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
 {
 	struct _gv *newvar;
+	struct _p *pst;
 	int *x;
 	x=val;
 	newvar=(struct _gv*)malloc(sizeof(struct _gv));
@@ -103,50 +151,71 @@ void add_s_var(int s_type,char *name,int type,void *val)
 		default:
 			break;
 	}
-	switch(s_type)
+	pst=get_struct_pointer(struct_name,struct_num);
+	if(pst)
 	{
-		case S_MAIN:
-			if(s_first==NULL)
-			{
-				s_first=newvar;
-			}
-			else
-			{
-				newvar->prev=s_last;
-				s_last->next=newvar;
-			}
-			s_last=newvar;
-			break;
-		case S_PH:
-			break;
-		case S_SH:
-			break;
-		case S_LC:
-			break;
-		default:
-			break;
+		if(pst->first==NULL)
+		{
+			pst->first=newvar;
+		}
+		else
+		{
+			newvar->prev=pst->last;
+			pst->last->next=newvar;
+		}
+		pst->last=newvar;
+		if(((strcmp(struct_name,"s"))==0) || ((strcmp(struct_name,"main"))==0))
+		{
+			gv_first=pst->first;
+			gv_last=pst->last;
+		}
+		free(pst);
 	}
 }
-void set_s_var(int s_type,char *name,int type,int val)
+void set_s_var(struct _p *p,char *name,int type,void *val)
 {
-
-}
-struct _var* get_s_var(int s_type,char *name)
-{
-	switch(s_type)
+	struct _var *var;
+	int *x;
+	x=val;
+	var=get_s_var(p,name);
+	if(var)
 	{
-		case S_MAIN:
-			
-			break;
-		case S_PH:
-			break;
-		case S_SH:
-			break;
-		case S_LC:
-			break;
-		default:
-			break;
+		if(var->type==type)
+		{
+			switch(type){
+			case TYPE_STRING:
+				free(var->s);
+				var->s=strdup((char*)val);
+				if(var->s==NULL) {die("error allocating space for var val");}
+				break;
+			case TYPE_VAL:
+				var->val=*x;
+				break;
+			case TYPE_STRUCT:
+				break;
+			default:
+				break;
+			}
+		}
 	}
+	
+}
+struct _var* get_s_var(struct _p *p,char *name)
+{
+	struct _gv *ptr;
+	if(!p)
+	{
+		p->first=gv_first;
+		p->last=gv_last;
+	}
+	for(ptr=p->first;ptr;ptr=ptr->next)
+	{
+		if(strcmp(ptr->v.name,name)==0)
+		{
+			return &ptr->v;
+		}
+	}
+	return NULL;
 }
 void set_var(char *name,int type,void *val)
 {
@@ -155,6 +224,26 @@ void set_var(char *name,int type,void *val)
 struct _var* get_var(char *name)
 {
 	if(name[0]=='$') return (get_normal_var(name));
+}
+void make_tables(int filesys_type)
+{
+	//make s and main tables
+	switch(filesys_type){
+	case FT_ELF:
+		break;
+	case FT_MACHO:
+		break;
+	case FT_PE:
+		break;
+	case FT_MZ:
+		break;
+	default:
+		break;
+	}
+}
+void del_tables()
+{
+	
 }
 void push(char *s)
 {

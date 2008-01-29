@@ -172,22 +172,23 @@ struct _var* ex(nodeType *p) {
         	break;
         case STRUCT:
         	printf("struct: ");
-        	printf("%s\n",p->opr.op[0]->id.s);
-        	break;
-        case STRUCTW:
-        	printf("struct: ");
-        	printf("%s(%s)\n",p->opr.op[0]->id.s,p->opr.op[1]->id.s);
-        	break;
-        case STRUCTE:
-        	printf("struct: ");
-        	v[0]=ex(p->opr.op[1]);
-        	printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
-        	break;
-        case STRUCTS:
-        	printf("struct: ");
         	v[0]=ex(p->opr.op[0]);
         	printf("->");
         	v[1]=ex(p->opr.op[1]);
+        	break;
+        case STRUCTW:
+        	printf("structW: ");
+        	printf("%s(%s)\n",p->opr.op[0]->id.s,p->opr.op[1]->id.s);
+        	break;
+        case STRUCTE:
+        	printf("structE: ");
+        	v[0]=ex(p->opr.op[1]);
+        	printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
+        	break;
+        case STRUCT1:
+        	printf("struct1: ");
+        	printf("%s\n",p->opr.op[0]->id.s);
+        	get_s_var(NULL,p->opr.op[0]->id.s);
         	break;
         case TYPE:
         	file_probe();

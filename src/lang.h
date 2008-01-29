@@ -1,4 +1,4 @@
-typedef enum { typeCon, typeVar, typeWord, typeOpr, typeString } nodeEnum;
+typedef enum { typeCon, typeVar, typeWord, typeOpr,typeStruct1, typeStructE, typeStructW, typeString } nodeEnum;
 
 /* constants */
 typedef struct {

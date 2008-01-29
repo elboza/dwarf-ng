@@ -22,6 +22,7 @@ void yyerror(char *s);
     int iValue;                 /* integer value */
     char *sVar;                /* symbol table variable */
     char *sWord;					/* internal variable */
+    char *sStruct;		/*struct*/
     nodeType *nPtr;             /* node pointer */
 };
 
@@ -38,9 +39,9 @@ void yyerror(char *s);
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
 %left '*' '/'
-%nonassoc UMINUS STRUCT STRUCTS STRUCTW STRUCTE
+%nonassoc UMINUS STRUCT STRUCT1 STRUCTW STRUCTE
 
-%type <nPtr> stmt expr stmt_list filename ivar
+%type <nPtr> stmt expr stmt_list filename ivar Tivar
 
 %%
 
@@ -116,10 +117,14 @@ filename:
 		;
 		
 ivar:
+		Tivar					{$$=$1;}
+		| Tivar '-' '>' Tivar			{$$=opr(STRUCT,2,$1,$4);}
+		;
+
+Tivar:
 		  WORD '(' WORD ')'			{$$=opr(STRUCTW,2,id_word($1),id_word($3));}
 		| WORD '[' expr ']'			{$$=opr(STRUCTE,2,id_word($1),$3);}
-		| WORD					{$$=opr(STRUCT,2,id_word($1),NULL);}
-		| ivar '-' '>' ivar		{$$=opr(STRUCTS,2,$1,$4);}
+		| WORD					{$$=opr(STRUCT1,1,id_word($1));}
 		;
 %%
 

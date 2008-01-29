@@ -91,7 +91,10 @@ void load_macho_hd()
 }
 void load_elf_hd()
 {
-	
+	Elf32_Ehdr *elf;int xx=23;
+	elf=(Elf32_Ehdr*)faddr;
+	make_tables("elf");
+	add_s_var("s",0,"prova",TYPE_VAL,&xx);
 	printf("elf\n");
 }
 void die(char *s)
