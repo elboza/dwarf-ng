@@ -164,11 +164,11 @@ void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
 			pst->last->next=newvar;
 		}
 		pst->last=newvar;
-		if(((strcmp(struct_name,"s"))==0) || ((strcmp(struct_name,"main"))==0))
-		{
-			gv_first=pst->first;
-			gv_last=pst->last;
-		}
+		//if(((strcmp(struct_name,"s"))==0) || ((strcmp(struct_name,"main"))==0))
+		//{
+		//	gv_first=pst->first;
+		//	gv_last=pst->last;
+		//}
 		free(pst);
 	}
 }
@@ -225,25 +225,62 @@ struct _var* get_var(char *name)
 {
 	if(name[0]=='$') return (get_normal_var(name));
 }
-void make_tables(int filesys_type)
+void add_table(struct _gv *p,struct _gv *st)
 {
-	//make s and main tables
-	switch(filesys_type){
-	case FT_ELF:
-		break;
-	case FT_MACHO:
-		break;
-	case FT_PE:
-		break;
-	case FT_MZ:
-		break;
-	default:
-		break;
+	struct _p *x;
+	if(p==NULL)
+	{
+		x->first=gv_first;
+		x->last=gv_last;
 	}
+	else
+	{
+		x->first=st->v.p.first;
+		x->last=st->v.p.last;
+	}
+	if(x->first==NULL)
+	{
+		x->first=st;
+	}
+	else
+	{
+		st->prev=x->last;
+		x->last->next=st;
+	}
+	x->last=st;
 }
-void del_tables()
+void make_table(char *nome,int num)
 {
-	
+	struct _gv *p,*x;
+	int n;
+	p=(struct _gv*)malloc(sizeof(struct _gv));
+	if(p==NULL) die("error allocating table memory");
+	p->v.name=strdup(nome);
+	if(p->v.name==NULL) die("error allocating table memory");
+	p->prev=NULL;
+	p->next=NULL;
+	p->v.p.first=NULL;
+	p->v.p.last=NULL;
+	if(num<0) p->v.type=TYPE_STRUCT;
+	else p->v.type=TYPE_NODE_STRUCT;
+	add_table(NULL,p);
+	if(num>=0)
+	{
+		for(n=0;n<=num;n++)
+		{
+			x=(struct _gv*)malloc(sizeof(struct _gv));
+			if(x=NULL) die("error allocating child table memory");
+			x->v.name=strdup(nome);
+			if(x->v.name==NULL) die("error allocating child table memory");
+			x->v.type=TYPE_STRUCT;
+			x->prev=NULL;
+			x->next=NULL;
+			x->v.p.first=NULL;
+			x->v.p.last=NULL;
+			add_table(p,x);
+			x=NULL;
+		}
+	}
 }
 void push(char *s)
 {

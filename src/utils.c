@@ -63,6 +63,7 @@ void file_probe()
 }
 void load_headers()
 {
+	make_table("main",-1);
 	switch(file_type)
 	{
 	case FT_MACHO:
@@ -93,7 +94,7 @@ void load_elf_hd()
 {
 	Elf32_Ehdr *elf;int xx=23;
 	elf=(Elf32_Ehdr*)faddr;
-	make_tables("elf");
+	make_table("s",-1);
 	add_s_var("s",0,"prova",TYPE_VAL,&xx);
 	printf("elf\n");
 }
