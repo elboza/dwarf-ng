@@ -33,6 +33,7 @@ void file_open(char *s)
 }
 void file_close()
 {
+	delete_tables();
 	if(fd)
 	{
 		//munmap(faddr);

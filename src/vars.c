@@ -43,6 +43,17 @@ void add_var(char *name,int type,void *val)
 	}
 	gv_last=newvar;
 }
+void remove_item(struct _gv *p)
+{
+	if(p->prev)
+	{
+		p->prev->next=p->next;
+	}
+	if(p->next)
+	{
+		p->next->prev=p->prev;
+	}
+}
 void set_normal_var(char *name,int type,void *val)
 {
 	int *x;
@@ -169,7 +180,7 @@ void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
 		//	gv_first=pst->first;
 		//	gv_last=pst->last;
 		//}
-		free(pst);
+		//free(pst);
 	}
 }
 void set_s_var(struct _p *p,char *name,int type,void *val)
@@ -225,29 +236,53 @@ struct _var* get_var(char *name)
 {
 	if(name[0]=='$') return (get_normal_var(name));
 }
+void del_table(struct _gv *p)
+{
+	struct _gv *ptr;
+	for(ptr=p->v.p.first;ptr;ptr=ptr->next)
+	{
+		if(ptr->v.type>=TYPE_STRUCT)
+		{
+			del_table(ptr);
+		}
+			remove_item(ptr);
+	}
+}
+void delete_tables()
+{
+	struct _gv *ptr;
+	for(ptr=gv_first;ptr;ptr=ptr->next)
+	{
+		if(ptr->v.type>=TYPE_STRUCT)
+		{
+			del_table(ptr);
+			remove_item(ptr);
+		}
+	}
+}
 void add_table(struct _gv *p,struct _gv *st)
 {
-	struct _p *x;
+	struct _gv **f,**l;
 	if(p==NULL)
 	{
-		x->first=gv_first;
-		x->last=gv_last;
+		f=&gv_first;
+		l=&gv_last;
 	}
 	else
 	{
-		x->first=st->v.p.first;
-		x->last=st->v.p.last;
+		f=&st->v.p.first;
+		l=&st->v.p.last;
 	}
-	if(x->first==NULL)
+	if(*f==NULL)
 	{
-		x->first=st;
+		*f=st;
 	}
 	else
 	{
-		st->prev=x->last;
-		x->last->next=st;
+		st->prev=*l;
+		(*l)->next=st;
 	}
-	x->last=st;
+	*l=st;
 }
 void make_table(char *nome,int num)
 {
