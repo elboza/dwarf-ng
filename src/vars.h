@@ -17,6 +17,10 @@ struct _p
 {
 	struct _gv *first,*last;
 };
+struct _pp
+{
+	struct _gv **f,**l;
+};
 struct _gv
 {
 	struct _var v;

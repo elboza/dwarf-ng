@@ -95,12 +95,13 @@ struct _p* get_struct_pointer(char *name,int num)
 	struct _p *p;
 	struct _gv *ptr,*in_ptr;
 	int count;
-	p=(struct _p*)malloc(sizeof(struct _p));
-	if(p==NULL) die("error allocating _p struct");
+	//p=(struct _p*)malloc(sizeof(struct _p));
+	//if(p==NULL) die("error allocating _p struct");
 	if(name==NULL)
 	{
-		p->first=gv_first;
-		p->last=gv_last;
+		//p->first=gv_first;
+		//p->last=gv_last;
+		return NULL;
 	}
 	else
 	{
@@ -117,8 +118,11 @@ struct _p* get_struct_pointer(char *name,int num)
 						{
 							if(count==num)
 							{
-								p->first=in_ptr->v.p.first;
-								p->last=in_ptr->v.p.last;
+								//p->first=in_ptr->v.p.first;
+								//p->last=in_ptr->v.p.last;
+								//*(pp->f)=in_ptr->v.p.first;
+								//*(pp->l)=in_ptr->v.p.last;
+								p=(struct _p*)&(in_ptr->v.p);
 								return p;
 							}
 							count++;
@@ -127,15 +131,18 @@ struct _p* get_struct_pointer(char *name,int num)
 					}
 					else
 					{
-						p->first=ptr->v.p.first;
-						p->last=ptr->v.p.last;
+						//p->first=ptr->v.p.first;
+						//p->last=ptr->v.p.last;
+						//*(pp->f)=ptr->v.p.first;
+						//*(pp->l)=ptr->v.p.last;
+						p=(struct _p*)&(ptr->v.p);
 						return p;
 					}
 				}
 			}
 		}
 	}
-	return p;
+	return NULL;
 }
 void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
 {
