@@ -43,15 +43,50 @@ void add_var(char *name,int type,void *val)
 	}
 	gv_last=newvar;
 }
-void remove_item(struct _gv *p)
+void remove_item(struct _gv *from,struct _gv *p)
 {
 	if(p->prev)
 	{
 		p->prev->next=p->next;
 	}
+	else
+	{
+
+	}
 	if(p->next)
 	{
 		p->next->prev=p->prev;
+	}
+	if(p->prev==NULL)
+	{
+		if(from==NULL)
+		{
+			gv_first=p->next;
+		}
+		else
+		{
+			from->v.p.first=p->next;
+		}
+	}
+	if(p->next==NULL)
+	{
+		if(from==NULL)
+		{
+			gv_last=p->prev;
+		}
+		else
+		{
+			from->v.p.last=p->prev;
+		}
+	}
+	if(p)
+	{
+		if(p->v.name) free(p->v.name);
+		if(p->v.type==TYPE_STRING)
+		{
+			if(p->v.s) free(p->v.s);
+		}
+		free(p);
 	}
 }
 void set_normal_var(char *name,int type,void *val)
@@ -252,7 +287,7 @@ void del_table(struct _gv *p)
 		{
 			del_table(ptr);
 		}
-			remove_item(ptr);
+			remove_item(p,ptr);
 	}
 }
 void delete_tables()
@@ -263,7 +298,7 @@ void delete_tables()
 		if(ptr->v.type>=TYPE_STRUCT)
 		{
 			del_table(ptr);
-			remove_item(ptr);
+			remove_item(NULL,ptr);
 		}
 	}
 }
