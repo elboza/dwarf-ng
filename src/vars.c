@@ -225,17 +225,40 @@ void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
 		//free(pst);
 	}
 }
-void set_s_var(struct _p *p,char *name,int type,void *val)
+//void set_s_var_bis(struct _p *p,char *name,int type,void *val)
+//{
+//	struct _var *var;
+//	int *x;
+//	x=val;
+//	var=get_s_var(p,name);
+//	if(var)
+//	{
+//		{
+//			switch(type){
+//			case TYPE_STRING:
+//				free(var->s);
+//				var->s=strdup((char*)val);
+//				if(var->s==NULL) {die("error allocating space for var val");}
+//				break;
+//			case TYPE_VAL:
+//				var->val=*x;
+//				break;
+//			case TYPE_STRUCT:
+//				break;
+//			default:
+//			}
+//		}
+//	}
+	
+//}
+void set_s_var(struct _var *var,int type,void *val)
 {
-	struct _var *var;
 	int *x;
 	x=val;
-	var=get_s_var(p,name);
 	if(var)
 	{
-		if(var->type==type)
-		{
-			switch(type){
+		if(var->type!=type) {printf("*** type not matching! ignoring.\n");return;}
+		switch(type){
 			case TYPE_STRING:
 				free(var->s);
 				var->s=strdup((char*)val);
@@ -249,19 +272,23 @@ void set_s_var(struct _p *p,char *name,int type,void *val)
 			default:
 				break;
 			}
-		}
 	}
-	
 }
 struct _var* get_s_var(struct _p *p,char *name)
 {
 	struct _gv *ptr;
+	struct _p tp;
 	if(!p)
 	{
-		p->first=gv_first;
-		p->last=gv_last;
+		tp.first=gv_first;
+		tp.last=gv_last;
 	}
-	for(ptr=p->first;ptr;ptr=ptr->next)
+	else
+	{
+		tp.first=p->first;
+		tp.last=p->last;
+	}
+	for(ptr=tp.first;ptr;ptr=ptr->next)
 	{
 		if(strcmp(ptr->v.name,name)==0)
 		{

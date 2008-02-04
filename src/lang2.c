@@ -97,10 +97,24 @@ struct _var* ex(nodeType *p) {
         case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
         case '=':
         	v[0]=ex(p->opr.op[1]);
-        	printf("(%s)\n",p->opr.op[0]->id.s);
+        	//printf("(%s)\n",p->opr.op[0]->id.s);
         	if(v[0]==NULL) break;
-        	if(v[0]->type==TYPE_VAL) set_var(p->opr.op[0]->id.s,TYPE_VAL,&v[0]->val);
-        	if(v[0]->type==TYPE_STRING) set_var(p->opr.op[0]->id.s,TYPE_STRING,v[0]->s);
+        	if(p->opr.op[0]->type==typeOpr)
+        	{
+        		printf("struct assign\n");
+        		v[1]=ex(p->opr.op[0]);
+        		if(v[1]->type>=TYPE_STRUCT)
+        		{
+        			printf("*** lvalue is a struct!...ignored\n");
+        			break;
+        		}
+        		set_s_var(v[1],v[0]->type,&v[0]->val);
+        	}
+        	else
+        	{
+        		if(v[0]->type==TYPE_VAL) set_var(p->opr.op[0]->id.s,TYPE_VAL,&v[0]->val);
+        		if(v[0]->type==TYPE_STRING) set_var(p->opr.op[0]->id.s,TYPE_STRING,v[0]->s);
+               	}
                	//set_var(p->opr.op[0]->id.s,.........);
                	//return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
                	//return NULL;
@@ -171,25 +185,31 @@ struct _var* ex(nodeType *p) {
         	forced=QUITTING;
         	break;
         case STRUCT:
-        	printf("struct: ");
-        	v[0]=ex(p->opr.op[0]);
-        	printf("->");
-        	v[1]=ex(p->opr.op[1]);
-        	break;
+        	//printf("struct: ");
+        	//v[0]=ex(p->opr.op[0]);
+        	//printf("-- %s --",p->opr.op[0]->opr.op[0]->id.s);
+        	v[0]=get_s_var(NULL,p->opr.op[0]->opr.op[0]->id.s);
+        	//printf("->");
+        	//v[1]=ex(p->opr.op[1]);
+        	if(v[0]==NULL) return NULL;
+       		v[1]=get_s_var((struct _p *)&(v[0]->p),p->opr.op[1]->opr.op[0]->id.s);
+       		return v[1];
+        	//break;
         case STRUCTW:
         	printf("structW: ");
         	printf("%s(%s)\n",p->opr.op[0]->id.s,p->opr.op[1]->id.s);
         	break;
         case STRUCTE:
         	printf("structE: ");
-        	v[0]=ex(p->opr.op[1]);
+        	//v[0]=ex(p->opr.op[1]);
         	printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
         	break;
         case STRUCT1:
-        	printf("struct1: ");
-        	printf("%s\n",p->opr.op[0]->id.s);
-        	get_s_var(NULL,p->opr.op[0]->id.s);
-        	break;
+        	//printf("struct1: ");
+        	//printf("%s\n",p->opr.op[0]->id.s);
+        	v[0]=get_s_var(NULL,p->opr.op[0]->id.s);
+        	return v[0];
+        	//break;
         case TYPE:
         	file_probe();
         	load_headers();
