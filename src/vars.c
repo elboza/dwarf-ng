@@ -339,8 +339,8 @@ void add_table(struct _gv *p,struct _gv *st)
 	}
 	else
 	{
-		f=&st->v.p.first;
-		l=&st->v.p.last;
+		f=&p->v.p.first;
+		l=&p->v.p.last;
 	}
 	if(*f==NULL)
 	{
@@ -373,7 +373,7 @@ void make_table(char *nome,int num)
 		for(n=0;n<=num;n++)
 		{
 			x=(struct _gv*)malloc(sizeof(struct _gv));
-			if(x=NULL) die("error allocating child table memory");
+			if(x==NULL) die("error allocating child table memory");
 			x->v.name=strdup(nome);
 			if(x->v.name==NULL) die("error allocating child table memory");
 			x->v.type=TYPE_STRUCT;
@@ -386,37 +386,58 @@ void make_table(char *nome,int num)
 		}
 	}
 }
-void push(char *s)
+void print_s(struct _var *p)
 {
-	struct _stack_s *ptr;
-	ptr=(struct _stack_s *)malloc(sizeof(struct _stack_s));
-	if(ptr==NULL) die("error allocating new stack  item");
-	ptr->name=NULL;
-	ptr->name=strdup(s);
-	if(ptr->name==NULL) die("error allocating new stack item");
-	ptr->prev=last_stack;
-	last_stack=ptr;
-}
-struct _var* peek(void)
-{
-	return last_stack;
-}
-struct _var* pop(void)
-{
-	struct _stack_s *ptr;
-	ptr=last_stack;
-	if(ptr)
+	struct _gv *var;
+	int count=0;
+	for(var=p->p.first;var;var=var->next)
 	{
-		last_stack=ptr->prev;
-		//free(ptr);
-	}
-	return ptr;
-}
-void s_remove(void)
-{
-	if(last_stack)
-	{
-		
+		if(var->v.type==TYPE_VAL)
+		{
+			printf("%s : 0x%x (%d)\n",var->v.name,var->v.val,var->v.val);
+		}
+		if(var->v.type==TYPE_STRING)
+		{
+			printf("%s : %s\n",var->v.name,var->v.s);
+		}
+		if(var->v.type>=TYPE_STRUCT)
+		{
+			if(p->type==TYPE_NODE_STRUCT) printf("*%s[%d] : structure.\n",var->v.name,count++); else
+			printf("*%s : structure.\n",var->v.name);
+		}
 	}
 }
+//void push(char *s)
+//{
+//	struct _stack_s *ptr;
+//	ptr=(struct _stack_s *)malloc(sizeof(struct _stack_s));
+//	if(ptr==NULL) die("error allocating new stack  item");
+//	ptr->name=NULL;
+//	ptr->name=strdup(s);
+//	if(ptr->name==NULL) die("error allocating new stack item");
+//	ptr->prev=last_stack;
+//	last_stack=ptr;
+//}
+//struct _var* peek(void)
+//{
+//	return last_stack;
+//}
+//struct _var* pop(void)
+//{
+//	struct _stack_s *ptr;
+//	ptr=last_stack;
+//	if(ptr)
+//	{
+//		last_stack=ptr->prev;
+//		//free(ptr);
+//	}
+//	return ptr;
+//}
+//void s_remove(void)
+//{
+//	if(last_stack)
+//	{
+//		
+//	}
+//}
 

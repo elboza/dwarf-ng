@@ -97,6 +97,8 @@ void load_elf_hd()
 	elf=(Elf32_Ehdr*)faddr;
 	make_table("s",-1);
 	add_s_var("s",0,"prova",TYPE_VAL,&xx);
+	make_table("ph",2);
+	add_s_var("ph",1,"pippo",TYPE_VAL,&xx);
 	printf("elf\n");
 }
 void die(char *s)

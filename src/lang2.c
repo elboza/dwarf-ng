@@ -87,10 +87,30 @@ struct _var* ex(nodeType *p) {
         			//standard print
         			if(v[0]->type==TYPE_VAL) {printf("%d\n",v[0]->val);break;}
         			if(v[0]->type==TYPE_STRING) {printf("%s\n",v[0]->s);break;}
+        			if(v[0]->type>=TYPE_STRUCT) {print_s(v[0]);break;}
         		}
         		// else printf .....formatted print
         		printf("formatted output\n");
-        		
+        		char c=*p->opr.op[0]->id.s;
+        		switch(c){
+        		case 'x':
+        			if(v[0]->type==TYPE_VAL) {printf("0x%x\n",v[0]->val);break;}
+        			if(v[0]->type==TYPE_STRING) {printf("%s\n",v[0]->s);break;}
+        			break;
+        		case 'd':
+        			if(v[0]->type==TYPE_VAL) {printf("%d\n",v[0]->val);break;}
+        			if(v[0]->type==TYPE_STRING) {printf("%s\n",v[0]->s);break;}
+        			break;
+        		case 'b':
+        			if(v[0]->type==TYPE_VAL) {printf("%b\n",v[0]->val);break;}
+        			if(v[0]->type==TYPE_STRING) {printf("%s\n",v[0]->s);break;}
+        			break;
+        		case 'o':
+        		case 's':
+        			break;
+        		default:
+        			break;
+        		}
         		//printf("%d\n", ex(p->opr.op[0])); 
         		//return NULL;
         		break;
@@ -196,14 +216,16 @@ struct _var* ex(nodeType *p) {
        		return v[1];
         	//break;
         case STRUCTW:
-        	printf("structW: ");
-        	printf("%s(%s)\n",p->opr.op[0]->id.s,p->opr.op[1]->id.s);
-        	break;
+        	printf("structW: \n");
+        	//printf("%s(%s)\n",p->opr.op[0]->id.s,p->opr.op[1]->id.s);
+        	return NULL;
+        	//break;
         case STRUCTE:
-        	printf("structE: ");
+        	printf("structE: \n");
         	//v[0]=ex(p->opr.op[1]);
-        	printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
-        	break;
+        	//printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
+        	return NULL;
+        	//break;
         case STRUCT1:
         	//printf("struct1: ");
         	//printf("%s\n",p->opr.op[0]->id.s);

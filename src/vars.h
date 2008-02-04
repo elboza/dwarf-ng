@@ -34,7 +34,7 @@ struct _stack_s
 	char *name;
 	struct _stack_s *prev;
 }*last_stack;
-void push(char *s);
-struct _var* peek(void);
-struct _var* pop(void);
-void s_remove(void);
+//void push(char *s);
+//struct _var* peek(void);
+//struct _var* pop(void);
+//void s_remove(void);
