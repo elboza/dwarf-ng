@@ -147,7 +147,7 @@ void shell()
 	char *cmd;
 	while(forced!=QUITTING)
 	{
-		cmd=rl_gets("dwarf>");
+		cmd=rl_gets("dwarf> ");
 		execute(cmd);
 	}
 	

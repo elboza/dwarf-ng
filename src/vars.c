@@ -297,6 +297,22 @@ struct _var* get_s_var(struct _p *p,char *name)
 	}
 	return NULL;
 }
+struct _var* get_s_num_var(struct _p *p,char *name,int num)
+{
+	struct _var *var;
+	struct _gv *ptr;
+	int n=0;
+	var=get_s_var(p,name);
+	if(var)
+	{
+		ptr=var->p.first;
+		while(n++<num)
+		{
+			ptr=ptr->next;
+		}
+		return &ptr->v;
+	}
+}
 void set_var(char *name,int type,void *val)
 {
 	if(name[0]=='$') set_normal_var(name,type,val);

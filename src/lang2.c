@@ -224,7 +224,8 @@ struct _var* ex(nodeType *p) {
         	printf("structE: \n");
         	//v[0]=ex(p->opr.op[1]);
         	//printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
-        	return NULL;
+        	v[0]=get_s_num_var(NULL,p->opr.op[0]->id.s,p->opr.op[1]->con.value);
+        	return v[0];
         	//break;
         case STRUCT1:
         	//printf("struct1: ");
