@@ -208,16 +208,20 @@ struct _var* ex(nodeType *p) {
         	//printf("struct: ");
         	//v[0]=ex(p->opr.op[0]);
         	//printf("-- %s --",p->opr.op[0]->opr.op[0]->id.s);
-        	v[0]=get_s_var(NULL,p->opr.op[0]->opr.op[0]->id.s);
+        	v[0]=get_s_var(p->opr.op[0]->opr.op[0]->id.s);
         	//printf("->");
         	//v[1]=ex(p->opr.op[1]);
-        	if(v[0]==NULL) return NULL;
-       		v[1]=get_s_var((struct _p *)&(v[0]->p),p->opr.op[1]->opr.op[0]->id.s);
+        	if(v[0]==NULL) {free_bookmark();return NULL;}
+        	if(v[0]->type<TYPE_STRUCT) {free_bookmark();return NULL;}
+        	set_bookmark((struct _p *)&(v[0]->p));
+       		//v[1]=get_s_var(p->opr.op[1]->opr.op[0]->id.s);
+       		v[1]=ex(p->opr.op[1]);
        		return v[1];
         	//break;
         case STRUCTW:
         	printf("structW: \n");
         	//printf("%s(%s)\n",p->opr.op[0]->id.s,p->opr.op[1]->id.s);
+        	free_bookmark();
         	return NULL;
         	//break;
         case STRUCTE:
@@ -225,13 +229,15 @@ struct _var* ex(nodeType *p) {
         	//v[0]=ex(p->opr.op[1]);
         	//printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
         	v[1]=ex(p->opr.op[1]);
-        	v[0]=get_s_num_var(NULL,p->opr.op[0]->id.s,v[1]->val);
+        	v[0]=get_s_num_var(p->opr.op[0]->id.s,v[1]->val);
+        	free_bookmark();
         	return v[0];
         	//break;
         case STRUCT1:
         	//printf("struct1: ");
         	//printf("%s\n",p->opr.op[0]->id.s);
-        	v[0]=get_s_var(NULL,p->opr.op[0]->id.s);
+        	v[0]=get_s_var(p->opr.op[0]->id.s);
+        	free_bookmark();
         	return v[0];
         	//break;
         case TYPE:

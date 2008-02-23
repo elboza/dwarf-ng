@@ -118,7 +118,7 @@ filename:
 		
 ivar:
 		Tivar					{$$=$1;}
-		| Tivar '-' '>' Tivar			{$$=opr(STRUCT,2,$1,$4);}
+		| Tivar '-' '>' ivar			{$$=opr(STRUCT,2,$1,$4);}
 		;
 
 Tivar:

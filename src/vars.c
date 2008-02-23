@@ -274,10 +274,12 @@ void set_s_var(struct _var *var,int type,void *val)
 			}
 	}
 }
-struct _var* get_s_var(struct _p *p,char *name)
+struct _var* get_s_var(char *name)
 {
 	struct _gv *ptr;
 	struct _p tp;
+	struct _p *p;
+	p=get_bookmark();
 	if(!p)
 	{
 		tp.first=gv_first;
@@ -302,7 +304,7 @@ struct _var* get_s_num_var(struct _p *p,char *name,int num)
 	struct _var *var;
 	struct _gv *ptr;
 	int n=0;
-	var=get_s_var(p,name);
+	var=get_s_var(name);
 	if(var)
 	{
 		ptr=var->p.first;
@@ -422,6 +424,18 @@ void print_s(struct _var *p)
 			printf("*%s : structure.\n",var->v.name);
 		}
 	}
+}
+void free_bookmark()
+{
+	bookmark=NULL;
+}
+void set_bookmark(struct _p *p)
+{
+	bookmark=p;
+}
+struct _p* get_bookmark()
+{
+	return bookmark;
 }
 //void push(char *s)
 //{
