@@ -80,15 +80,29 @@ void load_headers()
 }
 void load_macho_hd()
 {
+	int n,xx=23;
 	struct mach_header *mac;
+	struct load_command *lc;
+	struct segment_command *seg;
+	struct section *sect;
 	mac=(struct mach_header*)faddr;
-	add_s_var(S_MAIN,"magic",TYPE_VAL,mac->magic);
-	add_s_var(S_MAIN,"cputype",TYPE_VAL,mac->cputype);
-	add_s_var(S_MAIN,"cpusubtype",TYPE_VAL,mac->cpusubtype);
-	add_s_var(S_MAIN,"filetype",TYPE_VAL,mac->filetype);
-	add_s_var(S_MAIN,"ncmds",TYPE_VAL,mac->ncmds);
-	add_s_var(S_MAIN,"sizeofcmds",TYPE_VAL,mac->sizeofcmds);
-	add_s_var(S_MAIN,"flags",TYPE_VAL,mac->flags);
+	make_table(NULL,"s",-1);
+	add_s_var("s","magic",TYPE_VAL,&mac->magic);
+	add_s_var("s","cputype",TYPE_VAL,&mac->cputype);
+	add_s_var("s","cpusubtype",TYPE_VAL,&mac->cpusubtype);
+	add_s_var("s","filetype",TYPE_VAL,&mac->filetype);
+	add_s_var("s","ncmds",TYPE_VAL,&mac->ncmds);
+	add_s_var("s","sizeofcmds",TYPE_VAL,&mac->sizeofcmds);
+	add_s_var("s","flags",TYPE_VAL,&mac->flags);
+	lc=(struct load_command*)(mac+(sizeof(struct mach_header)));
+	printf("%d\n",lc->cmd);
+	for(n=0;n<mac->ncmds;n++)
+	{
+		
+	}
+	make_table(NULL,"lc",4);
+	make_table("lc[2]","sect",2);
+	add_s_var("lc[2]->sect[1]","pippo",TYPE_VAL,&xx);
 	printf("mach-o\n");
 }
 void load_elf_hd()
