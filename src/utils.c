@@ -64,7 +64,7 @@ void file_probe()
 }
 void load_headers()
 {
-	make_table("main",-1);
+	//make_table("main",-1);
 	switch(file_type)
 	{
 	case FT_MACHO:
@@ -95,10 +95,10 @@ void load_elf_hd()
 {
 	Elf32_Ehdr *elf;int xx=23;
 	elf=(Elf32_Ehdr*)faddr;
-	make_table("s",-1);
-	add_s_var("s",0,"prova",TYPE_VAL,&xx);
-	make_table("ph",2);
-	add_s_var("ph",1,"pippo",TYPE_VAL,&xx);
+	make_table(NULL,"s",-1);
+	add_s_var("s","prova",TYPE_VAL,&xx);
+	make_table(NULL,"ph",2);
+	add_s_var("ph[1]","pippo",TYPE_VAL,&xx);
 	printf("elf\n");
 }
 void die(char *s)

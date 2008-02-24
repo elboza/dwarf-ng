@@ -21,6 +21,11 @@ struct _pp
 {
 	struct _gv **f,**l;
 };
+struct token
+{
+	char name[255];
+	int num;
+};
 struct _gv
 {
 	struct _var v;

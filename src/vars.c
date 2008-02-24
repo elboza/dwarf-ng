@@ -125,13 +125,44 @@ struct _var* get_normal_var(char *name)
 	}
 	return 0;
 }
-struct _p* get_struct_pointer(char *name,int num)
+char* get_token(struct token *tok,char *s)
+{
+	char temp[255];
+	char *c,*tp;
+	c=&(tok->name[0]);
+	tok->num=-1;
+	tp=&temp[0];
+	while(isalnum(*s))
+	{
+		*c=*s;
+		c++;s++;
+	}
+	*c='\0';
+	c++;
+	*c='\0';
+	if(*s=='[')
+	{
+		s++;
+		while(isdigit(*s))
+		{
+			*tp=*s;
+			tp++;s++;
+		}
+		*tp='\0';
+		s++;
+		tok->num=atoi(temp);
+	}
+	if(*s=='-') s+=2;
+	return s;
+}
+struct _p* get_struct_pointer(struct _p *fromtable,char *name,int num)
 {
 	struct _p *p;
-	struct _gv *ptr,*in_ptr;
+	struct _gv *ptr,*in_ptr,*initialpointer;
 	int count;
 	//p=(struct _p*)malloc(sizeof(struct _p));
 	//if(p==NULL) die("error allocating _p struct");
+	if(fromtable==NULL) initialpointer=gv_first; else initialpointer=fromtable->first;
 	if(name==NULL)
 	{
 		//p->first=gv_first;
@@ -140,7 +171,7 @@ struct _p* get_struct_pointer(char *name,int num)
 	}
 	else
 	{
-		for(ptr=gv_first;ptr;ptr=ptr->next)
+		for(ptr=initialpointer;ptr;ptr=ptr->next)
 		{
 			if(ptr->v.type>=TYPE_STRUCT)
 			{
@@ -179,7 +210,22 @@ struct _p* get_struct_pointer(char *name,int num)
 	}
 	return NULL;
 }
-void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
+struct _p* quickparse(char *str)
+{
+	struct token tok;
+	struct _p *p;
+	if(str==NULL) return NULL;
+	str=get_token(&tok,str);
+	p=NULL;
+	p=get_struct_pointer(p,tok.name,tok.num);
+	while((strlen(str))!=0)
+	{
+		p=get_struct_pointer(p,tok.name,tok.num);
+		str=get_token(&tok,str);
+	}
+	return p;
+}
+void add_s_var(char *path,char *name,int type,void *val)
 {
 	struct _gv *newvar;
 	struct _p *pst;
@@ -204,7 +250,7 @@ void add_s_var(char *struct_name,int struct_num,char *name,int type,void *val)
 		default:
 			break;
 	}
-	pst=get_struct_pointer(struct_name,struct_num);
+	pst=quickparse(path);
 	if(pst)
 	{
 		if(pst->first==NULL)
@@ -299,7 +345,7 @@ struct _var* get_s_var(char *name)
 	}
 	return NULL;
 }
-struct _var* get_s_num_var(struct _p *p,char *name,int num)
+struct _var* get_s_num_var(char *name,int num)
 {
 	struct _var *var;
 	struct _gv *ptr;
@@ -347,7 +393,7 @@ void delete_tables()
 		}
 	}
 }
-void add_table(struct _gv *p,struct _gv *st)
+void add_table(struct _p *p,struct _gv *st)
 {
 	struct _gv **f,**l;
 	if(p==NULL)
@@ -357,8 +403,8 @@ void add_table(struct _gv *p,struct _gv *st)
 	}
 	else
 	{
-		f=&p->v.p.first;
-		l=&p->v.p.last;
+		f=&p->first;
+		l=&p->last;
 	}
 	if(*f==NULL)
 	{
@@ -371,9 +417,10 @@ void add_table(struct _gv *p,struct _gv *st)
 	}
 	*l=st;
 }
-void make_table(char *nome,int num)
+void make_table(char *path,char *nome,int num)
 {
 	struct _gv *p,*x;
+	struct _p *pointerpath;
 	int n;
 	p=(struct _gv*)malloc(sizeof(struct _gv));
 	if(p==NULL) die("error allocating table memory");
@@ -385,7 +432,8 @@ void make_table(char *nome,int num)
 	p->v.p.last=NULL;
 	if(num<0) p->v.type=TYPE_STRUCT;
 	else p->v.type=TYPE_NODE_STRUCT;
-	add_table(NULL,p);
+	pointerpath=quickparse(path);
+	add_table(pointerpath,p);
 	if(num>=0)
 	{
 		for(n=0;n<=num;n++)
@@ -399,7 +447,7 @@ void make_table(char *nome,int num)
 			x->next=NULL;
 			x->v.p.first=NULL;
 			x->v.p.last=NULL;
-			add_table(p,x);
+			add_table((struct _p*)&(p->v.p),x);
 			x=NULL;
 		}
 	}
@@ -437,37 +485,4 @@ struct _p* get_bookmark()
 {
 	return bookmark;
 }
-//void push(char *s)
-//{
-//	struct _stack_s *ptr;
-//	ptr=(struct _stack_s *)malloc(sizeof(struct _stack_s));
-//	if(ptr==NULL) die("error allocating new stack  item");
-//	ptr->name=NULL;
-//	ptr->name=strdup(s);
-//	if(ptr->name==NULL) die("error allocating new stack item");
-//	ptr->prev=last_stack;
-//	last_stack=ptr;
-//}
-//struct _var* peek(void)
-//{
-//	return last_stack;
-//}
-//struct _var* pop(void)
-//{
-//	struct _stack_s *ptr;
-//	ptr=last_stack;
-//	if(ptr)
-//	{
-//		last_stack=ptr->prev;
-//		//free(ptr);
-//	}
-//	return ptr;
-//}
-//void s_remove(void)
-//{
-//	if(last_stack)
-//	{
-//		
-//	}
-//}
 
