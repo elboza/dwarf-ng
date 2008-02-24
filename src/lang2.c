@@ -121,7 +121,7 @@ struct _var* ex(nodeType *p) {
         	if(v[0]==NULL) break;
         	if(p->opr.op[0]->type==typeOpr)
         	{
-        		printf("struct assign\n");
+        		//printf("struct assign\n");
         		v[1]=ex(p->opr.op[0]);
         		if(v[1]->type>=TYPE_STRUCT)
         		{
@@ -208,7 +208,8 @@ struct _var* ex(nodeType *p) {
         	//printf("struct: ");
         	//v[0]=ex(p->opr.op[0]);
         	//printf("-- %s --",p->opr.op[0]->opr.op[0]->id.s);
-        	v[0]=get_s_var(p->opr.op[0]->opr.op[0]->id.s);
+        	//v[0]=get_s_var(p->opr.op[0]->opr.op[0]->id.s);
+        	v[0]=ex(p->opr.op[0]);
         	//printf("->");
         	//v[1]=ex(p->opr.op[1]);
         	if(v[0]==NULL) {free_bookmark();return NULL;}
@@ -225,7 +226,7 @@ struct _var* ex(nodeType *p) {
         	return NULL;
         	//break;
         case STRUCTE:
-        	printf("structE: \n");
+        	//printf("structE: \n");
         	//v[0]=ex(p->opr.op[1]);
         	//printf("%s[%d]\n",p->opr.op[0]->id.s,v[0]->val);
         	v[1]=ex(p->opr.op[1]);
