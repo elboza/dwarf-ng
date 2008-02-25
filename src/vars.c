@@ -220,8 +220,8 @@ struct _p* quickparse(char *str)
 	p=get_struct_pointer(p,tok.name,tok.num);
 	while((strlen(str))!=0)
 	{
-		p=get_struct_pointer(p,tok.name,tok.num);
 		str=get_token(&tok,str);
+		p=get_struct_pointer(p,tok.name,tok.num);
 	}
 	return p;
 }
@@ -356,7 +356,7 @@ struct _var* get_s_num_var(char *name,int num)
 		ptr=var->p.first;
 		while(n++<num)
 		{
-			ptr=ptr->next;
+			if(ptr->next) ptr=ptr->next; else return NULL;
 		}
 		return &ptr->v;
 	}
@@ -436,7 +436,7 @@ void make_table(char *path,char *nome,int num)
 	add_table(pointerpath,p);
 	if(num>=0)
 	{
-		for(n=0;n<=num;n++)
+		for(n=0;n<num;n++)
 		{
 			x=(struct _gv*)malloc(sizeof(struct _gv));
 			if(x==NULL) die("error allocating child table memory");

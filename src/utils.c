@@ -113,6 +113,8 @@ void load_elf_hd()
 	add_s_var("s","prova",TYPE_VAL,&xx);
 	make_table(NULL,"ph",2);
 	add_s_var("ph[1]","pippo",TYPE_VAL,&xx);
+	make_table("ph[2]","ptable",4);
+	add_s_var("ph[2]->ptable[1]","pippo",TYPE_VAL,&xx);
 	printf("elf\n");
 }
 void die(char *s)
