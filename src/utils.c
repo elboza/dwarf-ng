@@ -34,6 +34,7 @@ void file_open(char *s)
 void file_close()
 {
 	delete_tables();
+	free_completion();
 	if(fd)
 	{
 		//munmap(faddr);
@@ -158,14 +159,81 @@ void load_macho_hd()
 }
 void load_elf_hd()
 {
-	Elf32_Ehdr *elf;int xx=23;
+	Elf32_Ehdr *elf;
+	Elf32_Phdr *ph;
+	Elf32_Shdr *sh;
+	int x,num_ph,num_sh;
+	char path[255];
 	elf=(Elf32_Ehdr*)faddr;
 	make_table(NULL,"s",-1);
-	add_s_var("s","prova",TYPE_VAL,&xx);
-	make_table(NULL,"ph",2);
-	add_s_var("ph[1]","pippo",TYPE_VAL,&xx);
-	make_table("ph[2]","ptable",4);
-	add_s_var("ph[2]->ptable[1]","pippo",TYPE_VAL,&xx);
+	add_s_var("s","e_ident",TYPE_STRING,&elf->e_ident);
+	x=(int)elf->e_type;
+	add_s_var("s","e_type",TYPE_VAL,&x);
+	x=(int)elf->e_machine;
+	add_s_var("s","e_machine",TYPE_VAL,&x);
+	add_s_var("s","e_version",TYPE_VAL,&elf->e_version);
+	add_s_var("s","e_entry",TYPE_VAL,&elf->e_entry);
+	add_s_var("s","e_phoff",TYPE_VAL,&elf->e_phoff);
+	add_s_var("s","e_shoff",TYPE_VAL,&elf->e_shoff);
+	add_s_var("s","e_flags",TYPE_VAL,&elf->e_flags);
+	x=(int)elf->e_ehsize;
+	add_s_var("s","e_ehsize",TYPE_VAL,&x);
+	x=(int)elf->e_phentsize;
+	add_s_var("s","e_phentsize",TYPE_VAL,&x);
+	x=(int)elf->e_phnum;
+	add_s_var("s","e_phnum",TYPE_VAL,&x);
+	x=(int)elf->e_shentsize;
+	add_s_var("s","e_shentsize",TYPE_VAL,&x);
+	x=(int)elf->e_shnum;
+	add_s_var("s","e_shnum",TYPE_VAL,&x);
+	x=(int)elf->e_shstrndx;
+	add_s_var("s","e_shstrndx",TYPE_VAL,&x);
+	if(elf->e_phnum>0)
+	{
+		make_table(NULL,"ph",elf->e_phnum);
+		num_ph=0;
+		ph=(Elf32_Phdr*)(faddr+elf->e_phoff);
+		do
+		{
+			sprintf(path,"ph[%d]",num_ph);
+			add_s_var(path,"p_type",TYPE_VAL,&ph->p_type);
+			add_s_var(path,"p_offset",TYPE_VAL,&ph->p_offset);
+			add_s_var(path,"p_vaddr",TYPE_VAL,&ph->p_vaddr);
+			add_s_var(path,"p_paddr",TYPE_VAL,&ph->p_paddr);
+			add_s_var(path,"p_filesz",TYPE_VAL,&ph->p_filesz);
+			add_s_var(path,"p_memsz",TYPE_VAL,&ph->p_memsz);
+			add_s_var(path,"p_flags",TYPE_VAL,&ph->p_flags);
+			add_s_var(path,"p_align",TYPE_VAL,&ph->p_align);
+			ph=(Elf32_Phdr*)((char*)ph+sizeof(Elf32_Phdr));
+			num_ph++;
+		}while(num_ph<elf->e_phnum);
+	}
+	if(elf->e_shnum>0)
+	{
+		make_table(NULL,"sh",elf->e_shnum);
+		num_sh=0;
+		sh=(Elf32_Shdr*)(faddr+elf->e_shoff);
+		do
+		{
+			sprintf(path,"sh[%d]",num_sh);
+			add_s_var(path,"sh_name",TYPE_VAL,&sh->sh_name);
+			add_s_var(path,"sh_type",TYPE_VAL,&sh->sh_type);
+			add_s_var(path,"sh_flags",TYPE_VAL,&sh->sh_flags);
+			add_s_var(path,"sh_addr",TYPE_VAL,&sh->sh_addr);
+			add_s_var(path,"sh_offset",TYPE_VAL,&sh->sh_offset);
+			add_s_var(path,"sh_size",TYPE_VAL,&sh->sh_size);
+			add_s_var(path,"sh_link",TYPE_VAL,&sh->sh_link);
+			add_s_var(path,"sh_info",TYPE_VAL,&sh->sh_info);
+			add_s_var(path,"sh_addralign",TYPE_VAL,&sh->sh_addralign);
+			add_s_var(path,"sh_entsize",TYPE_VAL,&sh->sh_entsize);
+			sh=(Elf32_Shdr*)((char*)sh+sizeof(Elf32_Shdr));
+			num_sh++;
+		}while(num_sh<elf->e_shnum);
+	}
+	//make_table(NULL,"ph",2);
+	//add_s_var("ph[1]","pippo",TYPE_VAL,&xx);
+	//make_table("ph[2]","ptable",4);
+	//add_s_var("ph[2]->ptable[1]","pippo",TYPE_VAL,&xx);
 	printf("elf\n");
 }
 void die(char *s)
@@ -218,4 +286,112 @@ void shell()
 		execute(cmd);
 	}
 	
+}
+void initialize_readline()
+{
+	rl_readline_name="dwarf";
+	rl_attempted_completion_function=(CPPFunction *)dwarf_completion;
+}
+char ** dwarf_completion(char *text,int start,int end)
+{
+	char **matches;
+	matches=(char **)NULL;
+	matches=completion_matches(text,dwarf_command_generator);
+	return (matches);
+}
+char* dwarf_command_generator(char *text,int state)
+{
+	static struct comp_list *ptr;
+	static int len;
+	char *name;
+	if(!state)
+	{
+		ptr=first_comp;
+		len=strlen(text);
+	}
+	while(ptr)
+	{
+		name=ptr->s;
+		if(ptr->next) ptr=ptr->next; else ptr=NULL;
+		if(strncmp(name,text,len)==0) return(strdup(name));
+	}
+	return ((char *)NULL);
+}
+void add_completion(char *path,char *item,int type)
+{
+	char str[1024];
+	struct comp_list *ptr;
+	int ok=0;
+	if((path==NULL) && (item==NULL)) return;
+	if(path==NULL) {strncpy(str,item,1024);ok=1;}
+	if(item==NULL) {strncpy(str,path,1024);ok=1;}
+	if(!ok) sprintf(str,"%s->%s",path,item);
+	ptr=(struct comp_list*)malloc(sizeof(struct comp_list));
+	if(ptr==NULL) die("error allocating for completation item");
+	ptr->s=(char*)malloc(strlen(str));
+	if(ptr->s==NULL) die("error allocating for completation item name");
+	strncpy(ptr->s,str,strlen(str));
+	ptr->type=type;
+	ptr->prev=NULL;
+	ptr->next=NULL;
+	if(first_comp==NULL)
+	{
+		first_comp=ptr;
+	}
+	else
+	{
+		ptr->prev=last_comp;
+		last_comp->next=ptr;
+	}
+	last_comp=ptr;
+}
+void free_completion()
+{
+	struct comp_list *ptr;
+	for(ptr=first_comp;ptr;ptr=ptr->next)
+	{
+		if(ptr->type==comp_discardable)
+		{
+			if(ptr->prev)
+			{
+				ptr->prev->next=ptr->next;
+			}
+			if(ptr->next)
+			{
+				ptr->next->prev=ptr->prev;
+			}
+		}
+	}
+}
+void add_cmds_completions()
+{
+	add_completion("quit",NULL,comp_fixed);
+	add_completion("while",NULL,comp_fixed);
+	add_completion("if",NULL,comp_fixed);
+	add_completion("else",NULL,comp_fixed);
+	add_completion("print",NULL,comp_fixed);
+	add_completion("quit",NULL,comp_fixed);
+	add_completion("pp",NULL,comp_fixed);
+	add_completion("exit",NULL,comp_fixed);
+//	add_completion("save",NULL,comp_fixed);
+//	add_completion("write",NULL,comp_fixed);
+	add_completion("load",NULL,comp_fixed);
+	add_completion("read",NULL,comp_fixed);
+	add_completion("open",NULL,comp_fixed);
+	add_completion("info",NULL,comp_fixed);
+	add_completion("type",NULL,comp_fixed);
+//	add_completion("force",NULL,comp_fixed);
+//	add_completion("sizeof",NULL,comp_fixed);
+//	add_completion("call",NULL,comp_fixed);
+//	add_completion("my",NULL,comp_fixed);
+//	add_completion("local",NULL,comp_fixed);
+//	add_completion("alias",NULL,comp_fixed);
+//	add_completion("shift",NULL,comp_fixed);
+//	add_completion("move",NULL,comp_fixed);
+//	add_completion("realloc",NULL,comp_fixed);
+	add_completion("help",NULL,comp_fixed);
+//	add_completion("insert",NULL,comp_fixed);
+//	add_completion("pos",NULL,comp_fixed);
+//	add_completion("createh",NULL,comp_fixed);
+	add_completion("show",NULL,comp_fixed);
 }

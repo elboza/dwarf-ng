@@ -42,6 +42,7 @@ void add_var(char *name,int type,void *val)
 		gv_last->next=newvar;
 	}
 	gv_last=newvar;
+	//add_completion(name,NULL,comp_var);
 }
 void remove_item(struct _gv *from,struct _gv *p)
 {
@@ -263,40 +264,9 @@ void add_s_var(char *path,char *name,int type,void *val)
 			pst->last->next=newvar;
 		}
 		pst->last=newvar;
-		//if(((strcmp(struct_name,"s"))==0) || ((strcmp(struct_name,"main"))==0))
-		//{
-		//	gv_first=pst->first;
-		//	gv_last=pst->last;
-		//}
-		//free(pst);
+		add_completion(path,name,comp_discardable);
 	}
 }
-//void set_s_var_bis(struct _p *p,char *name,int type,void *val)
-//{
-//	struct _var *var;
-//	int *x;
-//	x=val;
-//	var=get_s_var(p,name);
-//	if(var)
-//	{
-//		{
-//			switch(type){
-//			case TYPE_STRING:
-//				free(var->s);
-//				var->s=strdup((char*)val);
-//				if(var->s==NULL) {die("error allocating space for var val");}
-//				break;
-//			case TYPE_VAL:
-//				var->val=*x;
-//				break;
-//			case TYPE_STRUCT:
-//				break;
-//			default:
-//			}
-//		}
-//	}
-	
-//}
 void set_s_var(struct _var *var,int type,void *val)
 {
 	int *x;
@@ -422,6 +392,7 @@ void make_table(char *path,char *nome,int num)
 	struct _gv *p,*x;
 	struct _p *pointerpath;
 	int n;
+	char tempstr[255];
 	p=(struct _gv*)malloc(sizeof(struct _gv));
 	if(p==NULL) die("error allocating table memory");
 	p->v.name=strdup(nome);
@@ -434,6 +405,7 @@ void make_table(char *path,char *nome,int num)
 	else p->v.type=TYPE_NODE_STRUCT;
 	pointerpath=quickparse(path);
 	add_table(pointerpath,p);
+	add_completion(path,nome,comp_discardable);
 	if(num>=0)
 	{
 		for(n=0;n<num;n++)
@@ -449,6 +421,8 @@ void make_table(char *path,char *nome,int num)
 			x->v.p.last=NULL;
 			add_table((struct _p*)&(p->v.p),x);
 			x=NULL;
+			sprintf(tempstr,"%s[%d]",nome,n);
+			add_completion(path,tempstr,comp_discardable);
 		}
 	}
 }

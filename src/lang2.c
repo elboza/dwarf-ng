@@ -254,6 +254,10 @@ struct _var* ex(nodeType *p) {
         	file_probe();
         	load_headers();
         	break;;
+        case CLOSE:
+        	file_close();
+        	printf("file closed\n");
+        	break;
         }
     }
     for(i=0;i<3;i++)

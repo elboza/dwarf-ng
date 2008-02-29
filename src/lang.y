@@ -32,7 +32,7 @@ void yyerror(char *s);
 %token <sWord>	FILENAME
 %token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL
-%token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW
+%token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW CLOSE
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -84,6 +84,7 @@ stmt:
         | POS							{$$=opr(QUIT,2,NULL,NULL);}
         | CREATEH						{$$=opr(QUIT,2,NULL,NULL);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
+        | CLOSE							{$$=opr(CLOSE,2,NULL,NULL);}
         ;
 
 stmt_list:

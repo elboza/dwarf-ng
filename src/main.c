@@ -118,6 +118,8 @@ void look_data_ok()
 int main(int argc,char **argv)
 {
 	get_defaults_arg();
+	initialize_readline();
+	add_cmds_completions();
 	parse_args(argc,argv);
 	look_data_ok();
 	if(argc<2) usage();
