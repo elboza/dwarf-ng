@@ -29,23 +29,23 @@
 void usage()
 {
 	printf("dwarf v0.1 -- drugo@code.autistici.org\n");
-	printf("=====\n");
+	printf("======================================\n");
 	printf("\nUSAGE:\n");
 	printf("dwarf [options] [file]\n");
 	printf("\nvalid options:\n\n");
 	printf("-i            interactive (shell mode)\n");
 	printf("-h            help\n");
-	printf("-c '...'      command  mode (execute commands)\n");
+	printf("-c '<commands>'      command  mode (execute commands)\n");
 	printf("-x <file>     execute file script\n");
 	printf("-t            file type\n");
-	printf("-s <all,sh,main>  section headers\n");
-	printf("-f type       force to treat as a <pe|elf|mach-o|mz> file\n");
-	printf("-r            reloc (relocate section offsets)\n");
-	printf("-S --size= ±val,val,±section\n");
-	printf("--section= ±pos,name\n");
-	printf("--rel= sectors, sectname,±offs      (relocate section(s) offset)\n");
-	printf("--ph=±pos,name\n");
-	printf("-m --move=init,[end,len,]init2       move block\n");
+//	printf("-s <all,sh,main>  section headers\n");
+//	printf("-f type       force to treat as a <pe|elf|mach-o|mz> file\n");
+//	printf("-r            reloc (relocate section offsets)\n");
+//	printf("-S --size= ±val,val,±section\n");
+//	printf("--section= ±pos,name\n");
+//	printf("--rel= sectors, sectname,±offs      (relocate section(s) offset)\n");
+//	printf("--ph=±pos,name\n");
+//	printf("-m --move=init,[end,len,]init2       move block\n");
 	exit(1);
 }
 void get_defaults_arg()
@@ -98,7 +98,7 @@ void parse_args(int argc,char **argv)
 				if((strcmp(optarg,"main"))==0) ;
 				if((strcmp(optarg,"sh"))==0) ;
 				break;
-				case'f':
+			case'f':
 				if((strcmp(optarg,"null"))==0) forced=FT_NULL;  //default
 				if((strcmp(optarg,"pe"))==0) forced=FT_PE;
 				if((strcmp(optarg,"elf"))==0) forced=FT_ELF;
