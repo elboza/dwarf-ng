@@ -24,7 +24,7 @@
 #include<errno.h>
 #include"main.h"
 #include"vars.h"
-#include"look_debug.h"
+
 
 void usage()
 {

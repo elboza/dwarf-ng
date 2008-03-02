@@ -3,8 +3,6 @@ xcomp: main.o look_debug.o utils.o lang2.o y.tab.o lex.yy.o vars.o
 
 main.o : main.h main.c
 	gcc -c main.c -ggdb
-look_debug.o: look_debug.h look_debug.c
-	gcc -c look_debug.c -ggdb
 utils.o: utils.h utils.c
 	gcc -c utils.c -ggdb
 lang2.o: lang.l lang.y lang.h lang2.c
