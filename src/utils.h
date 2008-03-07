@@ -34,6 +34,7 @@ void shell(void);
 void load_headers(void);
 void load_macho_hd(void);
 void load_elf_hd(void);
+void load_pe_hd(void);
 void initialize_readline(void);
 char ** dwarf_completion();
 char* dwarf_command_generator();

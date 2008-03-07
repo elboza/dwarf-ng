@@ -30,6 +30,7 @@
 #include"main.h"
 #include"macho.h"
 #include"elf.h"
+#include"pe.h"
 #include"utils.h"
 #include"lang.h"
 #include"vars.h"
@@ -63,6 +64,9 @@ void file_probe()
 {
 	struct mach_header *mac;
 	Elf32_Ehdr *elf;
+	_IMAGE_DOS_HEADER *mzexe;
+	_IMAGE_NT_HEADERS *pe;
+	int x;
 	//file_open(filename);
 	//probe if is mach-o
 	mac=(struct mach_header*)faddr;
@@ -80,6 +84,15 @@ void file_probe()
 	}
 	//probe if it is a PE
 	//probe if it is a MZ
+	mzexe=(_IMAGE_DOS_HEADER*)faddr;
+	x=(int)mzexe->e_magic;
+	printf("sig: %x (%x)\n",x,mzexe->e_lfanew);
+	if(x==IMAGE_DOS_SIGNATURE)
+	{
+		file_type=FT_MZ;
+		
+	}
+	
 }
 void load_headers()
 {
@@ -91,6 +104,9 @@ void load_headers()
 		break;
 	case FT_ELF:
 		load_elf_hd();
+		break;
+	case FT_PE:
+		load_pe_hd();
 		break;
 	default:
 		
@@ -253,6 +269,10 @@ void load_elf_hd()
 	//make_table("ph[2]","ptable",4);
 	//add_s_var("ph[2]->ptable[1]","pippo",TYPE_VAL,&xx);
 	printf("elf\n");
+}
+void load_pe_hd()
+{
+	
 }
 void die(char *s)
 {
