@@ -1,5 +1,5 @@
 /*
- main.h : dwarf's main header.
+ dw_pe_utils.c : PE file format utils.
 
  (c) 2007-2008 Fernando Iazeolla
 
@@ -16,25 +16,36 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-int ilook_debug; /* if set perform the debug function only*/
-#define MAX_FILENAME 255
-#define MAX_STR 255
-char filename[MAX_FILENAME],*cmd;
-int forced;  /*if set force a file to be treat as a given kind reguardless of what really kind is*/
-int file_type;
-int file_endian;
-int cpu_endian;
-int file_bit_class;
-int fd;
-int mx;
-void *faddr;
-typedef enum {little_endian,big_endian} endian;
-typedef enum {bit8,bit16,bit32,bit64} filebitclass;
-//file types
-#define FT_NULL		0
-#define FT_ELF		1
-#define FT_MZ		2
-#define FT_MACHO	3
-#define FT_PE		4
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<string.h>
+#include<errno.h>
+#include<sys/mman.h>
+#include<fcntl.h>
+#include<stdio.h>
+#include<readline/readline.h>
+#include<readline/history.h>
+#include"stdint.h"
+#include"main.h"
+#include"macho.h"
+#include"elf.h"
+#include"pe.h"
+#include"dw_elf_utils.h"
+#include"dw_macho_utils.h"
+#include"dw_pe_utils.h"
+#include"dw_readline_completion.h"
+#include"utils.h"
+#include"lang.h"
+#include"vars.h"
 
-#define QUITTING	123
+
+void load_pe_hd()
+{
+	load_mz_hd();
+	
+}
+void load_mz_hd()
+{
+
+}

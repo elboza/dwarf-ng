@@ -23,6 +23,7 @@
 #include<string.h>
 #include<errno.h>
 #include"main.h"
+#include"dw_readline_completion.h"
 #include"vars.h"
 
 
@@ -142,12 +143,14 @@ int main(int argc,char **argv)
 	get_defaults_arg();
 	initialize_readline();
 	add_cmds_completions();
+	cpu_endian=probe_endian();
+	file_endian=little_endian;
 	parse_args(argc,argv);
 	look_data_ok();
 	if(argc<2) usage();
 	if(optind<argc) {strncpy(filename,argv[optind],MAX_FILENAME);}
 	else{strncpy(filename,"<NULL>",MAX_FILENAME);}
-	if(ilook_debug) look_debug();
+	//if(ilook_debug) look_debug();
 	execute(cmd);
 	
 	printf("Bye.\n");
