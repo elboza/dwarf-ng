@@ -190,7 +190,7 @@ int probe_endian()
 	int x=1,res;
 	char *h,*l;
 	h=(char*)&x;
-	l=h+1;
+	l=h+3;
 	res=(int)*l;
 	if(res) return big_endian; else return little_endian;
 }
