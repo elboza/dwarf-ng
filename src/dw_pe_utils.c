@@ -42,8 +42,93 @@
 
 void load_pe_hd()
 {
+	_IMAGE_DOS_HEADER *mz;
+	_IMAGE_NT_HEADERS *pe;
+	int x;
 	load_mz_hd();
-	
+	make_table(NULL,"pe",-1);
+	mz=(_IMAGE_DOS_HEADER*)faddr;
+	x=get_data32(mz->e_lfanew);
+	pe=(_IMAGE_NT_HEADERS*)(faddr+x);
+	x=get_data32(pe->Signature);
+	add_s_var("pe","Signature",TYPE_VAL,&x);
+	make_table("pe","FileHeader",-1);
+	make_table("pe","OptionalHeader",-1);
+	x=get_data16(pe->FileHeader.Machine);
+	add_s_var("pe->FileHeader","Machine",TYPE_VAL,&x);
+    x=get_data16(pe->FileHeader.NumberOfSections);
+    add_s_var("pe->FileHeader","NumberOfSections",TYPE_VAL,&x);
+    x=get_data32(pe->FileHeader.TimeDateStamp);
+	add_s_var("pe->FileHeader","TimeDateStamp",TYPE_VAL,&x);
+    x=get_data32(pe->FileHeader.PointerToSymbolTable);
+	add_s_var("pe->FileHeader","PointerToSymbolTable",TYPE_VAL,&x);
+    x=get_data32(pe->FileHeader.NumberOfSymbols);
+	add_s_var("pe->FileHeader","NumberOfSymbols",TYPE_VAL,&x);
+    x=get_data16(pe->FileHeader.SizeOfOptionalHeader);
+	add_s_var("pe->FileHeader","SizeOfOptionalHeader",TYPE_VAL,&x);
+    x=get_data16(pe->FileHeader.Characteristics);
+    add_s_var("pe->FileHeader","Characteristics",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.Magic);
+    add_s_var("pe->OptionalHeader","Magic",TYPE_VAL,&x);
+    x=get_data8(pe->OptionalHeader.MajorLinkerVersion);
+    add_s_var("pe->OptionalHeader","MajorLinkerVersion",TYPE_VAL,&x);
+    x=get_data8(pe->OptionalHeader.MinorLinkerVersion);
+    add_s_var("pe->OptionalHeader","MinorLinkerVersion",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfCode);
+    add_s_var("pe->OptionalHeader","SizeOfCode",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfInitializedData);
+    add_s_var("pe->OptionalHeader","SizeOfInitializedData",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfUninitializedData);
+    add_s_var("pe->OptionalHeader","SizeOfUninitializedData",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.AddressOfEntryPoint);
+    add_s_var("pe->OptionalHeader","AddressOfEntryPoint",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.BaseOfCode);
+    add_s_var("pe->OptionalHeader","BaseOfCode",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.BaseOfData);
+	add_s_var("pe->OptionalHeader","BaseOfData",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.ImageBase);
+    add_s_var("pe->OptionalHeader","ImageBase",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SectionAlignment);
+    add_s_var("pe->OptionalHeader","SectionAlignment",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.FileAlignment);
+    add_s_var("pe->OptionalHeader","FileAlignment",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.MajorOperatingSystemVersion);
+    add_s_var("pe->OptionalHeader","MajorOperatingSystemVersion",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.MinorOperatingSystemVersion);
+    add_s_var("pe->OptionalHeader","MinorOperatingSystemVersion",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.MajorImageVersion);
+    add_s_var("pe->OptionalHeader","MajorImageVersion",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.MinorImageVersion);
+    add_s_var("pe->OptionalHeader","MinorImageVersion",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.MajorSubsystemVersion);
+    add_s_var("pe->OptionalHeader","MajorSubsystemVersion",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.MinorSubsystemVersion);
+    add_s_var("pe->OptionalHeader","MinorSubsystemVersion",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.Reserved1);
+    add_s_var("pe->OptionalHeader","Reserved1",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfImage);
+    add_s_var("pe->OptionalHeader","SizeOfImage",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfHeaders);
+    add_s_var("pe->OptionalHeader","SizeOfHeaders",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.CheckSum);
+    add_s_var("pe->OptionalHeader","CheckSum",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.Subsystem);
+    add_s_var("pe->OptionalHeader","Subsystem",TYPE_VAL,&x);
+    x=get_data16(pe->OptionalHeader.DllCharacteristics);
+    add_s_var("pe->OptionalHeader","DllCharacteristics",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfStackReserve);
+    add_s_var("pe->OptionalHeader","SizeOfStackReserve",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfStackCommit);
+    add_s_var("pe->OptionalHeader","SizeOfStackCommit",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfHeapReserve);
+    add_s_var("pe->OptionalHeader","SizeOfHeapReserve",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.SizeOfHeapCommit);
+    add_s_var("pe->OptionalHeader","SizeOfHeapCommit",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.LoaderFlags);
+    add_s_var("pe->OptionalHeader","LoaderFlags",TYPE_VAL,&x);
+    x=get_data32(pe->OptionalHeader.NumberOfRvaAndSizes);
+    add_s_var("pe->OptionalHeader","NumberOfRvaAndSizes",TYPE_VAL,&x);
+    
 }
 void load_mz_hd()
 {

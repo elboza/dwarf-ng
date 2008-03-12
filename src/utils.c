@@ -220,6 +220,13 @@ inline void endian_swap_64(uint64_t *x)
         ((*x>>40) & 0x000000000000FF00) |
         (*x<<56);
 }
+uint8_t get_data8(uint8_t data)
+{
+	int res;
+	//if(cpu_endian!=file_endian) endian_swap_16(&data);
+	res=(int)data;
+	return res;
+}
 uint16_t get_data16(uint16_t data)
 {
 	int res;
