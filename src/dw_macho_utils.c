@@ -48,6 +48,10 @@ void load_macho_hd()
 	struct load_command *lc;
 	struct segment_command *seg;
 	struct section *sect;
+	struct dylib_command *m_dylib;
+	struct dylinker_command *dylinker;
+	struct symtab_command *symtab;
+	struct dysymtab_command *dysymtab;
 	mac=(struct mach_header*)faddr;
 	make_table(NULL,"s",-1);
 	x=get_data32(mac->magic);
@@ -135,7 +139,94 @@ void load_macho_hd()
 					}while(n_sect<seg->nsects);
 				}
 				break;
-			defaulf:
+			case LC_LOAD_DYLIB:
+			case LC_ID_DYLIB:
+				m_dylib=(struct dylib_command*)lc;
+				sprintf(path,"lc[%d]",n_seg);
+				x=get_data32(m_dylib->cmd);
+				add_s_var(path,"cmd",TYPE_VAL,&x);
+				x=get_data32(m_dylib->cmdsize);
+				add_s_var(path,"cmdsize",TYPE_VAL,&x);
+				x=get_data32(m_dylib->dylib.name.offset);
+				add_s_var(path,"offset",TYPE_VAL,&x);
+				x=get_data32(m_dylib->dylib.timestamp);
+    			add_s_var(path,"timestamp",TYPE_VAL,&x);
+    			x=get_data32(m_dylib->dylib.current_version);
+    			add_s_var(path,"current_version",TYPE_VAL,&x);
+    			x=get_data32(m_dylib->dylib.compatibility_version);
+    			add_s_var(path,"compatibility_version",TYPE_VAL,&x);
+				break;
+			case LC_LOAD_DYLINKER:
+			case LC_ID_DYLINKER:
+				dylinker=(struct dylinker_command*)lc;
+				sprintf(path,"lc[%d]",n_seg);
+				x=get_data32(dylinker->cmd);
+				add_s_var(path,"cmd",TYPE_VAL,&x);
+				x=get_data32(dylinker->cmdsize);
+				add_s_var(path,"cmdsize",TYPE_VAL,&x);
+				x=get_data32(dylinker->name.offset);
+				add_s_var(path,"offset",TYPE_VAL,&x);
+				break;
+			case LC_SYMTAB:
+				symtab=(struct symtab_command*)lc;
+				sprintf(path,"lc[%d]",n_seg);
+				x=get_data32(symtab->cmd);
+				add_s_var(path,"cmd",TYPE_VAL,&x);
+				x=get_data32(symtab->cmdsize);
+				add_s_var(path,"cmdsize",TYPE_VAL,&x);
+				x=get_data32(symtab->symoff);
+				add_s_var(path,"symoff",TYPE_VAL,&x);
+				x=get_data32(symtab->nsyms);
+				add_s_var(path,"nsyms",TYPE_VAL,&x);
+				x=get_data32(symtab->stroff);
+				add_s_var(path,"stroff",TYPE_VAL,&x);
+				x=get_data32(symtab->strsize);
+				add_s_var(path,"strsize",TYPE_VAL,&x);
+				break;
+			case LC_DYSYMTAB:
+				dysymtab=(struct dysymtab_command*)lc;
+				sprintf(path,"lc[%d]",n_seg);
+				x=get_data32(dysymtab->cmd);
+				add_s_var(path,"cmd",TYPE_VAL,&x);
+				x=get_data32(dysymtab->cmdsize);
+				add_s_var(path,"cmdsize",TYPE_VAL,&x);
+				x=get_data32(dysymtab->ilocalsym);
+				add_s_var(path,"ilocalsym",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nlocalsym);
+    			add_s_var(path,"nlocalsym",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->iextdefsym);
+    			add_s_var(path,"iextdefsym",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nextdefsym);
+    			add_s_var(path,"nextdefsym",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->iundefsym);
+    			add_s_var(path,"iundefsym",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nundefsym);
+    			add_s_var(path,"nundefsym",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->tocoff);
+    			add_s_var(path,"tocoff",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->ntoc);
+    			add_s_var(path,"ntoc",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->modtaboff);
+    			add_s_var(path,"modtaboff",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nmodtab);
+    			add_s_var(path,"nmodtab",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->extrefsymoff);
+    			add_s_var(path,"extrefsymoff",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nextrefsyms);
+    			add_s_var(path,"nextrefsyms",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->indirectsymoff);
+    			add_s_var(path,"indirectsymoff",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nindirectsyms);
+    			add_s_var(path,"nindirectsyms",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->extreloff);
+    			add_s_var(path,"extreloff",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nextrel);
+    			add_s_var(path,"nextrel",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->locreloff);
+    			add_s_var(path,"locreloff",TYPE_VAL,&x);
+    			x=get_data32(dysymtab->nlocrel);
+    			add_s_var(path,"nlocrel",TYPE_VAL,&x);
+			default:
 				break;
 			}
 			lc=(struct load_command*)((char*)lc+m_lc_cmdsize);

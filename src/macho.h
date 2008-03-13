@@ -196,3 +196,61 @@ struct section { /* for 32-bit architectures */
 #define SEG_IMPORT	"__IMPORT"	/* the segment for the self (dyld) */
 					/* modifing code stubs that has read, */
 					/* write and execute permissions */
+union lc_str {
+	uint32_t	offset;	/* offset to the string */
+#ifndef __LP64__
+	char		*ptr;	/* pointer to the string */
+#endif 
+};
+struct uuid_command {
+    uint32_t	cmd;		/* LC_UUID */
+    uint32_t	cmdsize;	/* sizeof(struct uuid_command) */
+    uint8_t	uuid[16];	/* the 128-bit uuid */
+};
+struct dylib {
+    union lc_str  name;			/* library's path name */
+    uint32_t timestamp;			/* library's build time stamp */
+    uint32_t current_version;		/* library's current version number */
+    uint32_t compatibility_version;	/* library's compatibility vers number*/
+};
+struct dylib_command {
+	uint32_t	cmd;		/* LC_ID_DYLIB, LC_LOAD_{,WEAK_}DYLIB,
+					   LC_REEXPORT_DYLIB */
+	uint32_t	cmdsize;	/* includes pathname string */
+	struct dylib	dylib;		/* the library identification */
+};
+struct dylinker_command {
+	uint32_t	cmd;		/* LC_ID_DYLINKER or LC_LOAD_DYLINKER */
+	uint32_t	cmdsize;	/* includes pathname string */
+	union lc_str    name;		/* dynamic linker's path name */
+};
+struct symtab_command {
+	uint32_t	cmd;		/* LC_SYMTAB */
+	uint32_t	cmdsize;	/* sizeof(struct symtab_command) */
+	uint32_t	symoff;		/* symbol table offset */
+	uint32_t	nsyms;		/* number of symbol table entries */
+	uint32_t	stroff;		/* string table offset */
+	uint32_t	strsize;	/* string table size in bytes */
+};
+struct dysymtab_command {
+    uint32_t cmd;	/* LC_DYSYMTAB */
+    uint32_t cmdsize;	/* sizeof(struct dysymtab_command) */
+    uint32_t ilocalsym;	/* index to local symbols */
+    uint32_t nlocalsym;	/* number of local symbols */
+    uint32_t iextdefsym;/* index to externally defined symbols */
+    uint32_t nextdefsym;/* number of externally defined symbols */
+    uint32_t iundefsym;	/* index to undefined symbols */
+    uint32_t nundefsym;	/* number of undefined symbols */
+    uint32_t tocoff;	/* file offset to table of contents */
+    uint32_t ntoc;	/* number of entries in table of contents */
+    uint32_t modtaboff;	/* file offset to module table */
+    uint32_t nmodtab;	/* number of module table entries */
+    uint32_t extrefsymoff;	/* offset to referenced symbol table */
+    uint32_t nextrefsyms;	/* number of referenced symbol table entries */
+    uint32_t indirectsymoff; /* file offset to the indirect symbol table */
+    uint32_t nindirectsyms;  /* number of indirect symbol table entries */
+    uint32_t extreloff;	/* offset to external relocation entries */
+    uint32_t nextrel;	/* number of external relocation entries */
+    uint32_t locreloff;	/* offset to local relocation entries */
+    uint32_t nlocrel;	/* number of local relocation entries */
+};
