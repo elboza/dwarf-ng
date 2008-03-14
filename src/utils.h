@@ -35,3 +35,5 @@ void load_headers(void);
 uint16_t get_data16(uint16_t data);
 uint32_t get_data32(uint32_t data);
 uint64_t get_data64(uint64_t data);
+int get_offset(char *s,char p);
+

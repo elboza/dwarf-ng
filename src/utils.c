@@ -248,3 +248,35 @@ uint64_t get_data64(uint64_t data)
 	res=(int)data;
 	return res;
 }
+int get_offset(char *s,char p)
+{
+	off_t len;
+	if(fd)
+	{
+		if(s==NULL) return 0;
+		if((strcmp(s,"FILE_BEGIN"))==0) return 0;
+		if((strcmp(s,"FILE_END"))==0)
+		{
+			len=lseek(fd,(off_t)0,SEEK_END);
+			return len;
+		}
+		//printf("pos=%s %c\n",s,p);
+		switch(file_type) {
+		case FT_MACHO:
+			//return get_offset_macho(s,p);
+			break;
+		case FT_PE:
+			//return get_offset_pe(s,p);
+			break;
+		case FT_ELF:
+			//return get_offset_elf(s,p);
+			break;
+		case FT_MZ:
+			//return get_offset_mz(s,p);
+			break;
+		default:
+			break;
+		};
+	}
+	return 0;
+}

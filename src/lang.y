@@ -49,7 +49,7 @@ void yyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL
+%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
 %token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW CLOSE
 %nonassoc IFX
 %nonassoc ELSE
@@ -113,8 +113,12 @@ stmt_list:
 expr:
           INTEGER               { $$ = con($1); }
         | VARIABLE              { $$ = id_var($1); }
-        | ivar					{ $$ =$1; }
-        | FILENAME					{ $$ =id_word($1); }
+        | ivar			{ $$ =$1; }
+        | FILE_BEGIN		{$$=con(get_offset("FILE_BEGIN",'.'));}
+        | FILE_END		{$$=con(get_offset("FILE_END",'.'));}
+        | FILE_END WORD		{$$=con(get_offset($2,'e'));}
+        | FILE_BEGIN WORD	{$$=con(get_offset($2,'b'));}
+        | FILENAME		{ $$ =id_word($1); }
         | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
         | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
         | expr '-' expr         { $$ = opr('-', 2, $1, $3); }
@@ -127,7 +131,7 @@ expr:
         | expr NE expr          { $$ = opr(NE, 2, $1, $3); }
         | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
         | '(' expr ')'          { $$ = $2; }
-        | STRING				{$$=id_string($1);}
+        | STRING		{$$=id_string($1);}
         ;
 
 filename:

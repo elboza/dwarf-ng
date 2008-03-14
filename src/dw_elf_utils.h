@@ -17,3 +17,4 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 void load_elf_hd(void);
+int get_offset_elf(char *s,char p);

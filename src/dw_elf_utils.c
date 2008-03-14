@@ -142,3 +142,8 @@ void load_elf_hd()
 	//add_s_var("ph[2]->ptable[1]","pippo",TYPE_VAL,&xx);
 	printf("elf\n");
 }
+int get_offset_elf(char *s,char p)
+{
+	
+	return 0;
+}

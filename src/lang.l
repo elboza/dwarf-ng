@@ -46,7 +46,7 @@ void yyerror(char *);
 					return VARIABLE;
 				}
 
-[-()<>=%+*/;{}.!"\[\]] {
+[-()<>=%+@*/;{}.!"\[\]] {
                 return *yytext;
              }
 
@@ -54,6 +54,8 @@ void yyerror(char *);
 "<="            return LE;
 "=="            return EQ;
 "!="            return NE;
+"@<"		return FILE_BEGIN;
+"@>"		return FILE_END;
 "while"         return WHILE;
 "if"            return IF;
 "else"          return ELSE;

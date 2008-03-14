@@ -17,3 +17,4 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 void load_macho_hd(void);
+int get_offset_macho(char *s,char p);
