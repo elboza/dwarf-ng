@@ -254,3 +254,79 @@ struct dysymtab_command {
     uint32_t locreloff;	/* offset to local relocation entries */
     uint32_t nlocrel;	/* number of local relocation entries */
 };
+struct ppc_thread_state
+{
+	unsigned int srr0;	/* Instruction address register (PC) */
+	unsigned int srr1;	/* Machine state register (supervisor) */
+	unsigned int r0;
+	unsigned int r1;
+	unsigned int r2;
+	unsigned int r3;
+	unsigned int r4;
+	unsigned int r5;
+	unsigned int r6;
+	unsigned int r7;
+	unsigned int r8;
+	unsigned int r9;
+	unsigned int r10;
+	unsigned int r11;
+	unsigned int r12;
+	unsigned int r13;
+	unsigned int r14;
+	unsigned int r15;
+	unsigned int r16;
+	unsigned int r17;
+	unsigned int r18;
+	unsigned int r19;
+	unsigned int r20;
+	unsigned int r21;
+	unsigned int r22;
+	unsigned int r23;
+	unsigned int r24;
+	unsigned int r25;
+	unsigned int r26;
+	unsigned int r27;
+	unsigned int r28;
+	unsigned int r29;
+	unsigned int r30;
+	unsigned int r31;
+
+	unsigned int cr;	/* Condition register */
+	unsigned int xer;	/* User's integer exception register */
+	unsigned int lr;	/* Link register */
+	unsigned int ctr;	/* Count register */
+	unsigned int mq;	/* MQ register (601 only) */
+
+	unsigned int vrsave;	/* Vector Save Register */
+};
+struct i386_thread_state
+{
+    unsigned int	eax;
+    unsigned int	ebx;
+    unsigned int	ecx;
+    unsigned int	edx;
+    unsigned int	edi;
+    unsigned int	esi;
+    unsigned int	ebp;
+    unsigned int	esp;
+    unsigned int	ss;
+    unsigned int	eflags;
+    unsigned int	eip;
+    unsigned int	cs;
+    unsigned int	ds;
+    unsigned int	es;
+    unsigned int	fs;
+    unsigned int	gs;
+};
+struct thread_command {
+	uint32_t	cmd;		/* LC_THREAD or  LC_UNIXTHREAD */
+	uint32_t	cmdsize;	/* total size of this command */
+	uint32_t flavor;		   /*flavor of thread state */
+	uint32_t count;		   /*count of longs in thread state */
+	/* struct XXX_thread_state state   thread state for this flavor */
+	/* ... */
+	union {
+		struct ppc_thread_state ppc;
+		struct i386_thread_state i386;
+	}thread_state;
+};

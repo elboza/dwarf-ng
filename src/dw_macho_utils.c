@@ -42,7 +42,7 @@
 
 void load_macho_hd()
 {
-	int n_seg,n_sect,x,m_ncmds,m_seg_nsects,m_lc_cmd,m_lc_cmdsize;
+	int n_seg,n_sect,x,m_ncmds,m_seg_nsects,m_lc_cmd,m_lc_cmdsize,m_cpu;
 	char path[255];
 	struct mach_header *mac;
 	struct load_command *lc;
@@ -52,12 +52,13 @@ void load_macho_hd()
 	struct dylinker_command *dylinker;
 	struct symtab_command *symtab;
 	struct dysymtab_command *dysymtab;
+	struct thread_command *thread;
 	mac=(struct mach_header*)faddr;
 	make_table(NULL,"s",-1);
 	x=get_data32(mac->magic);
 	add_s_var("s","magic",TYPE_VAL,&x);
-	x=get_data32(mac->cputype);
-	add_s_var("s","cputype",TYPE_VAL,&x);
+	m_cpu=get_data32(mac->cputype);
+	add_s_var("s","cputype",TYPE_VAL,&m_cpu);
 	x=get_data32(mac->cpusubtype);
 	add_s_var("s","cpusubtype",TYPE_VAL,&x);
 	x=get_data32(mac->filetype);
@@ -70,7 +71,7 @@ void load_macho_hd()
 	add_s_var("s","flags",TYPE_VAL,&x);
 	if(m_ncmds>0)
 	{
-		make_table(NULL,"lc",mac->ncmds);
+		make_table(NULL,"lc",m_ncmds);
 		lc=(struct load_command*)(faddr+sizeof(struct mach_header));
 		n_seg=0;
 		//printf("%d %x %d %x %d\n",lc->cmd,mac,sizeof(struct 	mach_header),lc,lc->cmdsize);
@@ -136,7 +137,7 @@ void load_macho_hd()
 						add_s_var(path,"reserved2",TYPE_VAL,&x);
 						sect=(struct section*)((char*)sect+sizeof(struct section));
 						n_sect++;
-					}while(n_sect<seg->nsects);
+					}while(n_sect<m_seg_nsects);
 				}
 				break;
 			case LC_LOAD_DYLIB:
@@ -226,6 +227,138 @@ void load_macho_hd()
     			add_s_var(path,"locreloff",TYPE_VAL,&x);
     			x=get_data32(dysymtab->nlocrel);
     			add_s_var(path,"nlocrel",TYPE_VAL,&x);
+    		case LC_UNIXTHREAD:
+    			thread=(struct thread_command*)lc;
+				sprintf(path,"lc[%d]",n_seg);
+				x=get_data32(thread->cmd);
+				add_s_var(path,"cmd",TYPE_VAL,&x);
+				x=get_data32(thread->cmdsize);
+				add_s_var(path,"cmdsize",TYPE_VAL,&x);
+				x=get_data32(thread->flavor);
+				add_s_var(path,"flavor",TYPE_VAL,&x);
+				x=get_data32(thread->count);
+				add_s_var(path,"count",TYPE_VAL,&x);
+				switch(m_cpu){
+				case CPU_TYPE_POWERPC:
+					x=get_data32(thread->thread_state.ppc.srr0);
+					add_s_var(path,"ssr0",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.srr1);
+					add_s_var(path,"ssr1",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r0);
+					add_s_var(path,"r0",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r1);
+					add_s_var(path,"r1",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r2);
+					add_s_var(path,"r2",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r3);
+					add_s_var(path,"r3",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r4);
+					add_s_var(path,"r4",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r5);
+					add_s_var(path,"r5",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r6);
+					add_s_var(path,"r6",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r7);
+					add_s_var(path,"r7",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r8);
+					add_s_var(path,"r8",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r9);
+					add_s_var(path,"r9",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r10);
+					add_s_var(path,"r10",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r11);
+					add_s_var(path,"r11",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r12);
+					add_s_var(path,"r12",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r13);
+					add_s_var(path,"r13",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r14);
+					add_s_var(path,"r14",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r15);
+					add_s_var(path,"r15",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r16);
+					add_s_var(path,"r16",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r17);
+					add_s_var(path,"r17",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r18);
+					add_s_var(path,"r18",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r19);
+					add_s_var(path,"r19",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r20);
+					add_s_var(path,"r20",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r21);
+					add_s_var(path,"r21",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r22);
+					add_s_var(path,"r22",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r23);
+					add_s_var(path,"23",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r24);
+					add_s_var(path,"r24",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r25);
+					add_s_var(path,"25",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r26);
+					add_s_var(path,"r26",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r27);
+					add_s_var(path,"r27",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r28);
+					add_s_var(path,"r28",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r29);
+					add_s_var(path,"r29",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r30);
+					add_s_var(path,"r30",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.r31);
+					add_s_var(path,"r31",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.cr);
+					add_s_var(path,"cr",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.xer);
+					add_s_var(path,"xer",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.lr);
+					add_s_var(path,"lr",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.ctr);
+					add_s_var(path,"ctr",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.mq);
+					add_s_var(path,"mq",TYPE_VAL,&x);
+					x=get_data32(thread->thread_state.ppc.vrsave);
+					add_s_var(path,"vsave",TYPE_VAL,&x);
+					break;
+				case CPU_TYPE_X86:
+					x=get_data32(thread->thread_state.i386.eax);
+					add_s_var(path,"eax",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.ebx);
+    				add_s_var(path,"ebx",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.ecx);
+    				add_s_var(path,"ecx",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.edx);
+    				add_s_var(path,"edx",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.edi);
+    				add_s_var(path,"edi",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.esi);
+    				add_s_var(path,"esi",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.ebp);
+    				add_s_var(path,"ebp",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.esp);
+    				add_s_var(path,"esp",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.ss);
+    				add_s_var(path,"ss",TYPE_VAL,&x);
+   					x=get_data32(thread->thread_state.i386.eflags);
+   					add_s_var(path,"eflags",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.eip);
+    				add_s_var(path,"eip",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.cs);
+    				add_s_var(path,"cs",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.ds);
+    				add_s_var(path,"ds",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.es);
+    				add_s_var(path,"es",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.fs);
+    				add_s_var(path,"fs",TYPE_VAL,&x);
+    				x=get_data32(thread->thread_state.i386.gs);
+    				add_s_var(path,"gs",TYPE_VAL,&x);
+					break;
+				default:
+					break;
+				};
+    			break;
 			default:
 				break;
 			}
