@@ -206,3 +206,20 @@ void load_mz_hd()
     x=get_data32(mz->e_lfanew);
     add_s_var("mz","e_lfanew",TYPE_VAL,&x);
 }
+off_t get_offset_pe(char *s,char p)
+{
+	off_t offset;
+	struct token tok;
+	offset=get_offset_mz(s,p);
+	return offset;
+}
+off_t get_offset_mz(char *s,char p)
+{
+	off_t offset;
+	if((strncmp(s,"mz",2))==0)
+	{
+		offset=0;
+		if(p=='e') offset+=sizeof(_IMAGE_DOS_HEADER);
+		return offset;
+	}
+}

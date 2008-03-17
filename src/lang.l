@@ -85,6 +85,7 @@ void yyerror(char *);
 "createh"		return CREATEH;
 "show"			return SHOW;
 "close"			return CLOSE;
+"dump"			return DUMP;
 
 {letter}({letter}|{digit})*       { 
                 	//yylval.inVar = *yytext - 'a';

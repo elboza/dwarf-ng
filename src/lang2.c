@@ -20,10 +20,13 @@
 #include<stdlib.h>
 #include<string.h>
 #include<unistd.h>
+#include"stdint.h"
 #include"main.h"
+#include"utils.h"
 #include "lang.h"
 #include "y.tab.h"
 #include"vars.h"
+#include"output.h"
 
 #define ARITH v[0]=ex(p->opr.op[0]);\
 			if(v[0]==NULL){printf("ARITH:no item\n");break;}\
@@ -40,6 +43,7 @@ struct _var* ex(nodeType *p) {
 	struct _var *v[3];
 	char *name,*s;
 	int type,val,i;
+	struct output_format fmt;
 	if (!p) return NULL;
 	for(i=0;i<3;i++) v[i]=NULL;
     switch(p->type) {
@@ -109,8 +113,9 @@ struct _var* ex(nodeType *p) {
         		}
         		// else printf .....formatted print
         		printf("formatted output\n");
-        		char c=*p->opr.op[0]->id.s;
-        		switch(c){
+        		//char c=*p->opr.op[0]->id.s;
+        		get_format(p->opr.op[0]->id.s,&fmt);
+        		switch(fmt.out){
         		case 'x':
         			if(v[0]->type==TYPE_VAL) {printf("0x%x\n",v[0]->val);break;}
         			if(v[0]->type==TYPE_STRING) {printf("%s\n",v[0]->s);break;}
@@ -125,12 +130,22 @@ struct _var* ex(nodeType *p) {
         			break;
         		case 'o':
         		case 's':
+        		case 'e':
         			break;
         		default:
         			break;
         		}
         		//printf("%d\n", ex(p->opr.op[0])); 
         		//return NULL;
+        		break;
+        case DUMP:     
+        		v[0]=ex(p->opr.op[1]);
+        		if(v[0]==NULL) break;
+        		if(p->opr.op[0]==NULL)
+        		get_format(NULL,&fmt);
+        		else
+        		get_format(p->opr.op[0]->id.s,&fmt);
+        		dump(&fmt,v[0]);
         		break;
         case ';':       ex(p->opr.op[0]); return ex(p->opr.op[1]);
         case '=':

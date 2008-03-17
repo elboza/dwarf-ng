@@ -327,6 +327,6 @@ struct thread_command {
 	/* ... */
 	union {
 		struct ppc_thread_state ppc;
-		struct i386_thread_state i386;
+		struct i386_thread_state i_386;
 	}thread_state;
 };

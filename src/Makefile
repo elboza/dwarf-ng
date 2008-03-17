@@ -1,5 +1,5 @@
-xcomp: main.o utils.o lang2.o y.tab.o lex.yy.o vars.o dw_rl.o dw_elf_utils.o dw_macho_utils.o dw_pe_utils.o
-	gcc -o dwarf main.o utils.o lang2.o y.tab.o dw_rl.o dw_elf_utils.o dw_macho_utils.o dw_pe_utils.o vars.o lex.yy.o -ggdb -lreadline
+xcomp: main.o utils.o lang2.o y.tab.o lex.yy.o vars.o dw_rl.o dw_elf_utils.o dw_macho_utils.o dw_pe_utils.o output.o
+	gcc -o dwarf main.o utils.o lang2.o y.tab.o dw_rl.o dw_elf_utils.o dw_macho_utils.o output.o dw_pe_utils.o vars.o lex.yy.o -ggdb -lreadline
 
 main.o : main.h main.c
 	gcc -c main.c -ggdb
@@ -12,6 +12,8 @@ lang2.o: lang.l lang.y lang.h lang2.c
 	gcc -c lang2.c -ggdb
 vars.o: vars.h vars.c
 	gcc -c vars.c -ggdb
+output.o: output.h output.c
+	gcc -c output.c -ggdb
 dw_rl.o: dw_readline_completion.c dw_readline_completion.h
 	gcc -c dw_readline_completion.c -o dw_rl.o -ggdb
 dw_elf_utils.o: dw_elf_utils.c dw_elf_utils.h

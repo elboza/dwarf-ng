@@ -18,4 +18,5 @@
 */
 void load_pe_hd(void);
 void load_mz_hd(void);
-int get_offset_pe(char *s,char p);
+off_t get_offset_pe(char *s,char p);
+off_t get_offset_mz(char *s,char p);

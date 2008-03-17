@@ -248,7 +248,7 @@ uint64_t get_data64(uint64_t data)
 	res=(int)data;
 	return res;
 }
-int get_offset(char *s,char p)
+off_t get_offset(char *s,char p)
 {
 	off_t len;
 	if(fd)
@@ -266,17 +266,30 @@ int get_offset(char *s,char p)
 			//return get_offset_macho(s,p);
 			break;
 		case FT_PE:
-			//return get_offset_pe(s,p);
+			return get_offset_pe(s,p);
 			break;
 		case FT_ELF:
 			//return get_offset_elf(s,p);
 			break;
 		case FT_MZ:
-			//return get_offset_mz(s,p);
+			return get_offset_mz(s,p);
 			break;
 		default:
 			break;
 		};
 	}
 	return 0;
+}
+void get_format(char *s,struct output_format *fmt)
+{
+	char *c;
+	c=s;
+	fmt->count=0;
+	if(s==NULL) {fmt->out='Z';return;} // a different letter from all others :)
+	fmt->out=*(c++);
+	while(isdigit(*c))
+	{
+		fmt->count=fmt->count*10+((*(c++))-'0');
+	}
+	//fmt->out=*c;
 }

@@ -1,5 +1,5 @@
 /*
- dw_macho_utils.h : Mach-O utils definitions.
+ output.h : output functions definitions.
 
  (c) 2007-2008 Fernando Iazeolla
 
@@ -16,5 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-void load_macho_hd(void);
-off_t get_offset_macho(char *s,char p);
+
+/*
+ * The 32-bit mach header appears at the very beginning of the object file for
+ * 32-bit architectures.
+ */
+
+#define DUMP_SIZE 128
+#define DUMP_MAX_LINE 16
+
+void dump(struct output_format *fmt,struct _var *var);
+void print(struct output_format *fmt,struct _var *var);

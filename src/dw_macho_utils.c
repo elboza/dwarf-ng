@@ -322,37 +322,37 @@ void load_macho_hd()
 					add_s_var(path,"vsave",TYPE_VAL,&x);
 					break;
 				case CPU_TYPE_X86:
-					x=get_data32(thread->thread_state.i386.eax);
+					x=get_data32(thread->thread_state.i_386.eax);
 					add_s_var(path,"eax",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.ebx);
+    				x=get_data32(thread->thread_state.i_386.ebx);
     				add_s_var(path,"ebx",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.ecx);
+    				x=get_data32(thread->thread_state.i_386.ecx);
     				add_s_var(path,"ecx",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.edx);
+    				x=get_data32(thread->thread_state.i_386.edx);
     				add_s_var(path,"edx",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.edi);
+    				x=get_data32(thread->thread_state.i_386.edi);
     				add_s_var(path,"edi",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.esi);
+    				x=get_data32(thread->thread_state.i_386.esi);
     				add_s_var(path,"esi",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.ebp);
+    				x=get_data32(thread->thread_state.i_386.ebp);
     				add_s_var(path,"ebp",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.esp);
+    				x=get_data32(thread->thread_state.i_386.esp);
     				add_s_var(path,"esp",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.ss);
+    				x=get_data32(thread->thread_state.i_386.ss);
     				add_s_var(path,"ss",TYPE_VAL,&x);
-   					x=get_data32(thread->thread_state.i386.eflags);
+   					x=get_data32(thread->thread_state.i_386.eflags);
    					add_s_var(path,"eflags",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.eip);
+    				x=get_data32(thread->thread_state.i_386.eip);
     				add_s_var(path,"eip",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.cs);
+    				x=get_data32(thread->thread_state.i_386.cs);
     				add_s_var(path,"cs",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.ds);
+    				x=get_data32(thread->thread_state.i_386.ds);
     				add_s_var(path,"ds",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.es);
+    				x=get_data32(thread->thread_state.i_386.es);
     				add_s_var(path,"es",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.fs);
+    				x=get_data32(thread->thread_state.i_386.fs);
     				add_s_var(path,"fs",TYPE_VAL,&x);
-    				x=get_data32(thread->thread_state.i386.gs);
+    				x=get_data32(thread->thread_state.i_386.gs);
     				add_s_var(path,"gs",TYPE_VAL,&x);
 					break;
 				default:
@@ -370,4 +370,9 @@ void load_macho_hd()
 	//make_table("lc[2]","sect",2);
 	//add_s_var("lc[2]->sect[1]","pippo",TYPE_VAL,&xx);
 	printf("mach-o\n");
+}
+off_t get_offset_macho(char *s,char p)
+{
+	struct token tok;
+	
 }

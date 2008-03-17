@@ -23,7 +23,11 @@ struct comp_list
 	int type;
 	struct comp_list *prev,*next;
 }*first_comp,*last_comp;
-
+struct output_format
+{
+	int count;
+	char out;
+};
 void file_probe(void);
 void file_open(char *s);
 void die(char *s);
@@ -35,5 +39,5 @@ void load_headers(void);
 uint16_t get_data16(uint16_t data);
 uint32_t get_data32(uint32_t data);
 uint64_t get_data64(uint64_t data);
-int get_offset(char *s,char p);
-
+off_t get_offset(char *s,char p);
+void get_format(char *s,struct output_format *fmt);
