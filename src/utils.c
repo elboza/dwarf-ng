@@ -56,13 +56,17 @@ void file_open(char *s)
 }
 void file_close()
 {
+	int x;
+	off_t size;
 	delete_tables();
 	free_completion();
 	file_endian=little_endian;
 	if(fd)
 	{
-		//munmap(faddr);
+		size=lseek(fd,(off_t)0,SEEK_END);
+		x=munmap(faddr,(size_t)size);
 		close(fd);
+		faddr=NULL;
 	}
 }
 void file_probe()

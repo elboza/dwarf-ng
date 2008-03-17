@@ -24,6 +24,8 @@
 
 #define DUMP_SIZE 128
 #define DUMP_MAX_LINE 16
+#define DUMP_LINES 8
 
 void dump(struct output_format *fmt,struct _var *var);
 void print(struct output_format *fmt,struct _var *var);
+void extended_dump(off_t ofset,struct output_format *fmt);

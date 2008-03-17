@@ -119,18 +119,18 @@ void free_completion()
 void add_cmds_completions()
 {
 	add_completion("quit",NULL,comp_fixed);
-	add_completion("while",NULL,comp_fixed);
-	add_completion("if",NULL,comp_fixed);
+	add_completion("while ",NULL,comp_fixed);
+	add_completion("if ",NULL,comp_fixed);
 	add_completion("else",NULL,comp_fixed);
-	add_completion("print",NULL,comp_fixed);
+	add_completion("print ",NULL,comp_fixed);
 	add_completion("quit",NULL,comp_fixed);
-	add_completion("pp",NULL,comp_fixed);
+	add_completion("pp ",NULL,comp_fixed);
 	add_completion("exit",NULL,comp_fixed);
 //	add_completion("save",NULL,comp_fixed);
 //	add_completion("write",NULL,comp_fixed);
-	add_completion("load",NULL,comp_fixed);
+	add_completion("load ",NULL,comp_fixed);
 	add_completion("read",NULL,comp_fixed);
-	add_completion("open",NULL,comp_fixed);
+	add_completion("open ",NULL,comp_fixed);
 	add_completion("info",NULL,comp_fixed);
 	add_completion("type",NULL,comp_fixed);
 //	add_completion("force",NULL,comp_fixed);
@@ -142,9 +142,10 @@ void add_cmds_completions()
 //	add_completion("shift",NULL,comp_fixed);
 //	add_completion("move",NULL,comp_fixed);
 //	add_completion("realloc",NULL,comp_fixed);
-	add_completion("help",NULL,comp_fixed);
+	add_completion("help ",NULL,comp_fixed);
 //	add_completion("insert",NULL,comp_fixed);
 //	add_completion("pos",NULL,comp_fixed);
 //	add_completion("createh",NULL,comp_fixed);
-	add_completion("show",NULL,comp_fixed);
+	add_completion("show ",NULL,comp_fixed);
+	add_completion("dump ",NULL,comp_fixed);
 }
