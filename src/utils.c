@@ -252,7 +252,7 @@ uint64_t get_data64(uint64_t data)
 	res=(int)data;
 	return res;
 }
-off_t get_offset(char *s,char p)
+int get_offset(char *s,char p)
 {
 	off_t offset;
 	offset=0;
@@ -283,7 +283,7 @@ off_t get_offset(char *s,char p)
 			break;
 		};
 	}
-	return offset;
+	return (int)offset;
 }
 void get_format(char *s,struct output_format *fmt)
 {

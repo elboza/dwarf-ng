@@ -55,7 +55,7 @@ void dump(struct output_format *fmt,struct _var *var)
 	if(faddr==NULL) return;
 	if(fmt->count==0) fmt->count++;
 	if(var->type!=TYPE_VAL) return;
-	offset=var->val;
+	offset=(off_t)var->val;
 	//offset=lseek(fd,offset,SEEK_SET);
 	//if(offset==-1) {printf("error while positioning into the file.\n");return;}
 	//buff=(char*)malloc(DUMP_SIZE*sizeof(char));
