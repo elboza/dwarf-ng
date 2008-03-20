@@ -216,6 +216,10 @@ off_t get_offset_pe(char *s,char p)
 off_t get_offset_mz(char *s,char p)
 {
 	off_t offset;
+	char *str;
+	struct token tok;
+	str=s;
+	str=get_token(&tok,str);
 	if((strncmp(s,"mz",2))==0)
 	{
 		offset=0;
