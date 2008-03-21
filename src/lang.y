@@ -41,6 +41,7 @@ void yyerror(char *s);
     char *sVar;                /* symbol table variable */
     char *sWord;					/* internal variable */
     char *sStruct;		/*struct*/
+    char *sOffset;
     nodeType *nPtr;             /* node pointer */
 };
 
@@ -49,6 +50,7 @@ void yyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
+%token <sOffset> OFFSET
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
 %token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW CLOSE DUMP
 %nonassoc IFX

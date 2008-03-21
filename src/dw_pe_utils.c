@@ -209,14 +209,39 @@ void load_mz_hd()
 off_t get_offset_pe(char *s,char p)
 {
 	off_t offset;
+	char *str;
+	_IMAGE_DOS_HEADER *mz;
+	_IMAGE_NT_HEADERS *pe;
+	_IMAGE_SECTION_HEADER *sec;
+	int x,m_pe_off,m_opt_header_size,m_num_sec,n;
 	struct token tok;
 	offset=get_offset_mz(s,p);
+	str=s;
+	str=get_token(&tok,str);
+	mz=(_IMAGE_DOS_HEADER*)faddr;
+	m_pe_off=get_data32(mz->e_lfanew);
+	pe=(_IMAGE_NT_HEADERS*)(faddr+m_pe_off);
+	m_opt_header_size=get_data16(pe->FileHeader.SizeOfOptionalHeader);
+	if((strncmp(tok.name,"pe",2))==0)
+	{
+		offset=(off_t)m_pe_off;
+		if(p=='e') offset+=sizeof(_IMAGE_NT_HEADERS);
+	}
+	if((strncmp(tok.name,"s",1))==0)
+	{
+		sec=(_IMAGE_SECTION_HEADER*) (faddr+m_pe_off+m_opt_header_size+sizeof(_IMAGE_FILE_HEADER)+sizeof(IMAGE_NT_SIGNATURE));
+		n=0;
+		do{sec++;}while(n++<tok.num);
+		offset=(off_t)sec;
+		if(p=='e') offset+=sizeof(_IMAGE_SECTION_HEADER);
+	}
 	return offset;
 }
 off_t get_offset_mz(char *s,char p)
 {
 	off_t offset;
 	char *str;
+	int x,m_pe_off,m_opt_header_size,m_num_sec,n;
 	struct token tok;
 	str=s;
 	str=get_token(&tok,str);

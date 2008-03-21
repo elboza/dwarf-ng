@@ -106,7 +106,8 @@ void yyerror(char *);
                else 
                    yylval.sWord[yyleng-2] = 0;
                    return STRING;
-                       } 
+                       }
+
 
 [ \t\n]+        ;       /* ignore whitespace */
 
