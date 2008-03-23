@@ -22,10 +22,10 @@
 #include<unistd.h>
 #include"stdint.h"
 #include"main.h"
-#include"utils.h"
 #include "lang.h"
 #include "y.tab.h"
 #include"vars.h"
+#include"utils.h"
 #include"output.h"
 
 #define ARITH v[0]=ex(p->opr.op[0]);\
@@ -274,6 +274,43 @@ struct _var* ex(nodeType *p) {
         	free_bookmark();
         	return v[0];
         	//break;
+        case OFFSET:
+        	if(p->opr.op[0]) v[0]=ex(p->opr.op[0]);
+        	if(p->opr.op[1]) v[1]=ex(p->opr.op[1]);
+        	//if(v[0]) printf("::%s",v[0]->s);
+        	//if(v[1]) printf("-> %s",v[1]->s);
+        	//printf("\n");
+        	v[2]=(struct _var*)malloc(sizeof(struct _var));
+    		if(v[2]==NULL) die("error creating malloc space");
+    		v[2]->name=NULL;
+    		v[2]->type=TYPE_STRING;
+    		v[2]->s=(char*)malloc(255);
+    		if(v[2]->s==NULL) die("error creating malloc space");
+    		if(v[1] && v[0])sprintf(v[2]->s,"%s->%s",v[0]->s,v[1]->s);
+    		if(!v[1] && v[0]) sprintf(v[2]->s,"%s",v[0]->s);
+    		if(!v[0] && !v[1]) {if(v[2]) if(v[2]->s) {free(v[2]->s);free(v[2]);v[2]=NULL;}}
+    		return v[2];
+        case OFFSETE:
+        	v[1]=ex(p->opr.op[1]);  //get expression
+        	v[0]=(struct _var*)malloc(sizeof(struct _var));
+    		if(v[0]==NULL) die("error creating malloc space");
+    		v[0]->name=NULL;
+    		v[0]->type=TYPE_STRING;
+    		v[0]->s=(char*)malloc(255);
+    		if(v[0]->s==NULL) die("error creating malloc space");
+    		sprintf(v[0]->s,"%s[%d]",p->opr.op[0]->id.s,v[1]->val);
+    		return v[0];
+    	case OFFSET_ROOT:
+    		if(p->opr.op[0]) v[0]=ex(p->opr.op[0]);
+    		if(v[0]==NULL) break;
+    		s=p->opr.op[1]->id.s;
+    		//printf("offset root: %s %c\n",v[0]->s,*s);
+    		v[2]=(struct _var*)malloc(sizeof(struct _var));
+    		if(v[2]==NULL) die("error creating malloc space");
+    		v[2]->name=NULL;
+    		v[2]->type=TYPE_VAL;
+    		v[2]->val=get_offset(v[0]->s,*s);
+    		return v[2];
         case TYPE:
         	file_probe();
         	load_headers();

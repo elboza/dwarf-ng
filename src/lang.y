@@ -41,7 +41,6 @@ void yyerror(char *s);
     char *sVar;                /* symbol table variable */
     char *sWord;					/* internal variable */
     char *sStruct;		/*struct*/
-    char *sOffset;
     nodeType *nPtr;             /* node pointer */
 };
 
@@ -50,7 +49,6 @@ void yyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token <sOffset> OFFSET
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
 %token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW CLOSE DUMP
 %nonassoc IFX
@@ -59,9 +57,9 @@ void yyerror(char *s);
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
 %left '*' '/'
-%nonassoc UMINUS STRUCT STRUCT1 STRUCTW STRUCTE
+%nonassoc UMINUS STRUCT STRUCT1 STRUCTW STRUCTE OFFSET OFFSETE OFFSET_ROOT
 
-%type <nPtr> stmt expr stmt_list filename ivar Tivar
+%type <nPtr> stmt expr stmt_list filename ivar Tivar Offset TOffset
 
 %%
 
@@ -120,8 +118,8 @@ expr:
         | ivar			{ $$ =$1; }
         | FILE_BEGIN		{$$=con(get_offset("FILE_BEGIN",'.'));}
         | FILE_END		{$$=con(get_offset("FILE_END",'.'));}
-        | FILE_END WORD		{$$=con(get_offset($2,'e'));}
-        | FILE_BEGIN WORD	{$$=con(get_offset($2,'b'));}
+        | FILE_END Offset	{$$=opr(OFFSET_ROOT,2,$2,id_word("e"));}
+        | FILE_BEGIN Offset	{$$=opr(OFFSET_ROOT,2,$2,id_word("b"));}
         | FILENAME		{ $$ =id_word($1); }
         | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
         | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
@@ -152,6 +150,16 @@ Tivar:
 		  WORD '(' WORD ')'			{$$=opr(STRUCTW,2,id_word($1),id_word($3));}
 		| WORD '[' expr ']'			{$$=opr(STRUCTE,2,id_word($1),$3);}
 		| WORD					{$$=opr(STRUCT1,1,id_word($1));}
+		;
+Offset:
+		TOffset '-' '>' Offset		{$$=opr(OFFSET,2,$1,$4);}
+		| TOffset					{$$=opr(OFFSET,2,$1,NULL);}
+		;
+
+TOffset:
+//		  WORD '(' WORD ')'			{$$=opr(OFFSETW,2,id_word($1),id_word($3));}
+		 WORD '[' expr ']'			{$$=opr(OFFSETE,2,id_word($1),$3);}
+		| WORD					{$$=id_word($1);}
 		;
 %%
 

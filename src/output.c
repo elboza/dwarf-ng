@@ -40,9 +40,9 @@
 #include"dw_macho_utils.h"
 #include"dw_pe_utils.h"
 #include"dw_readline_completion.h"
-#include"utils.h"
 #include"lang.h"
 #include"vars.h"
+#include"utils.h"
 #include"output.h"
 
 void dump(struct output_format *fmt,struct _var *var)

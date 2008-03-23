@@ -35,10 +35,9 @@
 #include"dw_macho_utils.h"
 #include"dw_pe_utils.h"
 #include"dw_readline_completion.h"
-#include"utils.h"
 #include"lang.h"
 #include"vars.h"
-
+#include"utils.h"
 
 void load_pe_hd()
 {
@@ -222,6 +221,7 @@ off_t get_offset_pe(char *s,char p)
 	m_pe_off=get_data32(mz->e_lfanew);
 	pe=(_IMAGE_NT_HEADERS*)(faddr+m_pe_off);
 	m_opt_header_size=get_data16(pe->FileHeader.SizeOfOptionalHeader);
+	m_num_sec=get_data16(pe->FileHeader.NumberOfSections);
 	if((strncmp(tok.name,"pe",2))==0)
 	{
 		offset=(off_t)m_pe_off;
@@ -229,9 +229,10 @@ off_t get_offset_pe(char *s,char p)
 	}
 	if((strncmp(tok.name,"s",1))==0)
 	{
-		sec=(_IMAGE_SECTION_HEADER*) (faddr+m_pe_off+m_opt_header_size+sizeof(_IMAGE_FILE_HEADER)+sizeof(IMAGE_NT_SIGNATURE));
+		sec=(_IMAGE_SECTION_HEADER*) (m_pe_off+m_opt_header_size+sizeof(_IMAGE_FILE_HEADER)+sizeof(IMAGE_NT_SIGNATURE));
 		n=0;
-		do{sec++;}while(n++<tok.num);
+		if(tok.num>=m_num_sec) tok.num=m_num_sec-1;
+		while(n++<tok.num){sec++;};
 		offset=(off_t)sec;
 		if(p=='e') offset+=sizeof(_IMAGE_SECTION_HEADER);
 	}

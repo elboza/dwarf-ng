@@ -35,9 +35,9 @@
 #include"dw_macho_utils.h"
 #include"dw_pe_utils.h"
 #include"dw_readline_completion.h"
-#include"utils.h"
 #include"lang.h"
 #include"vars.h"
+#include"utils.h"
 
 extern FILE *yyin;
 
@@ -284,6 +284,11 @@ int get_offset(char *s,char p)
 		};
 	}
 	return (int)offset;
+}
+int get_offset_var(struct _var *var,char p)
+{
+	if(!var) return 0;
+	return get_offset(var->s,p);
 }
 void get_format(char *s,struct output_format *fmt)
 {

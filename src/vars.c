@@ -25,8 +25,8 @@
 #include"main.h"
 #include"macho.h"
 #include"elf.h"
-#include"utils.h"
 #include"vars.h"
+#include"utils.h"
 
 
 void add_var(char *name,int type,void *val)
