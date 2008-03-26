@@ -42,3 +42,4 @@ uint64_t get_data64(uint64_t data);
 int get_offset(char *s,char p);
 int get_offset_var(struct _var *var,char p);
 void get_format(char *s,struct output_format *fmt);
+void save_hd(void);

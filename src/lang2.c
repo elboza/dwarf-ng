@@ -161,6 +161,8 @@ struct _var* ex(nodeType *p) {
         			printf("*** lvalue is a struct!...ignored\n");
         			break;
         		}
+        		if(v[0]->type==TYPE_STRING) set_s_var(v[1],v[0]->type,v[0]->s);
+        		else
         		set_s_var(v[1],v[0]->type,&v[0]->val);
         	}
         	else
@@ -323,7 +325,11 @@ struct _var* ex(nodeType *p) {
         	file_open(p->opr.op[0]->id.s);
         	file_probe();
         	load_headers();
-        	break;;
+        	break;
+        case SAVE:
+        	save_hd();
+        	printf("Ok. file saved.\n");
+        	break;
         case CLOSE:
         	file_close();
         	printf("file closed\n");

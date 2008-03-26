@@ -477,4 +477,21 @@ struct _p* get_bookmark()
 {
 	return bookmark;
 }
-
+struct _var* get_s_var_byname(char *path,char *varname)
+{
+	struct _p *p;
+	p=quickparse(path);
+	return get_s_var_bypointer(p,varname);
+}
+struct _var* get_s_var_bypointer(struct _p *p,char *varname)
+{
+	struct _gv *ptr;
+	for(ptr=p->first;ptr;ptr=ptr->next)
+	{
+		if(strcmp(ptr->v.name,varname)==0)
+		{
+			return &ptr->v;
+		}
+	}
+	return NULL;
+}

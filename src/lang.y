@@ -84,7 +84,7 @@ stmt:
         | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
         | '{' stmt_list '}'              { $$ = $2; }
 	| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
-	| SAVE							{$$=opr(QUIT,2,NULL,NULL);}
+	| SAVE							{$$=opr(SAVE,2,NULL,NULL);}
         | LOAD filename						{$$=opr(LOAD,1,$2);}
         | LOAD '(' filename ')'					{$$=opr(LOAD,1,$3);}
         | INFO							{$$=opr(QUIT,2,NULL,NULL);}

@@ -303,3 +303,24 @@ void get_format(char *s,struct output_format *fmt)
 	}
 	//fmt->out=*c;
 }
+void save_hd()
+{
+	switch(file_type)
+	{
+	case FT_MACHO:
+//		save_macho_hd();
+		break;
+	case FT_ELF:
+//		save_elf_hd();
+		break;
+	case FT_PE:
+		save_pe_hd();
+		break;
+	case FT_MZ:
+		save_mz_hd();
+		break;
+	default:
+		
+		break;
+	}
+}

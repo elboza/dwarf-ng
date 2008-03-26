@@ -52,6 +52,8 @@ struct _gv
 void set_var(char *name,int type,void *val);
 struct _var* get_s_var(char *name);
 struct _var* get_var(char *name);
+struct _var* get_s_var_byname(char *path,char *varname);
+struct _var* get_s_var_bypointer(struct _p *p,char *varname);
 struct _stack_s
 {
 	char *name;
