@@ -1,5 +1,5 @@
 /*
- dw_Mach-O_utils.h : Mach-O utils definitions.
+ dw_Mach-O_utils.h : Mach-O utils implementation.
 
  (c) 2007-2008 Fernando Iazeolla
 
@@ -373,5 +373,77 @@ void load_macho_hd()
 off_t get_offset_macho(char *s,char p)
 {
 	struct token tok;
+	struct _var *var;
+	off_t offset;
+	int n_seg,n_sect,x,m_ncmds,m_seg_nsects,m_lc_cmd,m_lc_cmdsize,m_cpu;
+	char path[255],*str;
+	struct mach_header *mac;
+	struct load_command *lc;
+	struct segment_command *seg;
+	struct section *sect;
+	struct dylib_command *m_dylib;
+	struct dylinker_command *dylinker;
+	struct symtab_command *symtab;
+	struct dysymtab_command *dysymtab;
+	struct thread_command *thread;
+	str=s;
+	str=get_token(&tok,str);
+	if((strncmp(tok.name,"s",1))==0)
+	{
+		offset=0;
+		if(p=='e') offset+=sizeof(struct mach_header);
+		return offset;
+	}
+	if((strncmp(tok.name,"lc",2))==0)
+	{
+		lc=(struct load_command*)(faddr+sizeof(struct mach_header));
+		offset=sizeof(struct mach_header);
+		n_seg=0;
+		m_lc_cmd=get_data32(lc->cmd);
+		m_lc_cmdsize=get_data32(lc->cmdsize);
+		//m_seg_nsects=get_data32(seg->nsects);
+		while(n_seg<tok.num)
+		{
+			m_lc_cmd=get_data32(lc->cmd);
+			m_lc_cmdsize=get_data32(lc->cmdsize);
+			//m_seg_nsects=get_data32(seg->nsects);
+			lc=(struct load_command*)((char*)lc+m_lc_cmdsize);
+			offset+=m_lc_cmdsize;
+			n_seg++;
+		}
+		if(((strcmp(str,""))!=0) &&  (m_lc_cmd==LC_SEGMENT))
+		{
+			sprintf(path,"%s[%d]",tok.name,tok.num);
+			str=get_token(&tok,str);
+			var=get_s_var_byname(path,"nsects");
+			m_seg_nsects=var->val;
+			if((strncmp(tok.name,"sect",4))==0)
+			{
+				if(m_seg_nsects>0)
+				{
+					if(tok.num>=m_seg_nsects) tok.num=m_seg_nsects-1;
+					sect=(struct section*)((char*)seg+sizeof(struct segment_command));
+					offset+=sizeof(struct segment_command);
+					n_sect=0;
+					while(n_sect<tok.num)
+					{
+						sect=(struct section*)((char*)sect+sizeof(struct section));
+						offset+=sizeof(struct section);
+						n_sect++;
+					}
+					//offset=(off_t)sect;
+					if(p=='e') offset+=sizeof(struct section);
+					return offset;
+				}
+			}
+		}
+		//offset=(off_t)lc;
+		if(p=='e') offset+=m_lc_cmdsize;
+		return offset;
+	}
 	
+}
+void save_macho_hd(void)
+{
+
 }

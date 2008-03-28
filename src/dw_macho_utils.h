@@ -18,3 +18,4 @@
 */
 void load_macho_hd(void);
 off_t get_offset_macho(char *s,char p);
+void save_macho_hd(void);
