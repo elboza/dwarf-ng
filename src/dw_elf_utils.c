@@ -45,7 +45,7 @@ void load_elf_hd()
 	Elf32_Ehdr *elf;
 	Elf32_Phdr *ph;
 	Elf32_Shdr *sh;
-	int x,num_ph,num_sh,m_e_phnum,m_e_shnum;
+	int x,num_ph,num_sh,m_e_phnum,m_e_shnum,m_e_phoff,m_e_shoff;
 	char path[255];
 	elf=(Elf32_Ehdr*)faddr;
 	make_table(NULL,"s",-1);
@@ -58,29 +58,29 @@ void load_elf_hd()
 	add_s_var("s","e_version",TYPE_VAL,&x);
 	x=get_data32(elf->e_entry);
 	add_s_var("s","e_entry",TYPE_VAL,&x);
-	x=get_data32(elf->e_phoff);
-	add_s_var("s","e_phoff",TYPE_VAL,&x);
-	x=get_data32(elf->e_shoff);
-	add_s_var("s","e_shoff",TYPE_VAL,&x);
+	m_e_phoff=get_data32(elf->e_phoff);
+	add_s_var("s","e_phoff",TYPE_VAL,&m_e_phoff);
+	m_e_shoff=get_data32(elf->e_shoff);
+	add_s_var("s","e_shoff",TYPE_VAL,&m_e_shoff);
 	x=get_data32(elf->e_flags);
 	add_s_var("s","e_flags",TYPE_VAL,&x);
 	x=get_data16(elf->e_ehsize);
 	add_s_var("s","e_ehsize",TYPE_VAL,&x);
 	x=get_data16(elf->e_phentsize);
 	add_s_var("s","e_phentsize",TYPE_VAL,&x);
-	x=get_data16(elf->e_phnum);
-	add_s_var("s","e_phnum",TYPE_VAL,&x);
+	m_e_phnum=get_data16(elf->e_phnum);
+	add_s_var("s","e_phnum",TYPE_VAL,&m_e_phnum);
 	x=get_data16(elf->e_shentsize);
 	add_s_var("s","e_shentsize",TYPE_VAL,&x);
-	x=get_data16(elf->e_shnum);
-	add_s_var("s","e_shnum",TYPE_VAL,&x);
+	m_e_shnum=get_data16(elf->e_shnum);
+	add_s_var("s","e_shnum",TYPE_VAL,&m_e_shnum);
 	x=get_data16(elf->e_shstrndx);
 	add_s_var("s","e_shstrndx",TYPE_VAL,&x);
-	if(elf->e_phnum>0)
+	if(m_e_phnum>0)
 	{
-		make_table(NULL,"ph",elf->e_phnum);
+		make_table(NULL,"ph",m_e_phnum);
 		num_ph=0;
-		ph=(Elf32_Phdr*)(faddr+elf->e_phoff);
+		ph=(Elf32_Phdr*)(faddr+m_e_phoff);
 		do
 		{
 			sprintf(path,"ph[%d]",num_ph);
@@ -102,13 +102,13 @@ void load_elf_hd()
 			add_s_var(path,"p_align",TYPE_VAL,&x);
 			ph=(Elf32_Phdr*)((char*)ph+sizeof(Elf32_Phdr));
 			num_ph++;
-		}while(num_ph<elf->e_phnum);
+		}while(num_ph<m_e_phnum);
 	}
-	if(elf->e_shnum>0)
+	if(m_e_shnum>0)
 	{
-		make_table(NULL,"sh",elf->e_shnum);
+		make_table(NULL,"sh",m_e_shnum);
 		num_sh=0;
-		sh=(Elf32_Shdr*)(faddr+elf->e_shoff);
+		sh=(Elf32_Shdr*)(faddr+m_e_shoff);
 		do
 		{
 			sprintf(path,"sh[%d]",num_sh);
@@ -134,7 +134,7 @@ void load_elf_hd()
 			add_s_var(path,"sh_entsize",TYPE_VAL,&x);
 			sh=(Elf32_Shdr*)((char*)sh+sizeof(Elf32_Shdr));
 			num_sh++;
-		}while(num_sh<elf->e_shnum);
+		}while(num_sh<m_e_shnum);
 	}
 	//make_table(NULL,"ph",2);
 	//add_s_var("ph[1]","pippo",TYPE_VAL,&xx);
