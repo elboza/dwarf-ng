@@ -274,7 +274,7 @@ int get_offset(char *s,char p)
 			offset=get_offset_pe(s,p);
 			break;
 		case FT_ELF:
-			//return get_offset_elf(s,p);
+			return get_offset_elf(s,p);
 			break;
 		case FT_MZ:
 			offset=get_offset_mz(s,p);

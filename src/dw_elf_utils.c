@@ -144,6 +144,46 @@ void load_elf_hd()
 }
 int get_offset_elf(char *s,char p)
 {
-	
+	off_t offset;
+	char *str;
+	Elf32_Ehdr *elf;
+	Elf32_Phdr *ph;
+	Elf32_Shdr *sh;
+	int x,num_ph,num_sh,m_e_phnum,m_e_shnum,m_e_phoff,m_e_shoff;
+	char path[255];
+	elf=(Elf32_Ehdr*)faddr;
+	m_e_phoff=get_data32(elf->e_phoff);
+	m_e_shoff=get_data32(elf->e_shoff);
+	m_e_phnum=get_data16(elf->e_phnum);
+	m_e_shnum=get_data16(elf->e_shnum);
+	struct token tok;
+	str=s;
+	str=get_token(&tok,str);
+	if((strcmp(s,"s"))==0)
+	{
+		offset=0;
+		if(p=='e') offset+=sizeof(Elf32_Ehdr);
+		return offset;
+	}
+	if((strncmp(tok.name,"ph",2))==0)
+	{
+		ph=(Elf32_Phdr*)(faddr+m_e_phoff);
+		x=0;
+		if(tok.num>=m_e_phnum) tok.num=m_e_phnum-1;
+		while(x++<tok.num){ph++;};
+		offset=(off_t)ph;
+		if(p=='e') offset+=sizeof(Elf32_Phdr);
+		return offset;
+	}
+	if((strncmp(tok.name,"sh",2))==0)
+	{
+		sh=(Elf32_Phdr*)(faddr+m_e_shoff);
+		x=0;
+		if(tok.num>=m_e_shnum) tok.num=m_e_shnum-1;
+		while(x++<tok.num){sh++;};
+		offset=(off_t)sh;
+		if(p=='e') offset+=sizeof(Elf32_Shdr);
+		return offset;
+	}
 	return 0;
 }
