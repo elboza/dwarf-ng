@@ -189,5 +189,104 @@ int get_offset_elf(char *s,char p)
 }
 void save_elf_hd()
 {
-
+	Elf32_Ehdr *elf;
+	Elf32_Phdr *ph;
+	Elf32_Shdr *sh;
+	int x,num_ph,num_sh,m_e_phnum,m_e_shnum,m_e_phoff,m_e_shoff;
+	char path[255];
+	struct _p *p;
+	struct _var *var;
+	elf=(Elf32_Ehdr*)faddr;
+	//have to insert save ident here
+	p=quickparse("s");
+	var=get_s_var_bypointer(p,"e_type");
+	elf->e_type=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_machine");
+	elf->e_machine=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_version");
+	elf->e_version=get_data32(var->val);
+	var=get_s_var_bypointer(p,"e_entry");
+	elf->e_entry=get_data32(var->val);
+	var=get_s_var_bypointer(p,"e_phoff");
+	m_e_phoff=var->val;
+	elf->e_phoff=get_data32(var->val);
+	var=get_s_var_bypointer(p,"e_shoff");
+	m_e_shoff=var->val;
+	elf->e_shoff=get_data32(var->val);
+	var=get_s_var_bypointer(p,"e_flags");
+	elf->e_flags=get_data32(var->val);
+	var=get_s_var_bypointer(p,"e_ehsize");
+	elf->e_ehsize=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_phentsize");
+	elf->e_phentsize=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_phnum");
+	m_e_phnum=var->val;
+	elf->e_phnum=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_shentsize");
+	elf->e_shentsize=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_shnum");
+	m_e_shnum=var->val;
+	elf->e_shnum=get_data16(var->val);
+	var=get_s_var_bypointer(p,"e_shstrndx");
+	elf->e_shstrndx=get_data16(var->val);
+	if(m_e_phnum>0)
+	{
+		num_ph=0;
+		ph=(Elf32_Phdr*)(faddr+m_e_phoff);
+		do
+		{
+			sprintf(path,"ph[%d]",num_ph);
+			p=quickparse(path);
+			var=get_s_var_bypointer(p,"p_type");
+			ph->p_type=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_offset");
+			ph->p_offset=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_vaddr");
+			ph->p_vaddr=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_paddr");
+			ph->p_paddr=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_filesz");
+			ph->p_filesz=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_memsz");
+			ph->p_memsz=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_flags");
+			ph->p_flags=get_data32(var->val);
+			var=get_s_var_bypointer(p,"p_align");
+			ph->p_align=get_data32(var->val);
+			ph=(Elf32_Phdr*)((char*)ph+sizeof(Elf32_Phdr));
+			num_ph++;
+		}while(num_ph<m_e_phnum);
+	}
+	if(m_e_shnum>0)
+	{
+		num_sh=0;
+		sh=(Elf32_Shdr*)(faddr+m_e_shoff);
+		do
+		{
+			sprintf(path,"sh[%d]",num_sh);
+			p=quickparse(path);
+			var=get_s_var_bypointer(p,"sh_name");
+			sh->sh_name=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_type");
+			sh->sh_type=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_flags");
+			sh->sh_flags=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_addr");
+			sh->sh_addr=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_offset");
+			sh->sh_offset=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_size");
+			sh->sh_size=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_link");
+			sh->sh_link=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_info");
+			sh->sh_info=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_addralign");
+			sh->sh_addralign=get_data32(var->val);
+			var=get_s_var_bypointer(p,"sh_entsize");
+			sh->sh_entsize=get_data32(var->val);
+			sh=(Elf32_Shdr*)((char*)sh+sizeof(Elf32_Shdr));
+			num_sh++;
+		}while(num_sh<m_e_shnum);
+	}
 }
