@@ -187,3 +187,7 @@ int get_offset_elf(char *s,char p)
 	}
 	return 0;
 }
+void save_elf_hd()
+{
+
+}

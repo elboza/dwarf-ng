@@ -18,3 +18,4 @@
 */
 void load_elf_hd(void);
 int get_offset_elf(char *s,char p);
+void save_elf_hd(void);
