@@ -142,7 +142,7 @@ struct _var* get_normal_var(char *name)
 			return &gv_ptr->v;
 		}
 	}
-	return 0;
+	return NULL;
 }
 char* get_token(struct token *tok,char *s)
 {
@@ -348,6 +348,7 @@ struct _var* get_s_num_var(char *name,int num)
 		}
 		return &ptr->v;
 	}
+	return NULL;
 }
 void set_var(char *name,int type,void *val)
 {

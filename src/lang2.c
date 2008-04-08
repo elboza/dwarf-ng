@@ -156,6 +156,7 @@ struct _var* ex(nodeType *p) {
         	{
         		//printf("struct assign\n");
         		v[1]=ex(p->opr.op[0]);
+        		if(v[1]==NULL) {printf("lvalue does not exist.\n");break;}
         		if(v[1]->type>=TYPE_STRUCT)
         		{
         			printf("*** lvalue is a struct!...ignored\n");

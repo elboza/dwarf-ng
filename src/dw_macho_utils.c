@@ -240,9 +240,9 @@ void load_macho_hd()
 				switch(m_cpu){
 				case CPU_TYPE_POWERPC:
 					x=get_data32(thread->thread_state.ppc.srr0);
-					add_s_var(path,"ssr0",TYPE_VAL,&x);
+					add_s_var(path,"srr0",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.srr1);
-					add_s_var(path,"ssr1",TYPE_VAL,&x);
+					add_s_var(path,"srr1",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r0);
 					add_s_var(path,"r0",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r1);
@@ -290,11 +290,11 @@ void load_macho_hd()
 					x=get_data32(thread->thread_state.ppc.r22);
 					add_s_var(path,"r22",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r23);
-					add_s_var(path,"23",TYPE_VAL,&x);
+					add_s_var(path,"r23",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r24);
 					add_s_var(path,"r24",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r25);
-					add_s_var(path,"25",TYPE_VAL,&x);
+					add_s_var(path,"r25",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r26);
 					add_s_var(path,"r26",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.r27);
@@ -318,7 +318,7 @@ void load_macho_hd()
 					x=get_data32(thread->thread_state.ppc.mq);
 					add_s_var(path,"mq",TYPE_VAL,&x);
 					x=get_data32(thread->thread_state.ppc.vrsave);
-					add_s_var(path,"vsave",TYPE_VAL,&x);
+					add_s_var(path,"vrsave",TYPE_VAL,&x);
 					break;
 				case CPU_TYPE_X86:
 					x=get_data32(thread->thread_state.i_386.eax);
@@ -474,7 +474,7 @@ void save_macho_hd(void)
 	m_ncmds=var->val;
 	var=get_s_var_bypointer(p,"sizeofcmds");
 	mac->sizeofcmds=get_data32(var->val);
-	var=get_s_var_bypointer(p,"fags");
+	var=get_s_var_bypointer(p,"flags");
 	mac->flags=get_data32(var->val);
 	if(m_ncmds)
 	{
