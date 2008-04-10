@@ -148,6 +148,7 @@ void add_cmds_completions()
 	add_completion("eject ",NULL,comp_fixed);
 	add_completion("addhd ",NULL,comp_fixed);
 	add_completion("rmhd ",NULL,comp_fixed);
+	add_completion("len ",NULL,comp_fixed);
 //	add_completion("pos",NULL,comp_fixed);
 //	add_completion("createh",NULL,comp_fixed);
 	add_completion("show ",NULL,comp_fixed);

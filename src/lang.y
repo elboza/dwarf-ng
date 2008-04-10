@@ -51,7 +51,7 @@ void yyerror(char *s);
 %token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
 %token ALIAS SHIFT MOVE REALLOC HELP INJECT POS CREATEH SHOW CLOSE DUMP GROUTH SHRINK
-%token FILL EJECT ADDHD RMHD
+%token FILL EJECT ADDHD RMHD LEN MOVERPOS MOVERNEG
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -96,7 +96,9 @@ stmt:
         | LOCAL							{$$=opr(QUIT,2,NULL,NULL);}
         | ALIAS							{$$=opr(QUIT,2,NULL,NULL);}
         | SHIFT							{$$=opr(QUIT,2,NULL,NULL);}
-        | MOVE							{$$=opr(QUIT,2,NULL,NULL);}
+        | MOVE '(' expr ',' expr ',' expr ')'			{$$=opr(MOVE,3,$3,$5,$7);}
+        | MOVE '(' expr ',' '+' expr ',' expr ')'		{$$=opr(MOVERPOS,3,$3,$6,$8);}
+        | MOVE '(' expr ',' '-' expr ',' expr ')'		{$$=opr(MOVERNEG,3,$3,$6,$8);}
         | REALLOC						{$$=opr(QUIT,2,NULL,NULL);}
         | HELP							{$$=opr(QUIT,2,NULL,NULL);}
         | INJECT						{$$=opr(INJECT,2,NULL,NULL);}
@@ -112,6 +114,7 @@ stmt:
         | FILL '(' WORD ',' expr ',' expr ')'			{$$=opr(FILL,3,$3,$5,$7);}
         | ADDHD '(' WORD ',' expr ')'				{$$=opr(ADDHD,3,$3,$5,NULL);}
         | RMHD '(' WORD ',' expr ')'				{$$=opr(RMHD,3,$3,$5,NULL);}
+        | LEN expr ';'						{$$=opr(LEN,1,$2);}
         ;
 
 stmt_list:

@@ -324,17 +324,48 @@ void save_hd()
 		break;
 	}
 }
+int remap(len)
+{
+
+}
 void grouth(int len)
 {
 	off_t offset;
-	int n,x;
+	int n;
+	char *x;
+	x=(char*)malloc(len);
+	if(x==NULL) die("error allocating mem");
 	//printf("grouth:%d\n",len);
 	offset=lseek(fd,(off_t)0,SEEK_END);
-	for(n=0;n<len;n++) x=write(fd,NULL,(size_t) 1);
+	n=write(fd,x,(size_t) len);
+	free(x);
 	faddr=mremap(faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
 void shrink(int len)
 {
-	printf("shrink:%d\n",len);
+	off_t offset,new_offset;
+	int n;
+	offset=lseek(fd,(off_t)0,SEEK_END);
+	new_offset=offset-len;
+	n=ftruncate(fd,new_offset);
+	if(n==-1) die("error shrinking file");
+	faddr=mremap(faddr,(size_t) offset,(size_t) new_offset,MAP_FILE|MAP_SHARED);
+	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
+}
+void mod_len(int len)
+{
+	if(len<0) shrink(-len); else grouth(len);
+}
+void move(int from,int end,int to)
+{
+	printf("move from:%d end:%d to%d\n",from,end,to);
+}
+void move_r_pos(int from,int len,int to)
+{
+	move(from,from+len,to);
+}
+void move_r_neg(int from,int len,int to)
+{
+	move(from,from+len,to);
 }

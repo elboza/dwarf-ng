@@ -345,6 +345,32 @@ struct _var* ex(nodeType *p) {
         	if(v[0]==NULL) break;
         	shrink(v[0]->val);
         	break;
+        case LEN:
+        	v[0]=ex(p->opr.op[0]);
+        	if(v[0]==NULL) break;
+        	mod_len(v[0]->val);
+        	break;
+        case MOVE:
+        	v[0]=ex(p->opr.op[0]);
+        	v[1]=ex(p->opr.op[1]);
+        	v[2]=ex(p->opr.op[2]);
+        	for(i=0;i<=2;i++) if(v[i]==NULL) break;
+        	move(v[0]->val,v[1]->val,v[2]->val);
+        	break;
+        case MOVERPOS:
+        	v[0]=ex(p->opr.op[0]);
+        	v[1]=ex(p->opr.op[1]);
+        	v[2]=ex(p->opr.op[2]);
+        	for(i=0;i<=2;i++) if(v[i]==NULL) break;
+        	move_r_pos(v[0]->val,v[1]->val,v[2]->val);
+        	break;
+        case MOVERNEG:
+        	v[0]=ex(p->opr.op[0]);
+        	v[1]=ex(p->opr.op[1]);
+        	v[2]=ex(p->opr.op[2]);
+        	for(i=0;i<=2;i++) if(v[i]==NULL) break;
+        	move_r_neg(v[0]->val,-v[1]->val,v[2]->val);
+        	break;
         }
     }
     for(i=0;i<3;i++)

@@ -45,3 +45,7 @@ void get_format(char *s,struct output_format *fmt);
 void save_hd(void);
 void grouth(int len);
 void shrink(int len);
+void mod_len(int len);
+void move(int from,int end,int to);
+void move_r_pos(int from,int len,int to);
+void move_r_neg(int from,int len,int to);

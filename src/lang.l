@@ -46,7 +46,7 @@ void yyerror(char *);
 					return VARIABLE;
 				}
 
-[-()<>=%+@*/;{}.!"\[\]] {
+[-()<>=%+@*/;,{}.!"\[\]] {
                 return *yytext;
              }
 
@@ -86,6 +86,7 @@ void yyerror(char *);
 "fill"			return FILL;
 "addhd"			return ADDHD;
 "rmhd"			return RMHD;
+"len"			return LEN;
 "pos"			return POS;
 "createh"		return CREATEH;
 "show"			return SHOW;
