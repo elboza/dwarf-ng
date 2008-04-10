@@ -324,3 +324,17 @@ void save_hd()
 		break;
 	}
 }
+void grouth(int len)
+{
+	off_t offset;
+	int n,x;
+	//printf("grouth:%d\n",len);
+	offset=lseek(fd,(off_t)0,SEEK_END);
+	for(n=0;n<len;n++) x=write(fd,NULL,(size_t) 1);
+	faddr=mremap(faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
+	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
+}
+void shrink(int len)
+{
+	printf("shrink:%d\n",len);
+}

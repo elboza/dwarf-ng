@@ -50,7 +50,8 @@ void yyerror(char *s);
 %token <sWord>	FILENAME
 %token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
-%token ALIAS SHIFT MOVE REALLOC HELP INSERT POS CREATEH SHOW CLOSE DUMP
+%token ALIAS SHIFT MOVE REALLOC HELP INJECT POS CREATEH SHOW CLOSE DUMP GROUTH SHRINK
+%token FILL EJECT ADDHD RMHD
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -98,13 +99,19 @@ stmt:
         | MOVE							{$$=opr(QUIT,2,NULL,NULL);}
         | REALLOC						{$$=opr(QUIT,2,NULL,NULL);}
         | HELP							{$$=opr(QUIT,2,NULL,NULL);}
-        | INSERT						{$$=opr(QUIT,2,NULL,NULL);}
+        | INJECT						{$$=opr(INJECT,2,NULL,NULL);}
         | POS							{$$=opr(QUIT,2,NULL,NULL);}
         | CREATEH						{$$=opr(QUIT,2,NULL,NULL);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
         | CLOSE							{$$=opr(CLOSE,2,NULL,NULL);}
         | DUMP '%' WORD expr ';'				{$$=opr(DUMP,2,id_word($3),$4);}
         | DUMP expr ';'						{$$=opr(DUMP,2,NULL,$2);}
+        | GROUTH expr ';'					{$$=opr(GROUTH,1,$2);}
+        | SHRINK expr ';'					{$$=opr(SHRINK,1,$2);}
+        | EJECT '(' expr ',' expr ')'				{$$=opr(EJECT,2,$3,$5);}
+        | FILL '(' WORD ',' expr ',' expr ')'			{$$=opr(FILL,3,$3,$5,$7);}
+        | ADDHD '(' WORD ',' expr ')'				{$$=opr(ADDHD,3,$3,$5,NULL);}
+        | RMHD '(' WORD ',' expr ')'				{$$=opr(RMHD,3,$3,$5,NULL);}
         ;
 
 stmt_list:

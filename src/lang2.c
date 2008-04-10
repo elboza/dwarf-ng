@@ -335,6 +335,16 @@ struct _var* ex(nodeType *p) {
         	file_close();
         	printf("file closed\n");
         	break;
+        case GROUTH:
+        	v[0]=ex(p->opr.op[0]);
+        	if(v[0]==NULL) break;
+        	grouth(v[0]->val);
+        	break;
+        case SHRINK:
+        	v[0]=ex(p->opr.op[0]);
+        	if(v[0]==NULL) break;
+        	shrink(v[0]->val);
+        	break;
         }
     }
     for(i=0;i<3;i++)
