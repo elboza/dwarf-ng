@@ -1,0 +1,18 @@
+AC_INIT([src/main.h],[boz])
+AM_INIT_AUTOMAKE(dwarf,0.0.1)
+AM_CONFIG_HEADER(config.h)
+dnl test
+
+AC_PROG_CC
+AC_LANG_C
+AH_TEMPLATE([HAVE_MREMAP],[checks if have mremap function])
+AH_TEMPLATE([HAVE_PIPPO],[pppppp])
+AC_PROG_MAKE_SET
+AC_HEADER_STDC
+AC_PROG_LEX
+AC_PROG_YACC
+dnl AC_CHECK_FUNC(mremap,AC_DEFINE([HAVE_MREMAP]))
+AC_CHECK_FUNCS(mremap,pippo)
+AC_CHECK_LIB(readline,main,,AC_MSG_ERROR(readline ilbrary required))
+AC_OUTPUT(Makefile src/Makefile)
+

@@ -38,6 +38,7 @@
 #include"lang.h"
 #include"vars.h"
 #include"utils.h"
+#include"../config.h"
 
 extern FILE *yyin;
 
@@ -339,7 +340,11 @@ void grouth(int len)
 	offset=lseek(fd,(off_t)0,SEEK_END);
 	n=write(fd,x,(size_t) len);
 	free(x);
+	#if HAVE_MREMAP
 	faddr=mremap(faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
+	#else
+	printf("don't have mremap 1\n");
+	#endif
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
 void shrink(int len)
@@ -350,12 +355,21 @@ void shrink(int len)
 	new_offset=offset-len;
 	n=ftruncate(fd,new_offset);
 	if(n==-1) die("error shrinking file");
+	#if HAVE_MREMAP
 	faddr=mremap(faddr,(size_t) offset,(size_t) new_offset,MAP_FILE|MAP_SHARED);
+	#else
+	printf("don't have mremap 2\n");
+	#endif
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
 void mod_len(int len)
 {
 	if(len<0) shrink(-len); else grouth(len);
+	#if HAVE_PIPPO
+	printf("have pippo\n");
+	#else
+	printf("don't have pippo\n");
+	#endif
 }
 void move(int from,int end,int to)
 {
