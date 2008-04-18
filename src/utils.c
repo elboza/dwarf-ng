@@ -343,7 +343,8 @@ void grouth(int len)
 	#if HAVE_MREMAP
 	faddr=mremap(faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
 	#else
-	printf("don't have mremap 1\n");
+	munmap(faddr,(size_t) offset);
+	faddr=(char*)mmap(NULL,(size_t) (offset+len),PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fd,(off_t)0);
 	#endif
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
@@ -358,18 +359,14 @@ void shrink(int len)
 	#if HAVE_MREMAP
 	faddr=mremap(faddr,(size_t) offset,(size_t) new_offset,MAP_FILE|MAP_SHARED);
 	#else
-	printf("don't have mremap 2\n");
+	munmap(faddr,(size_t) offset);
+	faddr=(char*)mmap(NULL,(size_t)new_offset,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fd,(off_t)0);
 	#endif
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
 void mod_len(int len)
 {
 	if(len<0) shrink(-len); else grouth(len);
-	#if HAVE_PIPPO
-	printf("have pippo\n");
-	#else
-	printf("don't have pippo\n");
-	#endif
 }
 void move(int from,int end,int to)
 {
