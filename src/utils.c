@@ -370,7 +370,40 @@ void mod_len(int len)
 }
 void move(int from,int end,int to)
 {
+	#define reversed 1
+	#define normal 0
+	int to_end,tmp,direction,i;
+	char *mem;
 	printf("move from:%d end:%d to%d\n",from,end,to);
+	if(!faddr) {printf("no files is opened!\n");return;}
+	if(end<from)
+	{
+		tmp=from;
+		from=end;
+		end=tmp;
+	}
+	to_end=end-from+to;
+	printf("* from:%d end:%d to:%d to_end:%d\n",from,end,to,to_end);
+	if((from<to) && (to<end)) direction=reversed; else direction=normal;
+	mem=(char*)faddr;
+	if(direction==reversed)
+	{
+		printf("reversed\n");
+		for(i=end;i>=from;i--)
+		{
+			mem[to_end]=mem[i];
+			to_end--;
+		}
+	}
+	else
+	{
+		printf("normal\n");
+		for(i=from;i<=end;i++)
+		{
+			mem[to]=mem[i];
+			to++;
+		}
+	}
 }
 void move_r_pos(int from,int len,int to)
 {
