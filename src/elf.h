@@ -16,6 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_ELF_H
+#define DW_ELF_H
+
 /* Type for a 16-bit quantity.  */
 typedef uint16_t Elf32_Half;
 typedef uint16_t Elf64_Half;
@@ -149,3 +153,6 @@ typedef struct
   Elf64_Xword	p_memsz;		/* Segment size in memory */
   Elf64_Xword	p_align;		/* Segment alignment */
 } Elf64_Phdr;
+
+#endif
+

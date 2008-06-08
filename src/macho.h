@@ -17,6 +17,9 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef DW_MACHO_H
+#define DW_MACHO_H
+
 /*
  * The 32-bit mach header appears at the very beginning of the object file for
  * 32-bit architectures.
@@ -330,3 +333,6 @@ struct thread_command {
 		struct i386_thread_state i_386;
 	}thread_state;
 };
+
+#endif
+

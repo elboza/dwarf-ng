@@ -16,9 +16,16 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_PE_UTILS_H
+#define DW_PE_UTILS_H
+
 void load_pe_hd(void);
 void load_mz_hd(void);
 off_t get_offset_pe(char *s,char p);
 off_t get_offset_mz(char *s,char p);
 void save_mz_hd(void);
 void save_pe_hd(void);
+
+#endif
+

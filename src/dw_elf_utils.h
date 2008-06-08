@@ -16,6 +16,13 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_ELF_UTILS_H
+#define DW_ELF_UTILS_H
+
 void load_elf_hd(void);
 int get_offset_elf(char *s,char p);
 void save_elf_hd(void);
+
+#endif
+

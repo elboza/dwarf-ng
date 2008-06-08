@@ -17,6 +17,9 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef DW_PE_H
+#define DW_PE_H
+
 #define IMAGE_DOS_SIGNATURE                 0x5A4D      // MZ
 #define IMAGE_OS2_SIGNATURE                 0x454E      // NE
 #define IMAGE_OS2_SIGNATURE_LE              0x454C      // LE
@@ -122,3 +125,6 @@ typedef struct {
     uint16_t    NumberOfLinenumbers;
     uint32_t   Characteristics;
 }_IMAGE_SECTION_HEADER ;
+
+#endif
+

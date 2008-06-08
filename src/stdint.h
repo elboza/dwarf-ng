@@ -16,6 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_STDINT_H
+#define DW_STDINT_H
+
 typedef signed char          int8_t;
 typedef short                int16_t;
 typedef int                  int32_t;
@@ -24,4 +28,6 @@ typedef unsigned char        uint8_t;
 typedef unsigned short       uint16_t;
 typedef unsigned int         uint32_t;
 typedef unsigned long long   uint64_t;
+
+#endif
 

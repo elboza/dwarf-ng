@@ -1,5 +1,5 @@
 /*
- utils.c : miscellaneous definitions.
+ utils.h : miscellaneous definitions.
 
  (c) 2007-2008 Fernando Iazeolla
 
@@ -16,6 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_UTILS_H
+#define DW_UTILS_H
+
 typedef enum {comp_fixed,comp_var,comp_discardable} rl_comp;
 struct comp_list
 {
@@ -49,3 +53,6 @@ void mod_len(int len);
 void move(int from,int end,int to);
 void move_r_pos(int from,int len,int to);
 void move_r_neg(int from,int len,int to);
+
+#endif
+

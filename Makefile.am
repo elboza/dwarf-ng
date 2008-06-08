@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = nostdinc no-dependencies
-SUBDIRS = src
+SUBDIRS = src doc
 
 EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
         Makefile.am configure.ac configure \
@@ -8,6 +8,6 @@ EXTRA_DIST=VERSION BUGS  COPYING  FAQ.TXT  INSTALL  README README.FIRST TODO \
         depcomp missing install-sh
 
 # mhmhmhm
-# CLEANFILES = autom4te.cache
+CLEANFILES = autom4te.cache
 
 srcdir = src

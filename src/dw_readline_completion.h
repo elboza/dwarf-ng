@@ -1,5 +1,5 @@
 /*
- dw_pe_utils.h : dwarf's readline completion definitions.
+ dw_readline_completion.h : dwarf's readline completion definitions.
 
  (c) 2007-2008 Fernando Iazeolla
 
@@ -16,9 +16,16 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_READLINE_H
+#define DW_READLINE_H
+
 void initialize_readline(void);
 char ** dwarf_completion(char *text,int start,int end);
 char* dwarf_command_generator(char *text,int state);
 void add_completion(char *path,char *item,int type);
 void free_completion(void);
 void add_cmds_completions(void);
+
+#endif
+

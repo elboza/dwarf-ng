@@ -16,6 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_MAIN_H
+#define DW_MAIN_H
+
 int ilook_debug; /* if set perform the debug function only*/
 #define MAX_FILENAME 255
 #define MAX_STR 255
@@ -38,3 +42,6 @@ typedef enum {bit8,bit16,bit32,bit64} filebitclass;
 #define FT_PE		4
 
 #define QUITTING	123
+
+#endif
+

@@ -16,6 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_VARS_H
+#define DW_VARS_H
+
 enum {TYPE_NULL,TYPE_STRING,TYPE_VAL,TYPE_STRUCT,TYPE_NODE_STRUCT};
 enum {S_MAIN,S_PH,S_SH,S_LC};
 struct _var
@@ -66,3 +70,6 @@ struct _p* get_bookmark(void);
 //struct _var* peek(void);
 //struct _var* pop(void);
 //void s_remove(void);
+
+#endif
+

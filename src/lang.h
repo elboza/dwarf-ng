@@ -16,6 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_LANG_H
+#define DW_LANG_H
+
 typedef enum { typeCon, typeVar, typeWord, typeOpr,typeStruct1, typeStructE, typeStructW, typeString } nodeEnum;
 
 /* constants */
@@ -49,3 +53,6 @@ typedef struct nodeTypeTag {
 
 //extern int sym[26];
 unsigned int lang_mx;
+
+#endif
+

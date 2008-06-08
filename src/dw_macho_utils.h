@@ -16,6 +16,13 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+
+#ifndef DW_MACHO_UTILS_H
+#define DW_MACHO_UTILS_H
+
 void load_macho_hd(void);
 off_t get_offset_macho(char *s,char p);
 void save_macho_hd(void);
+
+#endif
+
