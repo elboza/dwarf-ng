@@ -2,33 +2,32 @@
 .SH NAME
 dwarf - a little and powerful object file manipulation tool.
 .SH SYNOPSIS
-.B dwarf [ options ] [file]
+.B dwarf [ options ] [ file ]
 .SH DESCRIPTION
 .B dwarf
 is a powerful object file manipulation tools in the spirit of \fIgdb\fP. with \fIdwarf\fP you can read and edit all the file's section headers as well as the raw data. With \fIdwarf\fP you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. \fIdwarf\fP also permits to inject easily new headers and pieces of code/data into the file.
 \fIdwarf\fP currently handles \fIelf\fP, \fIPE\fP (Portable executables) and \fIMach-O\fP files format. In the future new files type will be added.
 .SH OPTIONS
 .TP
-.B -a, --autozoom
-Enable autozoom.  fim will automagically pick a reasonable zoom factor when loading a new image. (as in fbi)
+.B -i
+interactive (shell mode)
 .TP
-.B -c {commands}, --execute-commands {commands}
-The \fBcommands\fP string will be executed before entering the interactive loop.
-Please note that if your commands are more complicated than a simple 'next' or 'pornview'
-command, they must be quoted and escaped in a manner suitable for your shell!!
-
+.B -c '{commands}'
+command mode (executes commands)
+.P
 For example,
--c '*2;2pan_up;display;while(1){bottom_align;sleep "1" ; top_align}'
-
-(with the single quotes) will tell fim to first double the displayed image 
-size, then pan two times up, then display the image ; and then 
-do an endless loop consisting of bottom and top aligning, alternated.
+.B dwarf -c 'print 2+2;'
+will output:
+4
 .TP
 .c .B -h, --help
 .c print usage info
 .c .TP
-.B -d {device}, --device {device}
-framebuffer device to use.  Default is the one your vc is mapped to (as in fbi).
+.B -x < file >
+loads and executes file script.
+.TP
+.B -t
+shows the file type.
 .SH SEE ALSO
 readelf(1), objdump(1), ht(1), otool(1), gdb(1), elf(5)
 .SH AUTHOR
@@ -36,8 +35,7 @@ readelf(1), objdump(1), ht(1), otool(1), gdb(1), elf(5)
 Fernando Iazeolla < elboza@autistici.org > - founder & core developer.
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2008 Michele Martone <dezperado _ GUESS _ autistici.org>
-Copyright (C) 1999-2000 Gerd Knorr <kraxel _ GUESS _ bytesex.org>
+Copyright (C) 2007-2008 Fernando Iazeolla < elboza@autistici.org >
 .P
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -50,5 +48,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 .P
 You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software Foundation,
- Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+along with this program. If not, see <http://www.gnu.org/licenses/>.

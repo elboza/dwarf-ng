@@ -21,9 +21,12 @@ letter [a-zA-Z_]
 hexletter [a-fA-F]
 %{
 #include <stdlib.h>
+#include"stdint.h"
+#include "utils.h"
 #include "lang.h"
 #include "y.tab.h"
 void yyerror(char *);
+int yywrap(void);
 %}
 
 %%
