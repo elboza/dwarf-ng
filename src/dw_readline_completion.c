@@ -43,6 +43,8 @@ void initialize_readline()
 {
 	rl_readline_name="dwarf";
 	rl_attempted_completion_function=(CPPFunction *)dwarf_completion;
+	rl_completer_word_break_characters = " \t\n\"\\'<=;+*/%^~#{}().,";
+	rl_completion_append_character = ' ';
 }
 char ** dwarf_completion(char *text,int start,int end)
 {
@@ -80,9 +82,9 @@ void add_completion(char *path,char *item,int type)
 	if(!ok) sprintf(str,"%s->%s",path,item);
 	ptr=(struct comp_list*)malloc(sizeof(struct comp_list));
 	if(ptr==NULL) die("error allocating for completation item");
-	ptr->s=(char*)malloc(strlen(str));
+	ptr->s=(char*)malloc(strlen(str)+1);
 	if(ptr->s==NULL) die("error allocating for completation item name");
-	strncpy(ptr->s,str,strlen(str));
+	strncpy(ptr->s,str,strlen(str)+1);
 	ptr->type=type;
 	ptr->prev=NULL;
 	ptr->next=NULL;
@@ -118,39 +120,39 @@ void free_completion()
 void add_cmds_completions()
 {
 	add_completion("quit",NULL,comp_fixed);
-	add_completion("while ",NULL,comp_fixed);
-	add_completion("if ",NULL,comp_fixed);
+	add_completion("while",NULL,comp_fixed);
+	add_completion("if",NULL,comp_fixed);
 	add_completion("else",NULL,comp_fixed);
-	add_completion("print ",NULL,comp_fixed);
+	add_completion("print",NULL,comp_fixed);
 	add_completion("quit",NULL,comp_fixed);
-	add_completion("pp ",NULL,comp_fixed);
+	add_completion("pp",NULL,comp_fixed);
 	add_completion("exit",NULL,comp_fixed);
 //	add_completion("save",NULL,comp_fixed);
 //	add_completion("write",NULL,comp_fixed);
-	add_completion("load ",NULL,comp_fixed);
+	add_completion("load",NULL,comp_fixed);
 	add_completion("read",NULL,comp_fixed);
-	add_completion("open ",NULL,comp_fixed);
+	add_completion("open",NULL,comp_fixed);
 	add_completion("info",NULL,comp_fixed);
 	add_completion("type",NULL,comp_fixed);
 //	add_completion("force",NULL,comp_fixed);
 //	add_completion("sizeof",NULL,comp_fixed);
 //	add_completion("call",NULL,comp_fixed);
-	add_completion("grouth ",NULL,comp_fixed);
-	add_completion("shrink ",NULL,comp_fixed);
+	add_completion("grouth",NULL,comp_fixed);
+	add_completion("shrink",NULL,comp_fixed);
 //	add_completion("local",NULL,comp_fixed);
 //	add_completion("alias",NULL,comp_fixed);
 //	add_completion("shift",NULL,comp_fixed);
-	add_completion("move ",NULL,comp_fixed);
+	add_completion("move",NULL,comp_fixed);
 //	add_completion("realloc",NULL,comp_fixed);
-	add_completion("help ",NULL,comp_fixed);
-	add_completion("inject ",NULL,comp_fixed);
-	add_completion("fill ",NULL,comp_fixed);
-	add_completion("eject ",NULL,comp_fixed);
-	add_completion("addhd ",NULL,comp_fixed);
-	add_completion("rmhd ",NULL,comp_fixed);
-	add_completion("len ",NULL,comp_fixed);
+	add_completion("help",NULL,comp_fixed);
+	add_completion("inject",NULL,comp_fixed);
+	add_completion("fill",NULL,comp_fixed);
+	add_completion("eject",NULL,comp_fixed);
+	add_completion("addhd",NULL,comp_fixed);
+	add_completion("rmhd",NULL,comp_fixed);
+	add_completion("len",NULL,comp_fixed);
 //	add_completion("pos",NULL,comp_fixed);
 //	add_completion("createh",NULL,comp_fixed);
-	add_completion("show ",NULL,comp_fixed);
-	add_completion("dump ",NULL,comp_fixed);
+	add_completion("show",NULL,comp_fixed);
+	add_completion("dump",NULL,comp_fixed);
 }
