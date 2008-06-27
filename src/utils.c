@@ -41,6 +41,7 @@
 #include"../config.h"
 
 extern FILE *yyin;
+extern int errno;
 
 void file_open(char *s)
 {
@@ -48,7 +49,9 @@ void file_open(char *s)
 	fd=open(s,O_RDWR);
 	if(fd==-1)
 	{
-		printf("error opening %s file.\nexiting...\n",s);
+		printf("error opening %s file.",s);
+		if(errno==EACCES) printf("permission denied or check file existance.");
+		printf("\nexiting...\n");
 		exit(1);
 	}
 	len=lseek(fd,(off_t)0,SEEK_END);
@@ -70,13 +73,13 @@ void file_close()
 		faddr=NULL;
 	}
 }
-void file_probe()
+void file_probe(int verbose)
 {
 	struct mach_header *mac;
 	Elf32_Ehdr *elf;
 	_IMAGE_DOS_HEADER *mzexe;
 	_IMAGE_NT_HEADERS *pe;
-	int x;
+	int x,count;
 	//file_open(filename);
 	//probe if is mach-o
 	mac=(struct mach_header*)faddr;
@@ -85,6 +88,7 @@ void file_probe()
 		file_type=FT_MACHO;
 		if(mac->magic==MH_MAGIC) file_endian=cpu_endian;
 		if(mac->magic==MH_CIGAM) file_endian=(~cpu_endian) & 1;
+		if(verbose) printf("File type: Mach-O\n");
 		return;
 	}
 	//probe if it is an ELF
@@ -96,6 +100,7 @@ void file_probe()
 		if(elf->e_ident[EI_DATA]==2) file_endian=big_endian;
 		if(elf->e_ident[EI_CLASS]==ELFCLASS32) file_bit_class=bit32; //load 32 bit arch
 		if(elf->e_ident[EI_CLASS]==ELFCLASS64) file_bit_class=bit64; // load 64 bit arch
+		if(verbose) printf("File type: Elf\n");
 		return;
 	}
 	//probe if it is a PE
@@ -107,13 +112,16 @@ void file_probe()
 	{
 		file_type=FT_MZ;
 		file_endian=little_endian;
+		count=0;
 		x=get_data32(mzexe->e_lfanew);
 		pe=(_IMAGE_NT_HEADERS*)(faddr+x);
 		x=get_data32(pe->Signature);
 		if(x==IMAGE_NT_SIGNATURE)
 		{
 			file_type=FT_PE;
+			count=1;
 		}
+		if(verbose) {printf("File type: ");if(count) printf("PE\n"); else printf("MZ-exe");}
 	}
 	
 }
@@ -176,6 +184,15 @@ void execute(char *s)
 	if(r!=len){die("pipe write error");}
 	close(pipedesc[1]);
 	fp=fdopen(pipedesc[0],"r");
+	yyin=fp;
+	yyparse();
+	fclose(fp);
+}
+void execute_script(char *file)
+{
+	FILE *fp;
+	fp=fopen(file,"r");
+	if(fp==NULL) {printf("error opening %s file.\n",file); return;}
 	yyin=fp;
 	yyparse();
 	fclose(fp);
@@ -412,4 +429,38 @@ void move_r_pos(int from,int len,int to)
 void move_r_neg(int from,int len,int to)
 {
 	move(from,from+len,to);
+}
+void inject_file(char *file,int from,int len,char *shift)
+{
+	int to_shift,i;
+	char *mem,cdata,tmp_cmd[MAX_CMD];
+	FILE *fp;
+	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
+	printf("inject from file...%s %d %d %d\n",file,from,len,to_shift);
+	mem=(char*)faddr;
+	fp=fopen(file,"r");
+	if(fp==NULL) {printf("error opening file to inject.\n"); return;}
+	if(len==-1) if((fseek(fp,0L,SEEK_END))==0) len=(int)ftell(fp);
+	rewind(fp);
+	if(to_shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
+	mem+=from;
+	for(i=0;i<len;i++,mem++)
+	{
+		cdata=(char)fgetc(fp);
+		*mem=cdata;
+		//to code: check if mem goes out of bound !!!
+	}
+	fclose(fp);
+}
+void inject_byte(int data,int from,int len,char *shift)
+{
+	int to_shift,i;
+	char *mem,cdata,tmp_cmd[MAX_CMD];
+	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
+	printf("inject byte...%d %d %d %d\n",data,from,len,to_shift);
+	cdata=(char)data;
+	mem=(char*)faddr;
+	if(to_shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
+	mem+=from;
+	for(i=0;i<len;i++,mem++) *mem=cdata;
 }

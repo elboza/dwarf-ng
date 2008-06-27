@@ -29,16 +29,15 @@
 
 void usage()
 {
-	printf("dwarf v0.1 -- drugo@code.autistici.org\n");
-	printf("======================================\n");
-	printf("\nUSAGE:\n");
+	printf("dwarf-0.1.80 (c) Fernando Iazeolla <drugo@code.autistici.org>\n");
+	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
-	printf("\nvalid options:\n\n");
-	printf("-i            interactive (shell mode)\n");
-	printf("-h            help\n");
-	printf("-c '<commands>'      command  mode (execute commands)\n");
-	printf("-x <file>     execute file script\n");
-	printf("-t            file type\n");
+	printf("valid options:\n");
+	printf("-i              --shell --interactive        interactive (shell mode)\n");
+	printf("-h              --help                       show this help\n");
+	printf("-c '<commands>' --command '<commands>'       command  mode (execute commands)\n");
+	printf("-x <file>       --execute <file>             execute file script\n");
+	printf("-t              --type                       file type\n");
 //	printf("-s <all,sh,main>  section headers\n");
 //	printf("-f type       force to treat as a <pe|elf|mach-o|mz> file\n");
 //	printf("-r            reloc (relocate section offsets)\n");
@@ -49,18 +48,27 @@ void usage()
 //	printf("-m --move=init,[end,len,]init2       move block\n");
 	exit(1);
 }
-void get_defaults_arg()
+void usage_b()
+{
+	printf("dwarf-0.1.80 (c) Fernando Iazeolla 2007-2008\n");
+	printf("for help type: dwarf -h\n");
+}
+void get_defaults_arg(struct m_action *action)
 {
 	ilook_debug=0;
+	action->file=0;
+	action->shell=0;
+	action->script=0;
+	action->exec=0;
 	forced=FT_NULL;
 	file_type=FT_NULL;
-	cmd=(char*)malloc(1024);
+	cmd=(char*)malloc(MAX_CMD);
 	fd=0;
 	gv_first=NULL;
 	gv_last=NULL;
 	last_stack=NULL;
 }
-void parse_args(int argc,char **argv)
+void parse_args(int argc,char **argv,struct m_action *action)
 {
 	char *s1;
 	int c;
@@ -68,9 +76,13 @@ void parse_args(int argc,char **argv)
 	{
 		static struct option long_options[] =
 		{
-			{"move",required_argument,0,'m'},
-			{"size",required_argument,0,'S'},
-			{"section",required_argument,0,'s'}
+			{"execute",required_argument,0,'x'},
+			{"command",required_argument,0,'c'},
+			{"interactive",no_argument,0,'i'},
+			{"shell",no_argument,0,'i'},
+			{"type",required_argument,0,'t'},
+			{"help",no_argument,0,'h'},
+			{0,0,0,0,}
 			
 		};
 		int option_index = 0;
@@ -84,15 +96,21 @@ void parse_args(int argc,char **argv)
     				printf("This is free software (GNU GPLv2), and you are welcome to redistribute it\n");
     				printf("under GNU GPL version 2 (see <http://www.gnu.org/licenses/>).\n");
 				printf("entering shell-interactive mode....testing...\n");
-				shell();
-				strncpy(cmd,"quit;",1024);
+				action->shell=1;
+				//shell();
+				//strncpy(cmd,"quit;",1024);
 				break;
 			case 't':
-				printf("type\n");
+				//printf("type\n");
 				strncpy(cmd,"type;",1024);
+				action->exec=1;
 				break;
 			case 'x':
-				printf("input script file:%s\n",optarg);
+				//printf("input script file:%s\n",optarg);
+				action->script=1;
+				strncpy(scriptfile,optarg,MAX_FILENAME);
+				//execute_script(optarg);
+				//strncpy(cmd,"quit",1024);
 				break;
 			case 's':
 				if((strcmp(optarg,"all"))==0) ;//section_type=SEC_ALL;
@@ -120,7 +138,8 @@ void parse_args(int argc,char **argv)
 				ilook_debug=1;
 				break;
 			case 'c':
-				printf("to execute:%s ....testing..\n",optarg);
+				//printf("to execute:%s ....testing..\n",optarg);
+				action->exec=1;
 				strncpy(cmd,optarg,1024);
 				break;
 			case 'h':
@@ -138,20 +157,44 @@ void look_data_ok()
 {
 	
 }
+void config_parse()
+{
+	
+}
 int main(int argc,char **argv)
 {
-	get_defaults_arg();
+	struct m_action action;
+	char fileopen[MAX_CMD];
+	get_defaults_arg(&action);
+	config_parse();
 	initialize_readline();
 	add_cmds_completions();
 	cpu_endian=probe_endian();
 	file_endian=little_endian;
-	parse_args(argc,argv);
+	parse_args(argc,argv,&action);
 	look_data_ok();
-	if(argc<2) usage();
-	if(optind<argc) {strncpy(filename,argv[optind],MAX_FILENAME);}
+	if(argc<2) usage_b();
+	if(optind<argc) {strncpy(filename,argv[optind],MAX_FILENAME);action.file=1;}
 	else{strncpy(filename,"<NULL>",MAX_FILENAME);}
 	//if(ilook_debug) look_debug();
-	execute(cmd);
+	//execute(cmd);
+	if(action.file)
+	{
+		sprintf(fileopen,"open %s",filename);
+		execute(fileopen);
+	}
+	if(action.script)
+	{
+		execute_script(scriptfile);
+	}
+	if(action.exec)
+	{
+		execute(cmd);
+	}
+	if(action.shell)
+	{
+		shell();
+	}
 	
 	printf("Bye.\n");
 	free(cmd);

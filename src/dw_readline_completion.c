@@ -127,8 +127,8 @@ void add_cmds_completions()
 	add_completion("quit",NULL,comp_fixed);
 	add_completion("pp",NULL,comp_fixed);
 	add_completion("exit",NULL,comp_fixed);
-//	add_completion("save",NULL,comp_fixed);
-//	add_completion("write",NULL,comp_fixed);
+	add_completion("save",NULL,comp_fixed);
+	add_completion("write",NULL,comp_fixed);
 	add_completion("load",NULL,comp_fixed);
 	add_completion("read",NULL,comp_fixed);
 	add_completion("open",NULL,comp_fixed);
@@ -146,8 +146,8 @@ void add_cmds_completions()
 //	add_completion("realloc",NULL,comp_fixed);
 	add_completion("help",NULL,comp_fixed);
 	add_completion("inject",NULL,comp_fixed);
-	add_completion("fill",NULL,comp_fixed);
-	add_completion("eject",NULL,comp_fixed);
+//	add_completion("fill",NULL,comp_fixed);
+//	add_completion("eject",NULL,comp_fixed);
 	add_completion("addhd",NULL,comp_fixed);
 	add_completion("rmhd",NULL,comp_fixed);
 	add_completion("len",NULL,comp_fixed);

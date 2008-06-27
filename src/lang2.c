@@ -315,18 +315,20 @@ struct _var* ex(nodeType *p) {
     		v[2]->val=get_offset(v[0]->s,*s);
     		return v[2];
         case TYPE:
-        	file_probe();
-        	load_headers();
+        	file_probe(VERBOSE);
         	break;
         case LOAD:
-        	printf("closing file\n");
+        	//printf("closing file\n");
         	file_close();
-        	printf("file closed\n");
-        	printf("opening file %s\n",p->opr.op[0]->id.s);
+        	//printf("file closed\n");
+        	//printf("opening file %s\n",p->opr.op[0]->id.s);
         	file_open(p->opr.op[0]->id.s);
-        	file_probe();
+        	file_probe(VERBOSE);
         	load_headers();
         	break;
+	case INFO:
+		file_probe(VERBOSE);
+		break;
         case SAVE:
         	save_hd();
         	printf("Ok. file saved.\n");
@@ -371,6 +373,54 @@ struct _var* ex(nodeType *p) {
         	for(i=0;i<=2;i++) if(v[i]==NULL) break;
         	move_r_neg(v[0]->val,-v[1]->val,v[2]->val);
         	break;
+	case INJECT:
+		v[0]=ex(p->opr.op[0]);
+        	v[1]=ex(p->opr.op[1]);
+        	v[2]=ex(p->opr.op[2]);
+		v[3]=ex(p->opr.op[3]);
+		i=4;
+		if(v[3]==NULL) i--;
+		if(v[2]==NULL) i--;
+		//printf("inject...\n");
+		if(v[0]->type==TYPE_STRING)
+		{
+			switch(i){
+			case 4:
+				if(v[3]->type!=TYPE_STRING) {printf("error on parameter 4\n");break;}
+				inject_file(v[0]->s,v[1]->val,v[2]->val,v[3]->s);
+				break;
+			case 3:
+				if(v[2]->type==TYPE_STRING) 
+				{
+					if((strcmp(">>",v[2]->s))!=0) {printf("error parsing shift value (parameter 3)\n");break;}
+					inject_file(v[0]->s,v[1]->val,-1,">>");
+				}
+				else { inject_file(v[0]->s,v[1]->val,v[2]->val,NULL);}
+				break;
+			default:
+				inject_file(v[0]->s,v[1]->val,-1,NULL);
+				break;
+			};
+		}
+		else
+		{
+			switch(i){
+			case 4:
+				if(v[3]->type!=TYPE_STRING) {printf("error on parameter 4\n");break;}
+				inject_byte(v[0]->val,v[1]->val,v[2]->val,v[3]->s);
+				break;
+			case 3:
+				if(v[2]->type==TYPE_STRING) {if((strcmp(">>",v[2]->s))!=0) {printf("error parsing shift value (parameter 3)\n");break;}inject_byte(v[0]->val,v[1]->val,1,">>");}
+				else { inject_byte(v[0]->val,v[1]->val,v[2]->val,NULL);}
+				break;
+			default:
+				inject_byte(v[0]->val,v[1]->val,1,NULL);
+				break;
+			};
+		}
+		break;
+	default:
+		break;
         }
     }
     for(i=0;i<3;i++)

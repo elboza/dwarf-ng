@@ -50,8 +50,8 @@ void yyerror(char *s);
 %token <sWord>	FILENAME
 %token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
-%token ALIAS SHIFT MOVE REALLOC HELP INJECT POS CREATEH SHOW CLOSE DUMP GROUTH SHRINK
-%token FILL EJECT ADDHD RMHD LEN MOVERPOS MOVERNEG
+%token ALIAS SHIFT MOVE REALLOC HELP INJECT CREATEH SHOW CLOSE DUMP GROUTH SHRINK
+%token ADDHD RMHD LEN MOVERPOS MOVERNEG
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -88,7 +88,7 @@ stmt:
 	| SAVE							{$$=opr(SAVE,2,NULL,NULL);}
         | LOAD filename						{$$=opr(LOAD,1,$2);}
         | LOAD '(' filename ')'					{$$=opr(LOAD,1,$3);}
-        | INFO							{$$=opr(QUIT,2,NULL,NULL);}
+        | INFO							{$$=opr(INFO,2,NULL,NULL);}
         | TYPE							{$$=opr(TYPE,2,NULL,NULL);}
         | FORCE							{$$=opr(QUIT,2,NULL,NULL);}
         | SIZEOF						{$$=opr(QUIT,2,NULL,NULL);}
@@ -99,10 +99,10 @@ stmt:
         | MOVE '(' expr ',' expr ',' expr ')'			{$$=opr(MOVE,3,$3,$5,$7);}
         | MOVE '(' expr ',' '+' expr ',' expr ')'		{$$=opr(MOVERPOS,3,$3,$6,$8);}
         | MOVE '(' expr ',' '-' expr ',' expr ')'		{$$=opr(MOVERNEG,3,$3,$6,$8);}
-        | REALLOC						{$$=opr(QUIT,2,NULL,NULL);}
         | HELP							{$$=opr(QUIT,2,NULL,NULL);}
-        | INJECT						{$$=opr(INJECT,2,NULL,NULL);}
-        | POS							{$$=opr(QUIT,2,NULL,NULL);}
+        | INJECT '(' expr ',' expr ')'				{$$=opr(INJECT,4,$3,$5,NULL,NULL);}
+        | INJECT '(' expr ',' expr ',' expr ')'			{$$=opr(INJECT,4,$3,$5,$7,NULL);}
+        | INJECT '(' expr ',' expr ',' expr ',' expr ')'	{$$=opr(INJECT,4,$3,$5,$7,$9);}
         | CREATEH						{$$=opr(QUIT,2,NULL,NULL);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
         | CLOSE							{$$=opr(CLOSE,2,NULL,NULL);}
@@ -110,8 +110,6 @@ stmt:
         | DUMP expr ';'						{$$=opr(DUMP,2,NULL,$2);}
         | GROUTH expr ';'					{$$=opr(GROUTH,1,$2);}
         | SHRINK expr ';'					{$$=opr(SHRINK,1,$2);}
-        | EJECT '(' expr ',' expr ')'				{$$=opr(EJECT,2,$3,$5);}
-        | FILL '(' WORD ',' expr ',' expr ')'			{$$=opr(FILL,3,$3,$5,$7);}
         | ADDHD '(' WORD ',' expr ')'				{$$=opr(ADDHD,3,$3,$5,NULL);}
         | RMHD '(' WORD ',' expr ')'				{$$=opr(RMHD,3,$3,$5,NULL);}
         | LEN expr ';'						{$$=opr(LEN,1,$2);}

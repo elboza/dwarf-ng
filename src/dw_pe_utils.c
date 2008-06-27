@@ -159,6 +159,7 @@ void load_pe_hd()
 			sec++;
 		}while(n<m_num_sec);
 	}
+	//printf("PE\n");
 }
 void load_mz_hd()
 {

@@ -32,11 +32,12 @@ struct output_format
 	int count;
 	char out;
 };
-void file_probe(void);
+void file_probe(int verbose);
 void file_open(char *s);
 void die(char *s);
 char* rl_gets(char *prompt);
 void execute(char *s);
+void execute_script(char *file);
 void file_close(void);
 void shell(void);
 void load_headers(void);
@@ -53,6 +54,8 @@ void mod_len(int len);
 void move(int from,int end,int to);
 void move_r_pos(int from,int len,int to);
 void move_r_neg(int from,int len,int to);
+void inject_file(char *file,int from,int len,char *shift);
+void inject_byte(int data,int from,int len,char *shift);
 
 #endif
 

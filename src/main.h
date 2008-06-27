@@ -19,11 +19,14 @@
 
 #ifndef DW_MAIN_H
 #define DW_MAIN_H
-
+#define VERSION 0.1.80
 int ilook_debug; /* if set perform the debug function only*/
 #define MAX_FILENAME 255
 #define MAX_STR 255
-char filename[MAX_FILENAME],*cmd;
+#define MAX_CMD 1024
+#define VERBOSE 1
+#define NOVERBOSE 0
+char filename[MAX_FILENAME],*cmd,scriptfile[MAX_FILENAME];
 int forced;  /*if set force a file to be treat as a given kind reguardless of what really kind is*/
 int file_type;
 int file_endian;
@@ -32,6 +35,12 @@ int file_bit_class;
 int fd;
 int mx;
 void *faddr;
+struct m_action{
+		int file;
+		int shell;
+		int script;
+		int exec;
+	};
 typedef enum {little_endian,big_endian} endian;
 typedef enum {bit8,bit16,bit32,bit64} filebitclass;
 //file types

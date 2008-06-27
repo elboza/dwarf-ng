@@ -368,7 +368,7 @@ void load_macho_hd()
 	//make_table(NULL,"lc",4);
 	//make_table("lc[2]","sect",2);
 	//add_s_var("lc[2]->sect[1]","pippo",TYPE_VAL,&xx);
-	printf("mach-o\n");
+	//printf("mach-o\n");
 }
 off_t get_offset_macho(char *s,char p)
 {
