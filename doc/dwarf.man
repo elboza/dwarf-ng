@@ -9,10 +9,10 @@ is a powerful object file manipulation tools in the spirit of \fIgdb\fP. with \f
 \fIdwarf\fP currently handles \fIelf\fP, \fIPE\fP (Portable executables) and \fIMach-O\fP files format. In the future new files type will be added.
 .SH OPTIONS
 .TP
-.B -i
+.B -i, --interactive, --shell
 interactive (shell mode)
 .TP
-.B -c '{commands}'
+.B -c '{commands}', --command '{commands}'
 command mode (executes commands)
 .P
 For example,
@@ -20,14 +20,109 @@ For example,
 will output:
 4
 .TP
-.c .B -h, --help
-.c print usage info
-.c .TP
-.B -x < file >
+.B -h, --help
+print usage info
+.TP
+.B -x < file >, --execute < file >
 loads and executes file script.
 .TP
-.B -t
+.B -t, --type
 shows the file type.
+.TP
+If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)
+.SH THE DWARF'S LANGUAGE
+.TP 
+.B VARIABLES
+.B dwarf 
+recognizes two types of variables: the normal variables (simply called variables) and the structured variables.
+The normal \fBvariables\fP are preceded by the dollar symbol (\fB$\fP) and are created by the user for normal variable operation (\fIi.e. $a=5; $b=$a+3; print $b;\fP ).
+The \fBstructured variables\fP are created by \fBdwarf\fP when it loads a file into memory. The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
+\fIprint s->ph_num;\fP will print the ph_num variable of the main header (s) of a Elf file.
+\fIs->sh_num=3;\fP will modify the sh_num (number of section headers) in the main header (s) of the Elf file.
+.TP
+.B EXPRESSIONS
+Expressions \fBEXPR\fP are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 16=0xa) or an offset. 
+.TP
+.B OFFSETS
+offsets syntax is \f@<foo\fP or \f@>foo\fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (>) or minor (<) symbol indicate if the offset point to the end (>) or the beginning (<) of the specified data structure. whith \fB@>\fP we indicate the beginning of the file. Whith \fB@>\fP wh indicate the end of the file. For example \fIprint @>;\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@>+3; will assign to the variable $a the length of the file plus 3).
+.SH COMMANDS
+.TP
+.B SAVE [ save; | save(filename); ]
+saves all the chenges into the opened file. This action once performed is unreversable: chenges will be permanently written on the disk.
+.TP
+.B OPEN [ open filename; | open(filename); ]
+Closes the file opened if any and then load the specified file and creates all related data structures assosiated to the file.
+.TP
+.B WHILE [ while(expr) command(s); ]
+a typical while construct.
+.TP
+.B IF-ELSE [ if(expr) command(s); | if(expr) command(s); else command(s); ]
+a typical if-else costruct.
+.TP
+.B PRINT [print expr; | print %fmt expr; ]
+outputs the result of the expression (numerical or string). Yhe \fB%fmt\fP force a different output mode. \fBfmt\fP is in the form: xnn (<letter><number>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: x for hex output, d for decimal putput s for string output c for char output.
+.TP
+.B QUIT [ quit; ]
+pippo
+.TP
+.B INFO [ info; ]
+pippo
+.TP
+.B TYPE [ type; ]
+pippo
+.TP
+.B FORCE [ force filetype; | force(filetype); ]
+.TP
+.B GROUTH [ grouth expr; | grouth (expr);]
+pippo
+.TP
+.B SHRINK [ shrink expr; | shrink(expr); ]
+pippo
+.TP
+.B REFRESH [ refresh; ]
+pippo
+.TP
+.B RELOAD [ reload; ]
+pippo
+.TP
+.B MOVE [ move(expr,expr,expr); | move(expr,+expr,expr); | move(expr,-expr,expr); ]
+pippo
+.TP
+.B HELP [ help; ]
+pippo
+.TP
+.B INJECT [ inject(expr1,expr2,expr3,expr4); | inject(expr1,expr2,expr3); | inject(expr1,expr2); ]
+pippo
+.TP
+.B CREATE [ create(type,offs[,update[,shift]]); ]
+pippo
+.TP
+.B REMOVE [ remove(type,offs[,update[,shift]]); ]
+pippo
+.TP
+.B LEN [ len expr; ]
+pippo
+.TP
+.B NEW [ new; | new filename; | new(filename); ]
+pippo
+.TP
+.B CLOSE [ close; ]
+pippo
+.TP
+.B DUMP [ dump [%fmt] expr; ]
+pippo
+.SH FILE TYPES
+.TP
+.B ELF
+pippo
+.TP
+.B PE
+pippo
+.TP
+.B MACH-O
+pippo
+.SH EXAMPLES
+pippo
 .SH SEE ALSO
 readelf(1), objdump(1), ht(1), otool(1), gdb(1), elf(5)
 .SH AUTHOR

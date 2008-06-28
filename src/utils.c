@@ -70,8 +70,10 @@ void file_close()
 		size=lseek(fd,(off_t)0,SEEK_END);
 		x=munmap(faddr,(size_t)size);
 		close(fd);
+		fd=0;
 		faddr=NULL;
 	}
+	file_type=FT_NULL;
 }
 void file_probe(int verbose)
 {
@@ -82,6 +84,7 @@ void file_probe(int verbose)
 	int x,count;
 	//file_open(filename);
 	//probe if is mach-o
+	if(faddr==NULL) {printf("no file loaded!\n"); return;}
 	mac=(struct mach_header*)faddr;
 	if((mac->magic==MH_MAGIC)||(mac->magic==MH_CIGAM))
 	{
@@ -351,6 +354,7 @@ void grouth(int len)
 	off_t offset;
 	int n;
 	char *x;
+	if(!fd) {printf("no file opened!\n");return;}
 	x=(char*)malloc(len);
 	if(x==NULL) die("error allocating mem");
 	//printf("grouth:%d\n",len);
@@ -369,6 +373,7 @@ void shrink(int len)
 {
 	off_t offset,new_offset;
 	int n;
+	if(!fd) {printf("no file opened!\n");return;}
 	offset=lseek(fd,(off_t)0,SEEK_END);
 	new_offset=offset-len;
 	n=ftruncate(fd,new_offset);
@@ -435,6 +440,7 @@ void inject_file(char *file,int from,int len,char *shift)
 	int to_shift,i;
 	char *mem,cdata,tmp_cmd[MAX_CMD];
 	FILE *fp;
+	if(!fd) {printf("no file opened!\n");return;}
 	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
 	printf("inject from file...%s %d %d %d\n",file,from,len,to_shift);
 	mem=(char*)faddr;
@@ -456,6 +462,7 @@ void inject_byte(int data,int from,int len,char *shift)
 {
 	int to_shift,i;
 	char *mem,cdata,tmp_cmd[MAX_CMD];
+	if(!fd) {printf("no file opened!\n");return;}
 	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
 	printf("inject byte...%d %d %d %d\n",data,from,len,to_shift);
 	cdata=(char)data;
@@ -463,4 +470,113 @@ void inject_byte(int data,int from,int len,char *shift)
 	if(to_shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
 	mem+=from;
 	for(i=0;i<len;i++,mem++) *mem=cdata;
+}
+int type_look_up(char *type)
+{
+	if(file_type==FT_NULL) {printf("file type not defined.\n"); return;}
+	if((strcmp("ph",type))==0)
+	{
+		if(file_type!=FT_ELF) {printf("wrong file type.\n");return;}
+		return(sizeof(Elf32_Phdr));
+	}
+	if((strcmp("sh",type))==0)
+	{
+		if(file_type!=FT_ELF) {printf("wrong file type.\n");return;}
+		return(sizeof(Elf32_Shdr));
+	}
+	if((strncmp("lc",type,2))==0)
+	{
+		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return;}
+		
+	}
+	if((strcmp("sect",type))==0)
+	{
+		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return;}
+		return(sizeof(struct section));
+	}
+	if((strcmp("pe",type))==0)
+	{
+		if(file_type!=FT_PE) {printf("wrong file type.\n");return;}
+		return(sizeof(_IMAGE_NT_HEADERS));
+	}
+	if((strcmp("mz",type))==0)
+	{
+		if((file_type!=FT_PE)||(file_type!=FT_MZ)) {printf("wrong file type.\n");return;}
+		return(sizeof(_IMAGE_DOS_HEADER));
+	}
+	if((strcmp("s",type))==0)
+	{
+		switch(file_type){
+		case FT_ELF:
+			return(sizeof(Elf32_Ehdr));
+			break;
+		case FT_PE:
+			return(sizeof(_IMAGE_SECTION_HEADER));
+			break;
+		case FT_MACHO:
+			return(sizeof(struct mach_header));
+			break;
+		default:
+			printf("wrong file type.\n");
+			break;
+		};
+	}
+	return -1;
+}
+void create_hd(char *type,int offs,char *update,char *shift)
+{
+	int to_shift,to_update,len,from;
+	char tmp_cmd[MAX_CMD];
+	if(update==NULL) to_update=0; else to_update=1;
+	if(shift==NULL) to_shift=0; else to_shift=1;
+	printf("create: %s %d %d %d\n",type,offs,to_update,to_shift);
+	if(!fd) {printf("no file opened!\n");return;}
+	from=offs;
+	len=type_look_up(type);
+	if(len==-1) return;
+	printf("len=%d\n",len);
+	if(to_shift) {sprintf(tmp_cmd,"inject(0,%d,%d,\">>\");",from,len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
+	execute(tmp_cmd);
+	if(to_update) printf("update cascade is not implemented yet.\n");
+	refresh();
+}
+void remove_hd(char *type,int offs,char *update,char *shift)
+{
+	int to_shift,to_update,len,from;
+	char tmp_cmd[MAX_CMD];
+	if(update==NULL) to_update=0; else to_update=1;
+	if(shift==NULL) to_shift=0; else to_shift=1;
+	printf("remove: %s %d %d %d\n",type,offs,to_update,to_shift);
+	if(!fd) {printf("no file opened!\n");return;}
+	from=offs;
+	len=type_look_up(type);
+	if(len==-1) return;
+	printf("len=%d\n",len);
+	if(to_shift) {sprintf(tmp_cmd,"move(%d,%d,%d);len %d;",from,len,-len,-len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
+	execute(tmp_cmd);
+	if(to_update) printf("update cascade is not implemented yet.\n");
+	refresh();
+}
+void refresh()
+{
+	printf("refresh...\n");
+}
+void reload()
+{
+	printf("reload...\n");
+}
+void force(char *type)
+{
+	if((strcmp("elf",type))==0) {file_type=FT_ELF;return;}
+	if((strcmp("pe",type))==0) {file_type=FT_PE;return;}
+	if((strcmp("macho",type))==0) {file_type=FT_MACHO;return;}
+	if((strcmp("mz",type))==0) {file_type=FT_MZ;return;}
+	printf("wrong file type.\n");
+}
+void new_file(char *filename)
+{
+	printf("new file...");
+	if(filename!=NULL) printf("%s",filename);
+	printf("\n");
+	
 }

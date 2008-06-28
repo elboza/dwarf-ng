@@ -29,7 +29,7 @@
 
 void usage()
 {
-	printf("dwarf-0.1.80 (c) Fernando Iazeolla <drugo@code.autistici.org>\n");
+	printf("dwarf-%s (c) Fernando Iazeolla <drugo@code.autistici.org>\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
@@ -50,8 +50,8 @@ void usage()
 }
 void usage_b()
 {
-	printf("dwarf-0.1.80 (c) Fernando Iazeolla 2007-2008\n");
-	printf("for help type: dwarf -h\n");
+	printf("dwarf-%s (c) Fernando Iazeolla 2007-2008\n",VERSION);
+	printf("for help type: dwarf --help\n");
 }
 void get_defaults_arg(struct m_action *action)
 {

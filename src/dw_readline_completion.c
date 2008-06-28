@@ -134,13 +134,13 @@ void add_cmds_completions()
 	add_completion("open",NULL,comp_fixed);
 	add_completion("info",NULL,comp_fixed);
 	add_completion("type",NULL,comp_fixed);
-//	add_completion("force",NULL,comp_fixed);
+	add_completion("force",NULL,comp_fixed);
 //	add_completion("sizeof",NULL,comp_fixed);
 //	add_completion("call",NULL,comp_fixed);
 	add_completion("grouth",NULL,comp_fixed);
 	add_completion("shrink",NULL,comp_fixed);
-//	add_completion("local",NULL,comp_fixed);
-//	add_completion("alias",NULL,comp_fixed);
+	add_completion("refresh",NULL,comp_fixed);
+	add_completion("reload",NULL,comp_fixed);
 //	add_completion("shift",NULL,comp_fixed);
 	add_completion("move",NULL,comp_fixed);
 //	add_completion("realloc",NULL,comp_fixed);
@@ -148,8 +148,8 @@ void add_cmds_completions()
 	add_completion("inject",NULL,comp_fixed);
 //	add_completion("fill",NULL,comp_fixed);
 //	add_completion("eject",NULL,comp_fixed);
-	add_completion("addhd",NULL,comp_fixed);
-	add_completion("rmhd",NULL,comp_fixed);
+	add_completion("create",NULL,comp_fixed);
+	add_completion("remove",NULL,comp_fixed);
 	add_completion("len",NULL,comp_fixed);
 //	add_completion("pos",NULL,comp_fixed);
 //	add_completion("createh",NULL,comp_fixed);

@@ -317,6 +317,14 @@ struct _var* ex(nodeType *p) {
         case TYPE:
         	file_probe(VERBOSE);
         	break;
+        case FORCE:
+        	v[0]=ex(p->opr.op[0]);
+        	if(v[0]) force(v[0]->s);
+        	break;
+        case NEW:
+        	v[0]=ex(p->opr.op[0]);
+        	if(v[0]) new_file(v[0]->s); else new_file(NULL);
+        	break;
         case LOAD:
         	//printf("closing file\n");
         	file_close();
@@ -418,6 +426,62 @@ struct _var* ex(nodeType *p) {
 				break;
 			};
 		}
+		break;
+	case ADDHD:
+		v[0]=ex(p->opr.op[0]);
+        	v[1]=ex(p->opr.op[1]);
+        	v[2]=ex(p->opr.op[2]);
+		v[3]=ex(p->opr.op[3]);
+		printf("createHD\n");
+		i=4;
+		if(v[3]==NULL) i--;
+		if(v[2]==NULL) i--;
+		switch(i){
+		case 4:
+			if((strcmp(v[2]->s,"u"))!=0) {printf("errro in parameter 3 (update parameter).\n"); break;}
+			if((strcmp(v[3]->s,">>"))!=0) {printf("error in parameter 4 (shift file).\n"); break;}
+			create_hd(v[0]->s,v[1]->val,v[2]->s,v[3]->s);
+			break;
+		case 3:
+			if((strcmp(v[2]->s,"u"))==0) {create_hd(v[0]->s,v[1]->val,v[2]->s,NULL);break;}
+			if((strcmp(v[2]->s,">>"))==0) {create_hd(v[0]->s,v[1]->val,NULL,v[2]->s);break;}
+			printf("error in parameter 3.\n");
+			break;
+		default:
+			create_hd(v[0]->s,v[1]->val,NULL,NULL);
+			break;
+		};
+		break;
+	case RMHD:
+		v[0]=ex(p->opr.op[0]);
+        	v[1]=ex(p->opr.op[1]);
+        	v[2]=ex(p->opr.op[2]);
+		v[3]=ex(p->opr.op[3]);
+		printf("removeHD\n");
+		i=4;
+		if(v[3]==NULL) i--;
+		if(v[2]==NULL) i--;
+		switch(i){
+		case 4:
+			if((strcmp(v[2]->s,"u"))!=0) {printf("errro in parameter 3 (update parameter).\n"); break;}
+			if((strcmp(v[3]->s,">>"))!=0) {printf("error in parameter 4 (shift file).\n"); break;}
+			remove_hd(v[0]->s,v[1]->val,v[2]->s,v[3]->s);
+			break;
+		case 3:
+			if((strcmp(v[2]->s,"u"))==0) {remove_hd(v[0]->s,v[1]->val,v[2]->s,NULL);break;}
+			if((strcmp(v[2]->s,">>"))==0) {remove_hd(v[0]->s,v[1]->val,NULL,v[2]->s);break;}
+			printf("error in parameter 3.\n");
+			break;
+		default:
+			remove_hd(v[0]->s,v[1]->val,NULL,NULL);
+			break;
+		};
+		break;
+	case RELOAD:
+		reload();
+		break;
+	case REFRESH:
+		refresh();
 		break;
 	default:
 		break;

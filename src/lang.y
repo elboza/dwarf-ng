@@ -49,8 +49,8 @@ void yyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL LOCAL FILE_BEGIN FILE_END
-%token ALIAS SHIFT MOVE REALLOC HELP INJECT CREATEH SHOW CLOSE DUMP GROUTH SHRINK
+%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL RELOAD FILE_BEGIN FILE_END
+%token REFRESH SHIFT MOVE REALLOC HELP INJECT NEW SHOW CLOSE DUMP GROUTH SHRINK
 %token ADDHD RMHD LEN MOVERPOS MOVERNEG
 %nonassoc IFX
 %nonassoc ELSE
@@ -90,11 +90,12 @@ stmt:
         | LOAD '(' filename ')'					{$$=opr(LOAD,1,$3);}
         | INFO							{$$=opr(INFO,2,NULL,NULL);}
         | TYPE							{$$=opr(TYPE,2,NULL,NULL);}
-        | FORCE							{$$=opr(QUIT,2,NULL,NULL);}
+        | FORCE	STRING						{$$=opr(FORCE,2,id_string($2),NULL);}
+        | FORCE	'(' STRING ')'					{$$=opr(FORCE,2,id_string($3),NULL);}
         | SIZEOF						{$$=opr(QUIT,2,NULL,NULL);}
         | CALL							{$$=opr(QUIT,2,NULL,NULL);}
-        | LOCAL							{$$=opr(QUIT,2,NULL,NULL);}
-        | ALIAS							{$$=opr(QUIT,2,NULL,NULL);}
+        | REFRESH						{$$=opr(REFRESH,2,NULL,NULL);}
+        | RELOAD						{$$=opr(RELOAD,2,NULL,NULL);}
         | SHIFT							{$$=opr(QUIT,2,NULL,NULL);}
         | MOVE '(' expr ',' expr ',' expr ')'			{$$=opr(MOVE,3,$3,$5,$7);}
         | MOVE '(' expr ',' '+' expr ',' expr ')'		{$$=opr(MOVERPOS,3,$3,$6,$8);}
@@ -103,15 +104,21 @@ stmt:
         | INJECT '(' expr ',' expr ')'				{$$=opr(INJECT,4,$3,$5,NULL,NULL);}
         | INJECT '(' expr ',' expr ',' expr ')'			{$$=opr(INJECT,4,$3,$5,$7,NULL);}
         | INJECT '(' expr ',' expr ',' expr ',' expr ')'	{$$=opr(INJECT,4,$3,$5,$7,$9);}
-        | CREATEH						{$$=opr(QUIT,2,NULL,NULL);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
         | CLOSE							{$$=opr(CLOSE,2,NULL,NULL);}
         | DUMP '%' WORD expr ';'				{$$=opr(DUMP,2,id_word($3),$4);}
         | DUMP expr ';'						{$$=opr(DUMP,2,NULL,$2);}
         | GROUTH expr ';'					{$$=opr(GROUTH,1,$2);}
         | SHRINK expr ';'					{$$=opr(SHRINK,1,$2);}
-        | ADDHD '(' WORD ',' expr ')'				{$$=opr(ADDHD,3,$3,$5,NULL);}
-        | RMHD '(' WORD ',' expr ')'				{$$=opr(RMHD,3,$3,$5,NULL);}
+        | ADDHD '(' STRING ',' expr ')'				{$$=opr(ADDHD,4,id_string($3),$5,NULL,NULL);}
+        | ADDHD '(' STRING ',' expr ',' STRING ')'		{$$=opr(ADDHD,4,id_string($3),$5,id_string($7),NULL);}
+        | ADDHD '(' STRING ',' expr ',' STRING ',' STRING ')'	{$$=opr(ADDHD,4,id_string($3),$5,id_string($7),id_string($9));}
+        | RMHD '(' STRING ',' expr ')'				{$$=opr(RMHD,4,id_string($3),$5,NULL,NULL);}
+        | RMHD '(' STRING ',' expr ',' STRING ')'		{$$=opr(RMHD,4,id_string($3),$5,id_string($7),NULL);}
+        | RMHD '(' STRING ',' expr ',' STRING ',' STRING ')'	{$$=opr(RMHD,4,id_string($3),$5,id_string($7),id_string($9));}
+	| NEW							{$$=opr(NEW,2,NULL,NULL);}
+	| NEW filename						{$$=opr(NEW,2,$2,NULL);}
+	| NEW '(' filename ')'					{$$=opr(NEW,2,$3,NULL);}
         | LEN expr ';'						{$$=opr(LEN,1,$2);}
         ;
 

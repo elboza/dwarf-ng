@@ -56,6 +56,14 @@ void move_r_pos(int from,int len,int to);
 void move_r_neg(int from,int len,int to);
 void inject_file(char *file,int from,int len,char *shift);
 void inject_byte(int data,int from,int len,char *shift);
+void create_hd(char *type,int offs,char *update,char *shift);
+void remove_hd(char *type,int offs,char *update,char *shift);
+int type_look_up(char *type);
+void refresh(void);
+void reload(void);
+void force(char *type);
+void new_file(char *filename);
+
 
 #endif
 

@@ -19,7 +19,7 @@
 
 #ifndef DW_MAIN_H
 #define DW_MAIN_H
-#define VERSION 0.1.80
+#define VERSION "0.1.80"
 int ilook_debug; /* if set perform the debug function only*/
 #define MAX_FILENAME 255
 #define MAX_STR 255
