@@ -290,3 +290,37 @@ void save_elf_hd()
 		}while(num_sh<m_e_shnum);
 	}
 }
+int get_max_ph()
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0;
+	vv=get_s_var("ph");
+	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+	return count-1;
+}
+int get_max_sh()
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0;
+	vv=get_s_var("sh");
+	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+	return count-1;
+}
+void add_section_ph(int num)
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0,i;
+	vv=get_s_var("ph");
+	if(num==-1)
+	{
+		
+	}
+	else
+	{
+		for(i=0;i<num;i++) ;
+	}
+	
+}

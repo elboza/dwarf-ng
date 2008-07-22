@@ -42,36 +42,70 @@
 
 extern FILE *yyin;
 extern int errno;
+extern struct m_files mfiles;
+extern struct m_cfg mcfg;
 
+char * get_tmp_filename()
+{
+	char *s="dw_temp_file";
+	strncat(mcfg.tmpworkdir,s,MAX_FILENAME);
+	return &mcfg.tmpworkdir;
+}
 void file_open(char *s)
 {
+	char *tmpfilename,makecopystr[MAX_CMD],actualfilename[MAX_FILENAME];
+	int ret;
 	off_t len;
-	fd=open(s,O_RDWR);
-	if(fd==-1)
+	if(mcfg.tmpworkcopy)
 	{
-		printf("error opening %s file.",s);
+		tmpfilename=get_tmp_filename();
+		strncpy(actualfilename,tmpfilename,MAX_FILENAME);
+		strncpy(mfiles.tmpcopy,tmpfilename,MAX_FILENAME);
+		sprintf(makecopystr,"cp %s %s",s,tmpfilename);
+		//printf("DEBUG: %s\n",makecopystr);
+		ret=system(makecopystr);
+		if(ret==-1) {printf("error on creating tmp file\n");return;}
+		mfiles.fd=open(tmpfilename,O_RDWR);
+	}
+	else
+	{
+		strncpy(actualfilename,s,MAX_FILENAME);
+		mfiles.fd=open(s,O_RDWR);
+	}
+	
+	if(mfiles.fd==-1)
+	{
+		printf("error opening %s file.",actualfilename);
 		if(errno==EACCES) printf("permission denied or check file existance.");
 		printf("\nexiting...\n");
 		exit(1);
 	}
-	len=lseek(fd,(off_t)0,SEEK_END);
-	faddr=(char*)mmap(NULL,(size_t)len,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fd,(off_t)0);
+	strncpy(mfiles.originalfilename,s,MAX_FILENAME);
+	len=lseek(mfiles.fd,(off_t)0,SEEK_END);
+	faddr=(char*)mmap(NULL,(size_t)len,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,mfiles.fd,(off_t)0);
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
 void file_close()
 {
-	int x;
+	int x,ret;
+	char cmd[MAX_CMD];
 	off_t size;
 	delete_tables();
 	free_completion();
 	file_endian=little_endian;
-	if(fd)
+	if(mfiles.fd)
 	{
-		size=lseek(fd,(off_t)0,SEEK_END);
+		size=lseek(mfiles.fd,(off_t)0,SEEK_END);
 		x=munmap(faddr,(size_t)size);
-		close(fd);
-		fd=0;
+		close(mfiles.fd);
+		mfiles.fd=0;
 		faddr=NULL;
+		if(mcfg.tmpworkcopy)
+		{
+			sprintf(cmd,"rm %s",mfiles.tmpcopy);
+			ret=system(cmd);
+			if(ret==-1) printf("could not remove the temp file !\n");
+		}
 	}
 	file_type=FT_NULL;
 }
@@ -277,13 +311,13 @@ int get_offset(char *s,char p)
 {
 	off_t offset;
 	offset=0;
-	if(fd)
+	if(mfiles.fd)
 	{
 		if(s==NULL) return 0;
 		if((strcmp(s,"FILE_BEGIN"))==0) return 0;
 		if((strcmp(s,"FILE_END"))==0)
 		{
-			offset=lseek(fd,(off_t)0,SEEK_END);
+			offset=lseek(mfiles.fd,(off_t)0,SEEK_END);
 			return offset;
 		}
 		//printf("pos=%s %c\n",s,p);
@@ -345,6 +379,18 @@ void save_hd()
 		break;
 	}
 }
+void save_file()
+{
+	char cmd[MAX_CMD];
+	int ret;
+	save_hd();
+	if(mcfg.tmpworkcopy)
+	{
+		printf(cmd,"cp %s %s",mfiles.tmpcopy,mfiles.originalfilename);
+		ret=system(cmd);
+		if(ret==-1) {printf("error on saving original file !!\n");}
+	}
+}
 int remap(len)
 {
 
@@ -354,12 +400,12 @@ void grouth(int len)
 	off_t offset;
 	int n;
 	char *x;
-	if(!fd) {printf("no file opened!\n");return;}
+	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	x=(char*)malloc(len);
 	if(x==NULL) die("error allocating mem");
 	//printf("grouth:%d\n",len);
-	offset=lseek(fd,(off_t)0,SEEK_END);
-	n=write(fd,x,(size_t) len);
+	offset=lseek(mfiles.fd,(off_t)0,SEEK_END);
+	n=write(mfiles.fd,x,(size_t) len);
 	free(x);
 	#if HAVE_MREMAP
 	faddr=mremap(faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
@@ -373,10 +419,10 @@ void shrink(int len)
 {
 	off_t offset,new_offset;
 	int n;
-	if(!fd) {printf("no file opened!\n");return;}
-	offset=lseek(fd,(off_t)0,SEEK_END);
+	if(!mfiles.fd) {printf("no file opened!\n");return;}
+	offset=lseek(mfiles.fd,(off_t)0,SEEK_END);
 	new_offset=offset-len;
-	n=ftruncate(fd,new_offset);
+	n=ftruncate(mfiles.fd,new_offset);
 	if(n==-1) die("error shrinking file");
 	#if HAVE_MREMAP
 	faddr=mremap(faddr,(size_t) offset,(size_t) new_offset,MAP_FILE|MAP_SHARED);
@@ -440,7 +486,7 @@ void inject_file(char *file,int from,int len,char *shift)
 	int to_shift,i;
 	char *mem,cdata,tmp_cmd[MAX_CMD];
 	FILE *fp;
-	if(!fd) {printf("no file opened!\n");return;}
+	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
 	printf("inject from file...%s %d %d %d\n",file,from,len,to_shift);
 	mem=(char*)faddr;
@@ -462,7 +508,7 @@ void inject_byte(int data,int from,int len,char *shift)
 {
 	int to_shift,i;
 	char *mem,cdata,tmp_cmd[MAX_CMD];
-	if(!fd) {printf("no file opened!\n");return;}
+	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
 	printf("inject byte...%d %d %d %d\n",data,from,len,to_shift);
 	cdata=(char)data;
@@ -473,35 +519,35 @@ void inject_byte(int data,int from,int len,char *shift)
 }
 int type_look_up(char *type)
 {
-	if(file_type==FT_NULL) {printf("file type not defined.\n"); return;}
+	if(file_type==FT_NULL) {printf("file type not defined.\n"); return -1;}
 	if((strcmp("ph",type))==0)
 	{
-		if(file_type!=FT_ELF) {printf("wrong file type.\n");return;}
+		if(file_type!=FT_ELF) {printf("wrong file type.\n");return -1;}
 		return(sizeof(Elf32_Phdr));
 	}
 	if((strcmp("sh",type))==0)
 	{
-		if(file_type!=FT_ELF) {printf("wrong file type.\n");return;}
+		if(file_type!=FT_ELF) {printf("wrong file type.\n");return -1;}
 		return(sizeof(Elf32_Shdr));
 	}
 	if((strncmp("lc",type,2))==0)
 	{
-		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return;}
-		
+		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return -1;}
+		return -1;
 	}
 	if((strcmp("sect",type))==0)
 	{
-		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return;}
+		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return -1;}
 		return(sizeof(struct section));
 	}
 	if((strcmp("pe",type))==0)
 	{
-		if(file_type!=FT_PE) {printf("wrong file type.\n");return;}
+		if(file_type!=FT_PE) {printf("wrong file type.\n");return -1;}
 		return(sizeof(_IMAGE_NT_HEADERS));
 	}
 	if((strcmp("mz",type))==0)
 	{
-		if((file_type!=FT_PE)||(file_type!=FT_MZ)) {printf("wrong file type.\n");return;}
+		if((file_type!=FT_PE)||(file_type!=FT_MZ)) {printf("wrong file type.\n");return -1;}
 		return(sizeof(_IMAGE_DOS_HEADER));
 	}
 	if((strcmp("s",type))==0)
@@ -525,20 +571,51 @@ int type_look_up(char *type)
 }
 void create_hd(char *type,int offs,char *update,char *shift)
 {
-	int to_shift,to_update,len,from;
+	int to_shift,to_update,len,from,sec_num,max_secs,n_type;
 	char tmp_cmd[MAX_CMD];
+	sec_num=offs;
 	if(update==NULL) to_update=0; else to_update=1;
 	if(shift==NULL) to_shift=0; else to_shift=1;
-	printf("create: %s %d %d %d\n",type,offs,to_update,to_shift);
-	if(!fd) {printf("no file opened!\n");return;}
-	from=offs;
+	printf("create: %s %d %d %d....still coding it...sorry :)\n",type,offs,to_update,to_shift);
+	if(!mfiles.fd) {printf("no file opened!\n");return;}
+	//from=offs;
 	len=type_look_up(type);
 	if(len==-1) return;
 	printf("len=%d\n",len);
+	n_type=section_name(type);
+	switch(n_type){
+	case SEC_SH:
+		break;
+	case SEC_PH:
+		max_secs=get_max_ph();
+		//from=get_offs_ph(sec_num);
+		//add_section_ph(sec_num);
+		break;
+	case SEC_PE_S:
+		break;
+	case SEC_LC:
+		
+		break;
+	case SEC_SECT:
+		break;
+	default:
+		printf("wrong section name!\n");
+		return;
+	}
 	if(to_shift) {sprintf(tmp_cmd,"inject(0,%d,%d,\">>\");",from,len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
-	execute(tmp_cmd);
+	//execute(tmp_cmd);
+	//create  hd in tvar table !!!
 	if(to_update) printf("update cascade is not implemented yet.\n");
-	refresh();
+	//refresh();
+}
+int section_name(char *name)
+{
+	if((strcmp(name,"sh"))==0) return SEC_SH;
+	if((strcmp(name,"ph"))==0) return SEC_PH;
+	if((strcmp(name,"s"))==0) return SEC_PE_S;
+	if((strncmp(name,"lc",2))==0) return SEC_LC;
+	if((strcmp(name,"sect"))==0) return SEC_SECT;
+	return -1;
 }
 void remove_hd(char *type,int offs,char *update,char *shift)
 {
@@ -546,24 +623,47 @@ void remove_hd(char *type,int offs,char *update,char *shift)
 	char tmp_cmd[MAX_CMD];
 	if(update==NULL) to_update=0; else to_update=1;
 	if(shift==NULL) to_shift=0; else to_shift=1;
-	printf("remove: %s %d %d %d\n",type,offs,to_update,to_shift);
-	if(!fd) {printf("no file opened!\n");return;}
+	printf("remove: %s %d %d %d......still coding it...sorry :)\n",type,offs,to_update,to_shift);
+	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	from=offs;
 	len=type_look_up(type);
 	if(len==-1) return;
 	printf("len=%d\n",len);
 	if(to_shift) {sprintf(tmp_cmd,"move(%d,%d,%d);len %d;",from,len,-len,-len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
-	execute(tmp_cmd);
+	//execute(tmp_cmd);
+	//remove hd in var table !!!
 	if(to_update) printf("update cascade is not implemented yet.\n");
-	refresh();
+	//refresh();
 }
 void refresh()
 {
+	int x;
+	if(mcfg.flush_before_refresh)
+	{
+		if(mcfg.ask_flush)
+		{
+			puts("flush data before refresh? (Yes/No) ");
+			x=getchar();
+			if((x=='y') || (x=='Y')) flush();
+		}
+		else
+		{
+			flush();
+		}
+	}
+	delete_tables();
+	file_probe(NOVERBOSE);
+	load_headers();
 	printf("refresh...\n");
 }
 void reload()
 {
-	printf("reload...\n");
+	printf("reload...not yet implemented\n");
+}
+void flush()
+{
+	save_hd();
+	printf("data flushed\n");
 }
 void force(char *type)
 {
@@ -578,5 +678,30 @@ void new_file(char *filename)
 	printf("new file...");
 	if(filename!=NULL) printf("%s",filename);
 	printf("\n");
+	
+}
+void info()
+{
+	switch(file_type){
+	case FT_ELF:
+		printf("elf header       : s\n");
+		printf("section headersh : sh[0 .. %d]\n",get_max_sh());
+		printf("program headersh : ph[0 .. %d]\n",get_max_ph());
+		break;
+	case FT_PE:
+		printf("dos header : mz\n");
+		printf("win header : pe\n");
+		printf("sections   : s[0 .. %d]\n",get_max_pe_sect());
+		break;
+	case FT_MZ:
+		printf("dos header    : mz\n");
+		break;
+	case FT_MACHO:
+		printf("mac header    : s\n");
+		printf("load commands : lc[0 .. %d]\n",get_max_lc());
+		break;
+	default:
+		break;
+	}
 	
 }

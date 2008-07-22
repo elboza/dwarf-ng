@@ -75,7 +75,7 @@ int yywrap(void);
 "type"			return TYPE;
 "force"			return FORCE;
 "sizeof"		return SIZEOF;
-"call"			return CALL;
+"flush"			return FLUSH;
 "grouth"		return GROUTH;
 "shrink"		return SHRINK;
 "refresh"		return REFRESH;

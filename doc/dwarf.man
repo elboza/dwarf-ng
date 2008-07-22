@@ -44,7 +44,7 @@ The \fBstructured variables\fP are created by \fBdwarf\fP when it loads a file i
 Expressions \fBEXPR\fP are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a \fB0x\fP...example: $a=0x10; ($a is 16 decimal!).
 .TP
 .B OFFSETS
-offsets syntax is \f@<foo\fP or \f@>foo\fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (>) or minor (<) symbol indicate if the offset point to the end (>) or the beginning (<) of the specified data structure. whith \fB@<\fP we indicate the beginning of the file. Whith \fB@>\fP wh indicate the end of the file. For example \fIprint @>;\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@>+3; will assign to the variable $a the length of the file plus 3).
+offsets syntax is \f @<foo \fP or \f @>foo \fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (>) or minor (<) symbol indicate if the offset point to the end (>) or the beginning (<) of the specified data structure. whith \fB@<\fP we indicate the beginning of the file. Whith \fB@>\fP wh indicate the end of the file. For example \fIprint @>;\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@>+3; will assign to the variable $a the length of the file plus 3).
 .SH COMMANDS
 .TP
 .B SAVE [ save; | save(filename); ]

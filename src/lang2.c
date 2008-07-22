@@ -317,6 +317,9 @@ struct _var* ex(nodeType *p) {
         case TYPE:
         	file_probe(VERBOSE);
         	break;
+        case FLUSH:
+        	flush();
+        	break;
         case FORCE:
         	v[0]=ex(p->opr.op[0]);
         	if(v[0]) force(v[0]->s);
@@ -336,9 +339,10 @@ struct _var* ex(nodeType *p) {
         	break;
 	case INFO:
 		file_probe(VERBOSE);
+		info();
 		break;
         case SAVE:
-        	save_hd();
+        	save_file();
         	printf("Ok. file saved.\n");
         	break;
         case CLOSE:
@@ -436,6 +440,7 @@ struct _var* ex(nodeType *p) {
 		i=4;
 		if(v[3]==NULL) i--;
 		if(v[2]==NULL) i--;
+		if(v[1]==NULL) i--;
 		switch(i){
 		case 4:
 			if((strcmp(v[2]->s,"u"))!=0) {printf("errro in parameter 3 (update parameter).\n"); break;}
@@ -447,8 +452,11 @@ struct _var* ex(nodeType *p) {
 			if((strcmp(v[2]->s,">>"))==0) {create_hd(v[0]->s,v[1]->val,NULL,v[2]->s);break;}
 			printf("error in parameter 3.\n");
 			break;
-		default:
+		case 2:
 			create_hd(v[0]->s,v[1]->val,NULL,NULL);
+			break;
+		default:
+			create_hd(v[0]->s,-1,NULL,NULL);
 			break;
 		};
 		break;

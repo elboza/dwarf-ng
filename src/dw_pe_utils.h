@@ -26,6 +26,7 @@ off_t get_offset_pe(char *s,char p);
 off_t get_offset_mz(char *s,char p);
 void save_mz_hd(void);
 void save_pe_hd(void);
+int get_max_pe_sect(void);
 
 #endif
 

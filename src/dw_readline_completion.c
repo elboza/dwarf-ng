@@ -135,8 +135,8 @@ void add_cmds_completions()
 	add_completion("info",NULL,comp_fixed);
 	add_completion("type",NULL,comp_fixed);
 	add_completion("force",NULL,comp_fixed);
-//	add_completion("sizeof",NULL,comp_fixed);
-//	add_completion("call",NULL,comp_fixed);
+//	add_completion("",NULL,comp_fixed);
+	add_completion("flush",NULL,comp_fixed);
 	add_completion("grouth",NULL,comp_fixed);
 	add_completion("shrink",NULL,comp_fixed);
 	add_completion("refresh",NULL,comp_fixed);

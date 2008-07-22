@@ -758,3 +758,12 @@ void save_macho_hd(void)
 		}while(n_seg<m_ncmds);
 	}
 }
+int get_max_lc()
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0;
+	vv=get_s_var("lc");
+	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+	return count-1;
+}

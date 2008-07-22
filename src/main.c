@@ -26,6 +26,8 @@
 #include"dw_readline_completion.h"
 #include"vars.h"
 
+struct m_cfg mcfg;
+struct m_files mfiles;
 
 void usage()
 {
@@ -55,7 +57,7 @@ void usage_b()
 }
 void get_defaults_arg(struct m_action *action)
 {
-	ilook_debug=0;
+	//ilook_debug=0;
 	action->file=0;
 	action->shell=0;
 	action->script=0;
@@ -63,10 +65,15 @@ void get_defaults_arg(struct m_action *action)
 	forced=FT_NULL;
 	file_type=FT_NULL;
 	cmd=(char*)malloc(MAX_CMD);
-	fd=0;
+	mfiles.fd=0;
 	gv_first=NULL;
 	gv_last=NULL;
 	last_stack=NULL;
+	mcfg.tmpworkcopy=YES;
+	mcfg.file_changed=NO;
+	mcfg.flush_before_refresh=YES;
+	mcfg.ask_flush=YES;
+	strcpy(mcfg.tmpworkdir,"/tmp/");
 }
 void parse_args(int argc,char **argv,struct m_action *action)
 {
@@ -95,7 +102,7 @@ void parse_args(int argc,char **argv,struct m_action *action)
     				printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
     				printf("This is free software (GNU GPLv2), and you are welcome to redistribute it\n");
     				printf("under GNU GPL version 2 (see <http://www.gnu.org/licenses/>).\n");
-				printf("entering shell-interactive mode....testing...\n");
+				printf("entering shell-interactive mode...\n");
 				action->shell=1;
 				//shell();
 				//strncpy(cmd,"quit;",1024);
@@ -135,7 +142,7 @@ void parse_args(int argc,char **argv,struct m_action *action)
 				printf("move!....to develop.\n");
 				break;
 			case 'd':
-				ilook_debug=1;
+				//ilook_debug=1;
 				break;
 			case 'c':
 				//printf("to execute:%s ....testing..\n",optarg);

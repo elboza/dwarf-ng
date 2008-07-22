@@ -21,6 +21,7 @@
 #define DW_UTILS_H
 
 typedef enum {comp_fixed,comp_var,comp_discardable} rl_comp;
+typedef enum {SEC_SH,SEC_PH,SEC_PE_S,SEC_LC,SEC_SECT} files_sections;
 struct comp_list
 {
 	char *s;
@@ -61,9 +62,12 @@ void remove_hd(char *type,int offs,char *update,char *shift);
 int type_look_up(char *type);
 void refresh(void);
 void reload(void);
+void flush(void);
 void force(char *type);
 void new_file(char *filename);
-
+void save_file(void);
+int section_name(char *name);
+void info(void);
 
 #endif
 

@@ -422,3 +422,12 @@ void save_pe_hd(void)
 		}while(n<m_num_sec);
 	}
 }
+int get_max_pe_sect()
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0;
+	vv=get_s_var("s");
+	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+	return count-1;
+}

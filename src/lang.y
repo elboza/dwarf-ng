@@ -49,7 +49,7 @@ void yyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF CALL RELOAD FILE_BEGIN FILE_END
+%token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF FLUSH RELOAD FILE_BEGIN FILE_END
 %token REFRESH SHIFT MOVE REALLOC HELP INJECT NEW SHOW CLOSE DUMP GROUTH SHRINK
 %token ADDHD RMHD LEN MOVERPOS MOVERNEG
 %nonassoc IFX
@@ -93,7 +93,7 @@ stmt:
         | FORCE	STRING						{$$=opr(FORCE,2,id_string($2),NULL);}
         | FORCE	'(' STRING ')'					{$$=opr(FORCE,2,id_string($3),NULL);}
         | SIZEOF						{$$=opr(QUIT,2,NULL,NULL);}
-        | CALL							{$$=opr(QUIT,2,NULL,NULL);}
+        | FLUSH							{$$=opr(FLUSH,2,NULL,NULL);}
         | REFRESH						{$$=opr(REFRESH,2,NULL,NULL);}
         | RELOAD						{$$=opr(RELOAD,2,NULL,NULL);}
         | SHIFT							{$$=opr(QUIT,2,NULL,NULL);}
@@ -110,6 +110,7 @@ stmt:
         | DUMP expr ';'						{$$=opr(DUMP,2,NULL,$2);}
         | GROUTH expr ';'					{$$=opr(GROUTH,1,$2);}
         | SHRINK expr ';'					{$$=opr(SHRINK,1,$2);}
+        | ADDHD '(' STRING ')'					{$$=opr(ADDHD,4,id_string($3),NULL,NULL,NULL);}
         | ADDHD '(' STRING ',' expr ')'				{$$=opr(ADDHD,4,id_string($3),$5,NULL,NULL);}
         | ADDHD '(' STRING ',' expr ',' STRING ')'		{$$=opr(ADDHD,4,id_string($3),$5,id_string($7),NULL);}
         | ADDHD '(' STRING ',' expr ',' STRING ',' STRING ')'	{$$=opr(ADDHD,4,id_string($3),$5,id_string($7),id_string($9));}
