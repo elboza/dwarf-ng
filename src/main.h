@@ -49,6 +49,8 @@ struct m_cfg{
 	int file_changed;
 	int flush_before_refresh;
 	int ask_flush;
+	int createHD_autoshift;
+	int createHD_autoupdate;
 	char tmpworkdir[MAX_FILENAME];
 };
 struct m_files{

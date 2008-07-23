@@ -73,6 +73,8 @@ void get_defaults_arg(struct m_action *action)
 	mcfg.file_changed=NO;
 	mcfg.flush_before_refresh=YES;
 	mcfg.ask_flush=YES;
+	mcfg.createHD_autoshift=YES;
+	mcfg.createHD_autoupdate=NO;
 	strcpy(mcfg.tmpworkdir,"/tmp/");
 }
 void parse_args(int argc,char **argv,struct m_action *action)

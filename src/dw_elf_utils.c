@@ -308,19 +308,127 @@ int get_max_sh()
 	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
 	return count-1;
 }
+void populate_new_ph(int sec_pos)
+{
+	int x=0;
+	char path[MAX_STR];
+	sprintf(path,"ph[%d]",sec_pos);
+	add_s_var(path,"p_type",TYPE_VAL,&x);
+	add_s_var(path,"p_offset",TYPE_VAL,&x);
+	add_s_var(path,"p_vaddr",TYPE_VAL,&x);
+	add_s_var(path,"p_paddr",TYPE_VAL,&x);
+	add_s_var(path,"p_filesz",TYPE_VAL,&x);
+	add_s_var(path,"p_memsz",TYPE_VAL,&x);
+	add_s_var(path,"p_flags",TYPE_VAL,&x);
+	add_s_var(path,"p_align",TYPE_VAL,&x);
+}
+void populate_new_sh(int sec_pos)
+{
+	int x=0;
+	char path[MAX_STR];
+	sprintf(path,"sh[%d]",sec_pos);
+	add_s_var(path,"sh_name",TYPE_VAL,&x);
+	add_s_var(path,"sh_type",TYPE_VAL,&x);
+	add_s_var(path,"sh_flags",TYPE_VAL,&x);
+	add_s_var(path,"sh_addr",TYPE_VAL,&x);
+	add_s_var(path,"sh_offset",TYPE_VAL,&x);
+	add_s_var(path,"sh_size",TYPE_VAL,&x);
+	add_s_var(path,"sh_link",TYPE_VAL,&x);
+	add_s_var(path,"sh_info",TYPE_VAL,&x);
+	add_s_var(path,"sh_addralign",TYPE_VAL,&x);
+	add_s_var(path,"sh_entsize",TYPE_VAL,&x);
+}
 void add_section_ph(int num)
 {
-	struct _gv *ptr;
+	struct _gv *x,*ptr;
 	struct _var *vv;
-	int count=0,i;
+	int count=0,i,sec_pos;
+	char path[MAX_STR],tempstr[MAX_STR];
 	vv=get_s_var("ph");
+	x=(struct _gv*)malloc(sizeof(struct _gv));
+	if(x==NULL) die("error allocating child table memory");
+	x->v.name=(char*)malloc(5);
+	if(x->v.name==NULL) die("error allocating child table memory");
+	strcpy(x->v.name,"ph");
+	x->v.type=TYPE_STRUCT;
+	x->prev=NULL;
+	x->next=NULL;
+	x->v.p.first=NULL;
+	x->v.p.last=NULL;
+	sprintf(tempstr,"ph[%d]",get_max_ph()+1);
+	add_completion(NULL,tempstr,comp_discardable);
 	if(num==-1)
 	{
-		
+		vv->p.last->next=x;
+		x->prev=vv->p.last;
+		vv->p.last=x; // now max_ph in already incremented !!
+		sec_pos=get_max_ph();
 	}
 	else
 	{
-		for(i=0;i<num;i++) ;
+		sec_pos=num;
+		ptr=vv->p.first;
+		for(i=0;i<num;i++) if(ptr->next) ptr=ptr->next;
+		if(ptr->prev==NULL)
+		{
+			vv->p.first->prev=x;
+			x->next=vv->p.first;
+			vv->p.first=x;
+		}
+		else
+		{
+			x->prev=ptr->prev;
+			x->next=ptr;
+			ptr->prev->next=x;
+			ptr->prev=x;
+		}
 	}
-	
+	populate_new_ph(sec_pos);
+}
+void add_section_sh(int num)
+{
+	struct _gv *x,*ptr;
+	struct _var *vv;
+	int count=0,i,sec_pos;
+	char path[MAX_STR],tempstr[MAX_STR];
+	vv=get_s_var("sh");
+	x=(struct _gv*)malloc(sizeof(struct _gv));
+	if(x==NULL) die("error allocating child table memory");
+	x->v.name=(char*)malloc(5);
+	if(x->v.name==NULL) die("error allocating child table memory");
+	strcpy(x->v.name,"sh");
+	x->v.type=TYPE_STRUCT;
+	x->prev=NULL;
+	x->next=NULL;
+	x->v.p.first=NULL;
+	x->v.p.last=NULL;
+	sprintf(tempstr,"sh[%d]",get_max_sh()+1);
+	add_completion(NULL,tempstr,comp_discardable);
+	if(num==-1)
+	{
+		vv->p.last->next=x;
+		x->prev=vv->p.last;
+		vv->p.last=x; // now max_sh in already incremented !!
+		sec_pos=get_max_sh();
+	}
+	else
+	{
+		sec_pos=num;
+		ptr=vv->p.first;
+		for(i=0;i<num;i++) if(ptr->next) ptr=ptr->next;
+		if(ptr->prev==NULL)
+		{
+			vv->p.first->prev=x;
+			x->next=vv->p.first;
+			vv->p.first=x;
+		}
+		else
+		{
+			x->prev=ptr->prev;
+			x->next=ptr;
+			ptr->prev->next=x;
+			ptr->prev=x;
+		}
+	}
+	populate_new_sh(sec_pos);
 }

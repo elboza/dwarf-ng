@@ -21,9 +21,12 @@
 #define DW_MACHO_UTILS_H
 
 void load_macho_hd(void);
-off_t get_offset_macho(char *s,char p);
+int get_offset_macho(char *s,char p);
 void save_macho_hd(void);
 int get_max_lc(void);
+int get_max_sect(int lc);
+void add_section_lc(int num);
+void add_macho_sect(int num);
 
 #endif
 

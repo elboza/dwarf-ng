@@ -206,7 +206,7 @@ void load_mz_hd()
     x=get_data32(mz->e_lfanew);
     add_s_var("mz","e_lfanew",TYPE_VAL,&x);
 }
-off_t get_offset_pe(char *s,char p)
+int get_offset_pe(char *s,char p)
 {
 	off_t offset;
 	char *str;
@@ -430,4 +430,67 @@ int get_max_pe_sect()
 	vv=get_s_var("s");
 	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
 	return count-1;
+}
+void populate_new_pe_sect(int sec_pos)
+{
+	int x=0;
+	char path[MAX_STR],*str="new";
+	sprintf(path,"s[%d]",sec_pos);
+	add_s_var(path,"Name",TYPE_STRING,str);
+	add_s_var(path,"PhysicalAddress",TYPE_VAL,&x);
+	add_s_var(path,"VirtualAddress",TYPE_VAL,&x);
+	add_s_var(path,"SizeOfRawData",TYPE_VAL,&x);
+	add_s_var(path,"PointerToRawData",TYPE_VAL,&x);
+	add_s_var(path,"PointerToRelocations",TYPE_VAL,&x);
+	add_s_var(path,"PointerToLinenumbers",TYPE_VAL,&x);
+	add_s_var(path,"NumberOfRelocations",TYPE_VAL,&x);
+	add_s_var(path,"NumberOfLinenumbers",TYPE_VAL,&x);
+	add_s_var(path,"Characteristics",TYPE_VAL,&x);
+}
+void add_section_pe(int num)
+{
+	struct _gv *x,*ptr;
+	struct _var *vv;
+	int count=0,i,sec_pos;
+	char path[MAX_STR],tempstr[MAX_STR];
+	vv=get_s_var("s");
+	x=(struct _gv*)malloc(sizeof(struct _gv));
+	if(x==NULL) die("error allocating child table memory");
+	x->v.name=(char*)malloc(5);
+	if(x->v.name==NULL) die("error allocating child table memory");
+	strcpy(x->v.name,"s");
+	x->v.type=TYPE_STRUCT;
+	x->prev=NULL;
+	x->next=NULL;
+	x->v.p.first=NULL;
+	x->v.p.last=NULL;
+	sprintf(tempstr,"s[%d]",get_max_pe_sect()+1);
+	add_completion(NULL,tempstr,comp_discardable);
+	if(num==-1)
+	{
+		vv->p.last->next=x;
+		x->prev=vv->p.last;
+		vv->p.last=x; // now max_sh in already incremented !!
+		sec_pos=get_max_pe_sect();
+	}
+	else
+	{
+		sec_pos=num;
+		ptr=vv->p.first;
+		for(i=0;i<num;i++) if(ptr->next) ptr=ptr->next;
+		if(ptr->prev==NULL)
+		{
+			vv->p.first->prev=x;
+			x->next=vv->p.first;
+			vv->p.first=x;
+		}
+		else
+		{
+			x->prev=ptr->prev;
+			x->next=ptr;
+			ptr->prev->next=x;
+			ptr->prev=x;
+		}
+	}
+	populate_new_pe_sect(sec_pos);
 }

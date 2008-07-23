@@ -386,6 +386,7 @@ void save_file()
 	save_hd();
 	if(mcfg.tmpworkcopy)
 	{
+		printf("saving from tmp copy...");
 		printf(cmd,"cp %s %s",mfiles.tmpcopy,mfiles.originalfilename);
 		ret=system(cmd);
 		if(ret==-1) {printf("error on saving original file !!\n");}
@@ -411,7 +412,7 @@ void grouth(int len)
 	faddr=mremap(faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
 	#else
 	munmap(faddr,(size_t) offset);
-	faddr=(char*)mmap(NULL,(size_t) (offset+len),PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fd,(off_t)0);
+	faddr=(char*)mmap(NULL,(size_t) (offset+len),PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,mfiles.fd,(off_t)0);
 	#endif
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
@@ -428,7 +429,7 @@ void shrink(int len)
 	faddr=mremap(faddr,(size_t) offset,(size_t) new_offset,MAP_FILE|MAP_SHARED);
 	#else
 	munmap(faddr,(size_t) offset);
-	faddr=(char*)mmap(NULL,(size_t)new_offset,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fd,(off_t)0);
+	faddr=(char*)mmap(NULL,(size_t)new_offset,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,mfiles.fd,(off_t)0);
 	#endif
 	if(faddr==MAP_FAILED) die("error on mmap(ing) the file");
 }
@@ -533,7 +534,20 @@ int type_look_up(char *type)
 	if((strncmp("lc",type,2))==0)
 	{
 		if(file_type!=FT_MACHO) {printf("wrong file type.\n");return -1;}
-		return -1;
+		return(sizeof(struct segment_command));
+		//if((strcasecmp(type,"LC_SEGMENT"))==0) return(sizeof(struct segment_command));
+		//if((strcasecmp(type,"LC_SYMSEG"))==0) return -1;
+		//if((strcasecmp(type,"LC_THREAD"))==0) return -1;
+		//if((strcasecmp(type,"LC_UNIXTHREAD"))==0) return -1;
+		//if((strcasecmp(type,"LC_LOADFVMLIB"))==0) return -1;
+		//if((strcasecmp(type,"LC_IDENT"))==0) return -1;
+		//if((strcasecmp(type,"LC_PREPAGE"))==0) return -1;
+		//if((strcasecmp(type,"LC_DYSYMTAB"))==0) return -1;
+		//if((strcasecmp(type,"LC_LOAD_DYLIB"))==0) return -1;
+		//if((strcasecmp(type,"LC_ID_DYLIB"))==0) return -1;
+		//if((strcasecmp(type,"LC_LOAD_DYLINKER"))==0) return -1;
+		//if((strcasecmp(type,"LC_ID_DYLINKER"))==0) return -1;
+		//return -1;
 	}
 	if((strcmp("sect",type))==0)
 	{
@@ -571,8 +585,8 @@ int type_look_up(char *type)
 }
 void create_hd(char *type,int offs,char *update,char *shift)
 {
-	int to_shift,to_update,len,from,sec_num,max_secs,n_type;
-	char tmp_cmd[MAX_CMD];
+	int to_shift,to_update,len,from,sec_num,max_secs,max_macho_sects,n_type;
+	char tmp_cmd[MAX_CMD],str[MAX_STR];
 	sec_num=offs;
 	if(update==NULL) to_update=0; else to_update=1;
 	if(shift==NULL) to_shift=0; else to_shift=1;
@@ -585,26 +599,96 @@ void create_hd(char *type,int offs,char *update,char *shift)
 	n_type=section_name(type);
 	switch(n_type){
 	case SEC_SH:
+		max_secs=get_max_sh();
+		if(sec_num==-1)
+		{
+			sprintf(str,"sh[%d]",max_secs);
+			from=get_offset_elf(str,'e');
+		}
+		else
+		{
+			sprintf(str,"sh[%d]",sec_num);
+			from=get_offset_elf(str,' ');
+		}
+		from-=(int)faddr;
+		printf("from===%d\n",from);
+		add_section_sh(sec_num);
 		break;
 	case SEC_PH:
 		max_secs=get_max_ph();
-		//from=get_offs_ph(sec_num);
-		//add_section_ph(sec_num);
+		if(sec_num==-1)
+		{
+			sprintf(str,"ph[%d]",max_secs);
+			from=get_offset_elf(str,'e');
+		}
+		else
+		{
+			sprintf(str,"ph[%d]",sec_num);
+			from=get_offset_elf(str,' ');
+		}
+		from-=(int)faddr;
+		printf("from===%d\n",from);
+		add_section_ph(sec_num);
 		break;
 	case SEC_PE_S:
+		max_secs=get_max_pe_sect();
+		if(sec_num==-1)
+		{
+			sprintf(str,"s[%d]",max_secs);
+			from=(int)get_offset_pe(str,'e');
+		}
+		else
+		{
+			sprintf(str,"s[%d]",sec_num);
+			from=(int)get_offset_pe(str,' ');
+		}
+		//from-=(int)faddr;
+		printf("from===%d\n",from);
+		add_section_pe(sec_num);
 		break;
 	case SEC_LC:
-		
+		max_secs=get_max_lc();
+		if(sec_num==-1)
+		{
+			sprintf(str,"lc[%d]",max_secs);
+			from=(int)get_offset_macho(str,'e');
+		}
+		else
+		{
+			sprintf(str,"lc[%d]",sec_num);
+			from=(int)get_offset_macho(str,' ');
+		}
+		//from-=(int)faddr;
+		printf("from===%d\n",from);
+		add_section_lc(sec_num);
 		break;
 	case SEC_SECT:
+		max_secs=get_max_lc();
+		if(sec_num==-1)
+		{
+			max_macho_sects=get_max_sect(max_secs);
+			if(max_macho_sects==0) {printf("invalid load command!\n");return;}
+			sprintf(str,"lc[%d]->sect[%d]",max_secs,max_macho_sects);
+			from=get_offset_macho(str,'e');
+		}
+		else
+		{
+			max_macho_sects=get_max_sect(sec_num);
+			if(max_macho_sects==0) {printf("invalid load command!\n");return;}
+			sprintf(str,"lc[%d]->sect[%d]",sec_num,max_macho_sects);
+			from=get_offset_macho(str,'e');
+		}
+		//from-=(int)faddr;
+		printf("from===%d\n",from);
+		//add_macho_sect(sec_num);
 		break;
 	default:
 		printf("wrong section name!\n");
 		return;
 	}
 	if(to_shift) {sprintf(tmp_cmd,"inject(0,%d,%d,\">>\");",from,len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
+	printf("%s\n",tmp_cmd);
 	//execute(tmp_cmd);
-	//create  hd in tvar table !!!
 	if(to_update) printf("update cascade is not implemented yet.\n");
 	//refresh();
 }

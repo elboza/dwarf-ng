@@ -443,7 +443,7 @@ struct _var* ex(nodeType *p) {
 		if(v[1]==NULL) i--;
 		switch(i){
 		case 4:
-			if((strcmp(v[2]->s,"u"))!=0) {printf("errro in parameter 3 (update parameter).\n"); break;}
+			if((strcmp(v[2]->s,"u"))!=0) {printf("error in parameter 3 (update parameter).\n"); break;}
 			if((strcmp(v[3]->s,">>"))!=0) {printf("error in parameter 4 (shift file).\n"); break;}
 			create_hd(v[0]->s,v[1]->val,v[2]->s,v[3]->s);
 			break;

@@ -22,11 +22,12 @@
 
 void load_pe_hd(void);
 void load_mz_hd(void);
-off_t get_offset_pe(char *s,char p);
+int get_offset_pe(char *s,char p);
 off_t get_offset_mz(char *s,char p);
 void save_mz_hd(void);
 void save_pe_hd(void);
 int get_max_pe_sect(void);
+void add_section_pe(int num);
 
 #endif
 

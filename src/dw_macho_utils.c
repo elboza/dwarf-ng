@@ -370,7 +370,7 @@ void load_macho_hd()
 	//add_s_var("lc[2]->sect[1]","pippo",TYPE_VAL,&xx);
 	//printf("mach-o\n");
 }
-off_t get_offset_macho(char *s,char p)
+int get_offset_macho(char *s,char p)
 {
 	struct token tok;
 	struct _var *var;
@@ -766,4 +766,106 @@ int get_max_lc()
 	vv=get_s_var("lc");
 	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
 	return count-1;
+}
+int get_max_sect(int lc)
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0;
+	char str[MAX_STR];
+	sprintf(str,"lc[%d]->sect",lc);
+	vv=get_s_var(str);
+	//p=quickparse(str);
+	if(vv)
+	{
+		for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+		return count-1;
+	}
+	return 0;
+}
+void populate_new_lc(int sec_pos)
+{
+	int x=0;
+	char path[MAX_STR],*str="new";
+	sprintf(path,"lc[%d]",sec_pos);
+	add_s_var(path,"cmd",TYPE_VAL,&x);
+	add_s_var(path,"cmdsize",TYPE_VAL,&x);
+	add_s_var(path,"segname",TYPE_STRING,str);
+	add_s_var(path,"vmaddr",TYPE_VAL,&x);
+	add_s_var(path,"vmsize",TYPE_VAL,&x);
+	add_s_var(path,"fileoff",TYPE_VAL,&x);
+	add_s_var(path,"filesize",TYPE_VAL,&x);
+	add_s_var(path,"maxprot",TYPE_VAL,&x);
+	add_s_var(path,"initprot",TYPE_VAL,&x);
+	add_s_var(path,"nsects",TYPE_VAL,&x);
+	add_s_var(path,"flags",TYPE_VAL,&x);
+}
+void populate_new_sect(int sec_pos)
+{
+	int x=0,pos2;
+	char path[MAX_STR],*str="new";
+	pos2=get_max_sect(sec_pos);
+	sprintf(path,"lc[%d]->sect[%d]",sec_pos,pos2);
+	add_s_var(path,"sectname",TYPE_STRING,str);
+	add_s_var(path,"segname",TYPE_STRING,str);
+	add_s_var(path,"addr",TYPE_VAL,&x);
+	add_s_var(path,"size",TYPE_VAL,&x);
+	add_s_var(path,"offset",TYPE_VAL,&x);
+	add_s_var(path,"align",TYPE_VAL,&x);
+	add_s_var(path,"reloff",TYPE_VAL,&x);
+	add_s_var(path,"nreloc",TYPE_VAL,&x);
+	add_s_var(path,"flags",TYPE_VAL,&x);
+	add_s_var(path,"reserved1",TYPE_VAL,&x);
+	add_s_var(path,"reserved2",TYPE_VAL,&x);
+}
+void add_section_lc(int num)
+{
+	struct _gv *x,*ptr;
+	struct _var *vv;
+	int count=0,i,sec_pos;
+	char path[MAX_STR],tempstr[MAX_STR];
+	vv=get_s_var("lc");
+	x=(struct _gv*)malloc(sizeof(struct _gv));
+	if(x==NULL) die("error allocating child table memory");
+	x->v.name=(char*)malloc(5);
+	if(x->v.name==NULL) die("error allocating child table memory");
+	strcpy(x->v.name,"lc");
+	x->v.type=TYPE_STRUCT;
+	x->prev=NULL;
+	x->next=NULL;
+	x->v.p.first=NULL;
+	x->v.p.last=NULL;
+	sprintf(tempstr,"lc[%d]",get_max_lc()+1);
+	add_completion(NULL,tempstr,comp_discardable);
+	if(num==-1)
+	{
+		vv->p.last->next=x;
+		x->prev=vv->p.last;
+		vv->p.last=x; // now max_ph in already incremented !!
+		sec_pos=get_max_lc();
+	}
+	else
+	{
+		sec_pos=num;
+		ptr=vv->p.first;
+		for(i=0;i<num;i++) if(ptr->next) ptr=ptr->next;
+		if(ptr->prev==NULL)
+		{
+			vv->p.first->prev=x;
+			x->next=vv->p.first;
+			vv->p.first=x;
+		}
+		else
+		{
+			x->prev=ptr->prev;
+			x->next=ptr;
+			ptr->prev->next=x;
+			ptr->prev=x;
+		}
+	}
+	populate_new_lc(sec_pos);
+}
+void add_macho_sect(int num)
+{
+
 }
