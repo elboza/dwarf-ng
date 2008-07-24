@@ -26,6 +26,8 @@ void save_elf_hd(void);
 int get_max_ph(void);
 void add_section_ph(int num);
 int get_max_sh(void);
+void probe_sh_shstrtab(void);
+char* print_sh_shstrtab(int offset);
 
 #endif
 

@@ -447,13 +447,21 @@ void make_table(char *path,char *nome,int num)
 }
 void print_s(struct _var *p)
 {
-	struct _gv *var;
-	int count=0;
+	struct _gv *var,*ptr;
+	int count=0,x;
+	char str[MAX_STR];
 	for(var=p->p.first;var;var=var->next)
 	{
 		if(var->v.type==TYPE_VAL)
 		{
-			printf("%s : 0x%x (%d)\n",var->v.name,var->v.val,var->v.val);
+			if((strcmp("sh_name",var->v.name))==0)
+			{
+				printf("%s : 0x%x (%d) [%s]\n",var->v.name,var->v.val,var->v.val,print_sh_shstrtab(var->v.val));
+			}
+			else
+			{
+				printf("%s : 0x%x (%d)\n",var->v.name,var->v.val,var->v.val);
+			}
 		}
 		if(var->v.type==TYPE_STRING)
 		{
@@ -461,8 +469,42 @@ void print_s(struct _var *p)
 		}
 		if(var->v.type>=TYPE_STRUCT)
 		{
-			if(p->type==TYPE_NODE_STRUCT) printf("*%s[%d] : structure.\n",var->v.name,count++); else
-			printf("*%s : structure.\n",var->v.name);
+			if(p->type==TYPE_NODE_STRUCT)
+			{
+			 	printf("*%s[%d] : ",var->v.name,count++); 
+			 	if((strcmp("sh",var->v.name))==0)
+			 	{
+			 		x=var->v.p.first->v.val;
+			 		printf(" [%s]",print_sh_shstrtab(x));
+			 	}
+			 	if((strcmp("lc",var->v.name))==0)
+			 	{
+			 		sprintf(str,"lc[%d]",count-1);
+			 		ptr=get_s_var_byname(str,"segname");
+			 		if(ptr) printf(" [%s]",ptr->v.s);
+			 		else printf(" structure");
+			 	}
+			 	if((strcmp("sect",var->v.name))==0)
+			 	{
+			 		printf(" [sect name]");
+			 	}
+			 	if((strcmp("s",var->v.name))==0)
+			 	{
+			 		sprintf(str,"s[%d]",count-1);
+			 		ptr=get_s_var_byname(str,"Name");
+			 		if(ptr) printf(" [%s]",ptr->v.s);
+			 		else printf(" structure");
+			 	}
+			 	if((strcmp("ph",var->v.name))==0)
+			 	{
+			 		printf(" structure");
+			 	}
+			 	printf(".\n");
+			}
+			else
+			{
+				printf("*%s : structure.\n",var->v.name);
+			}
 		}
 	}
 }

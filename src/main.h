@@ -19,7 +19,7 @@
 
 #ifndef DW_MAIN_H
 #define DW_MAIN_H
-#define VERSION "0.1.80"
+#define VERSION "0.1.85"
 #define MAX_FILENAME 255
 #define MAX_STR 255
 #define MAX_CMD 1024
@@ -36,6 +36,7 @@ int file_endian;
 int cpu_endian;
 int file_bit_class;
 void *faddr;
+int sh_shstrtab;
 struct m_action{
 	int file;
 	int shell;

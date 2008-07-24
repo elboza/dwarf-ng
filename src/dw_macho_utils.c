@@ -772,13 +772,14 @@ int get_max_sect(int lc)
 	struct _gv *ptr;
 	struct _var *vv;
 	int count=0;
-	char str[MAX_STR];
-	sprintf(str,"lc[%d]->sect",lc);
-	vv=get_s_var(str);
+	//char str[MAX_STR];
+	//sprintf(str,"lc[%d]->sect",lc);
+	vv=get_s_num_var("lc",lc);
 	//p=quickparse(str);
 	if(vv)
 	{
-		for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+		for(ptr=vv->p.first;ptr;ptr=ptr->next) count++;
+		printf("max_sect=%d\n",(count-1));
 		return count-1;
 	}
 	return 0;
@@ -867,5 +868,27 @@ void add_section_lc(int num)
 }
 void add_macho_sect(int num)
 {
-
+	struct _gv *x,*ptr;
+	struct _var *vv;
+	int count=0,i,sec_pos;
+	char path[MAX_STR],tempstr[MAX_STR];
+	if(num==-1) return;
+	vv=get_s_num_var("lc",num);
+	x=(struct _gv*)malloc(sizeof(struct _gv));
+	if(x==NULL) die("error allocating child table memory");
+	x->v.name=(char*)malloc(9);
+	if(x->v.name==NULL) die("error allocating child table memory");
+	strcpy(x->v.name,"sect");
+	x->v.type=TYPE_STRUCT;
+	x->prev=NULL;
+	x->next=NULL;
+	x->v.p.first=NULL;
+	x->v.p.last=NULL;
+	sprintf(tempstr,"sect[%d]",get_max_sect(num)+1);
+	add_completion(NULL,tempstr,comp_discardable);
+	vv->p.last->next=x;
+	x->prev=vv->p.last;
+	vv->p.last=x; // now max_ph in already incremented !!
+	sec_pos=get_max_sect(num);
+	populate_new_sect(sec_pos);
 }

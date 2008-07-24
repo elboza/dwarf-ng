@@ -167,7 +167,7 @@ int get_offset_elf(char *s,char p)
 	}
 	if((strncmp(tok.name,"ph",2))==0)
 	{
-		ph=(Elf32_Phdr*)(faddr+m_e_phoff);
+		ph=(Elf32_Phdr*)(m_e_phoff);
 		x=0;
 		if(tok.num>=m_e_phnum) tok.num=m_e_phnum-1;
 		while(x++<tok.num){ph++;};
@@ -177,7 +177,7 @@ int get_offset_elf(char *s,char p)
 	}
 	if((strncmp(tok.name,"sh",2))==0)
 	{
-		sh=(Elf32_Phdr*)(faddr+m_e_shoff);
+		sh=(Elf32_Phdr*)(m_e_shoff);
 		x=0;
 		if(tok.num>=m_e_shnum) tok.num=m_e_shnum-1;
 		while(x++<tok.num){sh++;};
@@ -431,4 +431,41 @@ void add_section_sh(int num)
 		}
 	}
 	populate_new_sh(sec_pos);
+}
+void probe_sh_shstrtab()
+{
+	Elf32_Ehdr *elf;
+	Elf32_Shdr *sh;
+	int sh_offs,i,sh_num,x,j;
+	char *s,*str[]={".strtab",".shstrtab",".symtab"};
+	elf=(Elf32_Ehdr*)faddr;
+	sh_offs=get_data32(elf->e_shoff);
+	sh_num=get_data16(elf->e_shnum);
+	sh=(Elf32_Shdr*)(faddr+sh_offs);
+	for(i=0;i<sh_num;i++)
+	{
+		x=get_data32(sh->sh_type);
+		if(x==3)
+		{
+			x=get_data32(sh->sh_offset);
+			s=(char*)(faddr+x+1);
+			for(j=0;j<3;j++)
+			{
+				if((strcmp(str[j],s))==0)
+				{
+					//printf("eccolo! %x\n",x);
+					sh_shstrtab=x;
+					return;
+				}
+			}
+		}
+		sh=(Elf32_Shdr*)((char*)sh+sizeof(Elf32_Shdr));
+	}
+}
+char* print_sh_shstrtab(int offset)
+{
+	char *no_value="null",*s;
+	if(sh_shstrtab==0) return no_value;
+	s=(char*)((int)(faddr)+sh_shstrtab+offset);
+	return s;
 }

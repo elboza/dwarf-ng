@@ -108,6 +108,7 @@ void file_close()
 		}
 	}
 	file_type=FT_NULL;
+	sh_shstrtab=0;
 }
 void file_probe(int verbose)
 {
@@ -137,6 +138,7 @@ void file_probe(int verbose)
 		if(elf->e_ident[EI_DATA]==2) file_endian=big_endian;
 		if(elf->e_ident[EI_CLASS]==ELFCLASS32) file_bit_class=bit32; //load 32 bit arch
 		if(elf->e_ident[EI_CLASS]==ELFCLASS64) file_bit_class=bit64; // load 64 bit arch
+		probe_sh_shstrtab();
 		if(verbose) printf("File type: Elf\n");
 		return;
 	}
@@ -610,7 +612,7 @@ void create_hd(char *type,int offs,char *update,char *shift)
 			sprintf(str,"sh[%d]",sec_num);
 			from=get_offset_elf(str,' ');
 		}
-		from-=(int)faddr;
+		//from-=(int)faddr;
 		printf("from===%d\n",from);
 		add_section_sh(sec_num);
 		break;
@@ -626,7 +628,7 @@ void create_hd(char *type,int offs,char *update,char *shift)
 			sprintf(str,"ph[%d]",sec_num);
 			from=get_offset_elf(str,' ');
 		}
-		from-=(int)faddr;
+		//from-=(int)faddr;
 		printf("from===%d\n",from);
 		add_section_ph(sec_num);
 		break;
@@ -680,7 +682,7 @@ void create_hd(char *type,int offs,char *update,char *shift)
 		}
 		//from-=(int)faddr;
 		printf("from===%d\n",from);
-		//add_macho_sect(sec_num);
+		add_macho_sect(sec_num);
 		break;
 	default:
 		printf("wrong section name!\n");
@@ -688,7 +690,7 @@ void create_hd(char *type,int offs,char *update,char *shift)
 	}
 	if(to_shift) {sprintf(tmp_cmd,"inject(0,%d,%d,\">>\");",from,len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
 	printf("%s\n",tmp_cmd);
-	//execute(tmp_cmd);
+	execute(tmp_cmd);
 	if(to_update) printf("update cascade is not implemented yet.\n");
 	//refresh();
 }

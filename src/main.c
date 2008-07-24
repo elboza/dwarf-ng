@@ -75,6 +75,7 @@ void get_defaults_arg(struct m_action *action)
 	mcfg.ask_flush=YES;
 	mcfg.createHD_autoshift=YES;
 	mcfg.createHD_autoupdate=NO;
+	sh_shstrtab=0;
 	strcpy(mcfg.tmpworkdir,"/tmp/");
 }
 void parse_args(int argc,char **argv,struct m_action *action)
