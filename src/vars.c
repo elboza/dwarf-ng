@@ -449,7 +449,7 @@ void print_s(struct _var *p)
 {
 	struct _gv *var,*ptr;
 	int count=0,x;
-	char str[MAX_STR];
+	char str[MAX_STR],*s1,*s2;
 	for(var=p->p.first;var;var=var->next)
 	{
 		if(var->v.type==TYPE_VAL)
@@ -480,13 +480,73 @@ void print_s(struct _var *p)
 			 	if((strcmp("lc",var->v.name))==0)
 			 	{
 			 		sprintf(str,"lc[%d]",count-1);
-			 		ptr=get_s_var_byname(str,"segname");
-			 		if(ptr) printf(" [%s]",ptr->v.s);
+			 		ptr=get_s_var_byname(str,"cmd");
+			 		if(ptr)
+			 		{
+			 			switch(ptr->v.val){
+			 			case 1:
+			 				ptr=get_s_var_byname(str,"segname");
+			 				printf(" LC_SEGMENT [%s]",ptr->v.s);
+			 				break;
+			 			case 2:
+			 				printf(" LC_SYMTAB");
+			 				break;
+			 			case 3:
+			 				printf(" LC_SYMSEG");
+			 				break;
+			 			case 4:
+			 				printf(" LC_THREAD");
+			 				break;
+			 			case 5:
+			 				printf(" LC_UNIXTHREAD");
+			 				break;
+			 			case 6:
+			 				printf(" LC_LOADFVMLIB");
+			 				break;
+			 			case 7:
+			 				printf(" LC_IDFVMLIB");
+			 				break;
+			 			case 8:
+			 				printf(" LC_IDENT");
+			 				break;
+			 			case 9:
+			 				printf(" LC_FVMFILE");
+			 				break;
+			 			case 10:
+			 				printf(" LC_PREPAGE");
+			 				break;
+			 			case 11:
+			 				printf(" LC_DYSYMTAB");
+			 				break;
+			 			case 12:
+			 				printf(" LC_LOAD_DYLIB");
+			 				break;
+			 			case 13:
+			 				printf(" LC_ID_DYLIB");
+			 				break;
+			 			case 14:
+			 				printf(" LC_LOAD_DYLINKER");
+			 				break;
+			 			case 15:
+			 				printf(" LC_ID_DYLINKER");
+			 				break;
+			 			case 16:
+			 				printf(" LC_PREBOUND_DYLIB");
+			 				break;
+			 			default:
+			 				printf(" structure");
+			 				break;
+			 			}
+			 		}
 			 		else printf(" structure");
 			 	}
 			 	if((strcmp("sect",var->v.name))==0)
 			 	{
-			 		printf(" [sect name]");
+			 		s1=var->v.p.first->v.s;
+			 		s2=var->v.p.first->next->v.s;
+			 		if((s1)&&(s2))
+			 		printf(" [%s] [(%s)]",s1,s2);
+			 		else printf(" structure");
 			 	}
 			 	if((strcmp("s",var->v.name))==0)
 			 	{

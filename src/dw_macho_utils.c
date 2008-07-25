@@ -772,14 +772,14 @@ int get_max_sect(int lc)
 	struct _gv *ptr;
 	struct _var *vv;
 	int count=0;
-	//char str[MAX_STR];
-	//sprintf(str,"lc[%d]->sect",lc);
-	vv=get_s_num_var("lc",lc);
+	char str[MAX_STR];
+	sprintf(str,"lc[%d]",lc);
+	//vv=get_s_num_var("lc",lc);
+	vv=get_s_var_byname(str,"sect");
 	//p=quickparse(str);
 	if(vv)
 	{
 		for(ptr=vv->p.first;ptr;ptr=ptr->next) count++;
-		printf("max_sect=%d\n",(count-1));
 		return count-1;
 	}
 	return 0;
@@ -801,12 +801,12 @@ void populate_new_lc(int sec_pos)
 	add_s_var(path,"nsects",TYPE_VAL,&x);
 	add_s_var(path,"flags",TYPE_VAL,&x);
 }
-void populate_new_sect(int sec_pos)
+void populate_new_sect(int lc_pos,int sec_pos)
 {
 	int x=0,pos2;
 	char path[MAX_STR],*str="new";
-	pos2=get_max_sect(sec_pos);
-	sprintf(path,"lc[%d]->sect[%d]",sec_pos,pos2);
+	//pos2=get_max_sect(sec_pos);
+	sprintf(path,"lc[%d]->sect[%d]",lc_pos,sec_pos);
 	add_s_var(path,"sectname",TYPE_STRING,str);
 	add_s_var(path,"segname",TYPE_STRING,str);
 	add_s_var(path,"addr",TYPE_VAL,&x);
@@ -873,7 +873,8 @@ void add_macho_sect(int num)
 	int count=0,i,sec_pos;
 	char path[MAX_STR],tempstr[MAX_STR];
 	if(num==-1) return;
-	vv=get_s_num_var("lc",num);
+	sprintf(tempstr,"lc[%d]",num);
+	vv=get_s_var_byname(tempstr,"sect");
 	x=(struct _gv*)malloc(sizeof(struct _gv));
 	if(x==NULL) die("error allocating child table memory");
 	x->v.name=(char*)malloc(9);
@@ -890,5 +891,5 @@ void add_macho_sect(int num)
 	x->prev=vv->p.last;
 	vv->p.last=x; // now max_ph in already incremented !!
 	sec_pos=get_max_sect(num);
-	populate_new_sect(sec_pos);
+	populate_new_sect(num,sec_pos);
 }
