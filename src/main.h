@@ -19,7 +19,7 @@
 
 #ifndef DW_MAIN_H
 #define DW_MAIN_H
-#define VERSION "0.1.86"
+#define VERSION "0.1.87"
 #define MAX_FILENAME 255
 #define MAX_STR 255
 #define MAX_CMD 1024

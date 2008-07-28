@@ -557,7 +557,44 @@ void print_s(struct _var *p)
 			 	}
 			 	if((strcmp("ph",var->v.name))==0)
 			 	{
-			 		printf(" structure");
+			 		sprintf(str,"ph[%d]",count-1);
+			 		ptr=get_s_var_byname(str,"p_type");
+			 		if(ptr)
+			 		{
+			 			switch(ptr->v.val){
+			 			case 0:
+			 				printf(" PT_NULL");
+			 				break;
+			 			case 1:
+			 				printf(" PT_LOAD");
+			 				break;
+			 			case 2:
+			 				printf(" PT_DYNAMIC");
+			 				break;
+			 			case 3:
+			 				printf(" PT_INTERP");
+			 				break;
+			 			case 4:
+			 				printf(" PT_NOTE");
+			 				break;
+			 			case 5:
+			 				printf(" PT_SHLIB");
+			 				break;
+			 			case 6:
+			 				printf(" PT_PHDR");
+			 				break;
+			 			case 7:
+			 				printf(" PT_TLS");
+			 				break;
+			 			case 8:
+			 				printf(" PT_NUM");
+			 				break;
+			 			default:
+			 				printf(" structure");
+			 				break;
+			 			}
+			 		}
+			 		else printf(" structure");
 			 	}
 			 	printf(".\n");
 			}
