@@ -112,6 +112,9 @@ closes the opened file.
 .TP
 .B DUMP [ dump [%fmt] expr; ]
 dumps portion of opened file from expr offset in various formats depending on %fmt. The \fB%fmt\fP force a different output mode. \fBfmt\fP is in the form: xnn (<letter><number>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP for decimal putput \fBs\fP for string output \fBc\fP for char output, \fBb\fP for binary output,\fBe\fP (default) for a nice dump output. examples: \fIdump @<;\fP (dumps the beginning of the file), \fIdump %x3 @<+10;\fP (displays 3 bytes in hex format from 10 positions from the beginning of the file).
+.TP
+.B EXTRACT [ extract(from,len,file); ]
+extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
 .SH FILE TYPES
 .TP
 .B ELF

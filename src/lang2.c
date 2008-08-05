@@ -491,6 +491,13 @@ struct _var* ex(nodeType *p) {
 	case REFRESH:
 		refresh();
 		break;
+	case EXTRACT:
+		v[0]=ex(p->opr.op[0]);
+		v[1]=ex(p->opr.op[1]);
+		v[2]=ex(p->opr.op[2]);
+		if((!v[0])||(!v[1])||(!v[2])) break;
+		extract(v[0]->val,v[1]->val,v[2]->s);
+		break;
 	default:
 		break;
         }

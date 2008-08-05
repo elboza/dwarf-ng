@@ -147,7 +147,7 @@ void add_cmds_completions()
 	add_completion("help",NULL,comp_fixed);
 	add_completion("inject",NULL,comp_fixed);
 //	add_completion("fill",NULL,comp_fixed);
-//	add_completion("eject",NULL,comp_fixed);
+	add_completion("extract",NULL,comp_fixed);
 	add_completion("create",NULL,comp_fixed);
 	add_completion("remove",NULL,comp_fixed);
 	add_completion("len",NULL,comp_fixed);

@@ -51,7 +51,7 @@ void yyerror(char *s);
 %token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF FLUSH RELOAD FILE_BEGIN FILE_END
 %token REFRESH SHIFT MOVE REALLOC HELP INJECT NEW SHOW CLOSE DUMP GROUTH SHRINK
-%token ADDHD RMHD LEN MOVERPOS MOVERNEG
+%token ADDHD RMHD LEN MOVERPOS MOVERNEG EXTRACT
 %nonassoc IFX
 %nonassoc ELSE
 
@@ -121,6 +121,7 @@ stmt:
 	| NEW filename						{$$=opr(NEW,2,$2,NULL);}
 	| NEW '(' filename ')'					{$$=opr(NEW,2,$3,NULL);}
         | LEN expr ';'						{$$=opr(LEN,1,$2);}
+        | EXTRACT '(' expr ',' expr ',' STRING ')'		{$$=opr(EXTRACT,3,$3,$5,id_string($7));}
         ;
 
 stmt_list:

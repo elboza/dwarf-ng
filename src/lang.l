@@ -91,6 +91,7 @@ int yywrap(void);
 "show"			return SHOW;
 "close"			return CLOSE;
 "dump"			return DUMP;
+"extract"		return EXTRACT;
 
 {letter}({letter}|{digit})*       { 
                 	//yylval.inVar = *yytext - 'a';

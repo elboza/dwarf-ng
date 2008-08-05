@@ -389,7 +389,7 @@ void save_file()
 	if(mcfg.tmpworkcopy)
 	{
 		printf("saving from tmp copy...");
-		printf(cmd,"cp %s %s",mfiles.tmpcopy,mfiles.originalfilename);
+		sprintf(cmd,"cp %s %s",mfiles.tmpcopy,mfiles.originalfilename);
 		ret=system(cmd);
 		if(ret==-1) {printf("error on saving original file !!\n");}
 	}
@@ -790,4 +790,20 @@ void info()
 		break;
 	}
 	
+}
+void extract(int from,int len,char *file)
+{
+	char *mem;
+	int i;
+	FILE *fp;
+	printf("extract: %d %d %s\n",from,len,file);
+	mem=(char*)faddr;
+	mem+=from;
+	fp=fopen(file,"a");
+	if(!fp) {printf("error opening %s file.\n",file); return;}
+	for(i=0;i<len;i++)
+	{
+		fputc((int)(*(mem++)),fp);
+	}
+	fclose(fp);
 }

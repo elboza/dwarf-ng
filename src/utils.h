@@ -68,6 +68,7 @@ void new_file(char *filename);
 void save_file(void);
 int section_name(char *name);
 void info(void);
+void extract(int from,int len,char *file);
 
 #endif
 
