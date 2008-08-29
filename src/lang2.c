@@ -92,7 +92,10 @@ struct _var* ex(nodeType *p) {
         case WHILE:     
         		v[0]=ex(p->opr.op[0]);
         		if(v[0]->val!=TYPE_VAL) printf("warning..testing not a number\n");
-        		while(v[0]->val) v[1]=ex(p->opr.op[1]); break;
+        		while(v[0]->val) {v[1]=ex(p->opr.op[1]);
+        		v[0]=ex(p->opr.op[0]);
+        		}
+        		break;
         case IF:        
         		v[0]=ex(p->opr.op[0]);
         		if(v[0]->type!=TYPE_VAL) printf("warning...testing not a number\n");

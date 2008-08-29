@@ -62,11 +62,12 @@ struct m_files{
 typedef enum {little_endian,big_endian} endian;
 typedef enum {bit8,bit16,bit32,bit64} filebitclass;
 //file types
-#define FT_NULL		0
-#define FT_ELF		1
-#define FT_MZ		2
-#define FT_MACHO	3
-#define FT_PE		4
+#define FT_NULL			0
+#define FT_ELF			1
+#define FT_MZ			2
+#define FT_MACHO		3
+#define FT_FAT_MACHO	4
+#define FT_PE			5
 
 #define QUITTING	123
 

@@ -41,8 +41,12 @@
 
 void load_macho_hd()
 {
+	load_macho_header(0,NULL);
+}
+void load_macho_header(int xoffs,char *mainpath)
+{
 	int n_seg,n_sect,x,m_ncmds,m_seg_nsects,m_lc_cmd,m_lc_cmdsize,m_cpu;
-	char path[255];
+	char path[255],smainpath[255];
 	struct mach_header *mac;
 	struct load_command *lc;
 	struct segment_command *seg;
@@ -52,26 +56,28 @@ void load_macho_hd()
 	struct symtab_command *symtab;
 	struct dysymtab_command *dysymtab;
 	struct thread_command *thread;
-	mac=(struct mach_header*)faddr;
-	make_table(NULL,"s",-1);
+	if(!mainpath) strcpy(smainpath,""); else sprintf(smainpath,"%s->",mainpath);
+	mac=(struct mach_header*)(faddr+xoffs);
+	make_table(mainpath,"s",-1);
+	sprintf(path,"%ss",smainpath);
 	x=get_data32(mac->magic);
-	add_s_var("s","magic",TYPE_VAL,&x);
+	add_s_var(path,"magic",TYPE_VAL,&x);
 	m_cpu=get_data32(mac->cputype);
-	add_s_var("s","cputype",TYPE_VAL,&m_cpu);
+	add_s_var(path,"cputype",TYPE_VAL,&m_cpu);
 	x=get_data32(mac->cpusubtype);
-	add_s_var("s","cpusubtype",TYPE_VAL,&x);
+	add_s_var(path,"cpusubtype",TYPE_VAL,&x);
 	x=get_data32(mac->filetype);
-	add_s_var("s","filetype",TYPE_VAL,&x);
+	add_s_var(path,"filetype",TYPE_VAL,&x);
 	m_ncmds=get_data32(mac->ncmds);
-	add_s_var("s","ncmds",TYPE_VAL,&m_ncmds);
+	add_s_var(path,"ncmds",TYPE_VAL,&m_ncmds);
 	x=get_data32(mac->sizeofcmds);
-	add_s_var("s","sizeofcmds",TYPE_VAL,&x);
+	add_s_var(path,"sizeofcmds",TYPE_VAL,&x);
 	x=get_data32(mac->flags);
-	add_s_var("s","flags",TYPE_VAL,&x);
+	add_s_var(path,"flags",TYPE_VAL,&x);
 	if(m_ncmds>0)
 	{
-		make_table(NULL,"lc",m_ncmds);
-		lc=(struct load_command*)(faddr+sizeof(struct mach_header));
+		make_table(mainpath,"lc",m_ncmds);
+		lc=(struct load_command*)(faddr+xoffs+sizeof(struct mach_header));
 		n_seg=0;
 		//printf("%d %x %d %x %d\n",lc->cmd,mac,sizeof(struct 	mach_header),lc,lc->cmdsize);
 		do
@@ -84,7 +90,7 @@ void load_macho_hd()
 			case LC_SEGMENT:
 				//printf("LC_SEGMENT\n");
 				seg=(struct segment_command*)lc;
-				sprintf(path,"lc[%d]",n_seg);
+				sprintf(path,"%slc[%d]",smainpath,n_seg);
 				x=get_data32(seg->cmd);
 				add_s_var(path,"cmd",TYPE_VAL,&x);
 				x=get_data32(seg->cmdsize);
@@ -113,7 +119,7 @@ void load_macho_hd()
 					sect=(struct section*)((char*)seg+sizeof(struct segment_command));
 					n_sect=0;
 					do{
-						sprintf(path,"lc[%d]->sect[%d]",n_seg,n_sect);
+						sprintf(path,"%slc[%d]->sect[%d]",smainpath,n_seg,n_sect);
 						add_s_var(path,"sectname",TYPE_STRING,&sect->sectname);
 						add_s_var(path,"segname",TYPE_STRING,&sect->segname);
 						x=get_data32(sect->addr);
@@ -142,7 +148,7 @@ void load_macho_hd()
 			case LC_LOAD_DYLIB:
 			case LC_ID_DYLIB:
 				m_dylib=(struct dylib_command*)lc;
-				sprintf(path,"lc[%d]",n_seg);
+				sprintf(path,"%slc[%d]",smainpath,n_seg);
 				x=get_data32(m_dylib->cmd);
 				add_s_var(path,"cmd",TYPE_VAL,&x);
 				x=get_data32(m_dylib->cmdsize);
@@ -159,7 +165,7 @@ void load_macho_hd()
 			case LC_LOAD_DYLINKER:
 			case LC_ID_DYLINKER:
 				dylinker=(struct dylinker_command*)lc;
-				sprintf(path,"lc[%d]",n_seg);
+				sprintf(path,"%slc[%d]",smainpath,n_seg);
 				x=get_data32(dylinker->cmd);
 				add_s_var(path,"cmd",TYPE_VAL,&x);
 				x=get_data32(dylinker->cmdsize);
@@ -169,7 +175,7 @@ void load_macho_hd()
 				break;
 			case LC_SYMTAB:
 				symtab=(struct symtab_command*)lc;
-				sprintf(path,"lc[%d]",n_seg);
+				sprintf(path,"%slc[%d]",smainpath,n_seg);
 				x=get_data32(symtab->cmd);
 				add_s_var(path,"cmd",TYPE_VAL,&x);
 				x=get_data32(symtab->cmdsize);
@@ -185,7 +191,7 @@ void load_macho_hd()
 				break;
 			case LC_DYSYMTAB:
 				dysymtab=(struct dysymtab_command*)lc;
-				sprintf(path,"lc[%d]",n_seg);
+				sprintf(path,"%slc[%d]",smainpath,n_seg);
 				x=get_data32(dysymtab->cmd);
 				add_s_var(path,"cmd",TYPE_VAL,&x);
 				x=get_data32(dysymtab->cmdsize);
@@ -228,7 +234,7 @@ void load_macho_hd()
     			add_s_var(path,"nlocrel",TYPE_VAL,&x);
     		case LC_UNIXTHREAD:
     			thread=(struct thread_command*)lc;
-				sprintf(path,"lc[%d]",n_seg);
+				sprintf(path,"%slc[%d]",smainpath,n_seg);
 				x=get_data32(thread->cmd);
 				add_s_var(path,"cmd",TYPE_VAL,&x);
 				x=get_data32(thread->cmdsize);
@@ -767,6 +773,16 @@ int get_max_lc()
 	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
 	return count-1;
 }
+int get_max_arch(void)
+{
+	struct _gv *ptr;
+	struct _var *vv;
+	int count=0;
+	vv=get_s_var_byname("fat","arch");
+	if(!vv) return -1;
+	for(ptr=vv->p.first;ptr;ptr=ptr->next) count ++;
+	return count-1;
+}
 int get_max_sect(int lc)
 {
 	struct _gv *ptr;
@@ -892,4 +908,47 @@ void add_macho_sect(int num)
 	vv->p.last=x; // now max_ph in already incremented !!
 	sec_pos=get_max_sect(num);
 	populate_new_sect(num,sec_pos);
+}
+void load_fat_macho_hd(void)
+{
+	int x,m_nfat_arch,i,nfat_size,m_offset,m_cpu;
+	char path[255];
+	struct fat_header *fat;
+	struct fat_arch *nfat;
+	fat=(struct fat_header*)faddr;
+	make_table(NULL,"fat",-1);
+	x=get_data32(fat->magic);
+	add_s_var("fat","magic",TYPE_VAL,&x);
+	m_nfat_arch=get_data32(fat->nfat_arch);
+	add_s_var("fat","nfat_arch",TYPE_VAL,&m_nfat_arch);
+	make_table("fat","arch",m_nfat_arch);
+	nfat=(struct fat_arch*)(faddr+sizeof(struct fat_header));
+	i=0;
+	do
+	{
+		sprintf(path,"fat->arch[%d]",i);
+		m_cpu=get_data32(nfat->cputype);
+		add_s_var(path,"cputype",TYPE_VAL,&m_cpu);
+		x=get_data32(nfat->cpusubtype);
+		add_s_var(path,"cpusubtype",TYPE_VAL,&x);
+		m_offset=get_data32(nfat->offset);
+		add_s_var(path,"offset",TYPE_VAL,&m_offset);
+		nfat_size=get_data32(nfat->size);
+		add_s_var(path,"size",TYPE_VAL,&nfat_size);
+		x=get_data32(nfat->align);
+		add_s_var(path,"align",TYPE_VAL,&x);
+		if(m_cpu==7) file_endian=little_endian; else file_endian=big_endian;
+		load_macho_header(m_offset,path);
+		file_endian=big_endian;
+		nfat=(struct fat_arch*)((char*)nfat+sizeof(struct fat_arch));
+	}while(++i<m_nfat_arch);
+}
+void save_fat_macho_hd(void)
+{
+	printf("not yet implemented...\n");
+}
+int get_offset_fat_macho(char *s,char p)
+{
+	printf("not yet implemented...\n");
+	return 0;
 }

@@ -113,6 +113,7 @@ void file_close()
 void file_probe(int verbose)
 {
 	struct mach_header *mac;
+	struct fat_header *fat;
 	Elf32_Ehdr *elf;
 	_IMAGE_DOS_HEADER *mzexe;
 	_IMAGE_NT_HEADERS *pe;
@@ -127,6 +128,15 @@ void file_probe(int verbose)
 		if(mac->magic==MH_MAGIC) file_endian=cpu_endian;
 		if(mac->magic==MH_CIGAM) file_endian=(~cpu_endian) & 1;
 		if(verbose) printf("File type: Mach-O\n");
+		return;
+	}
+	//probe if is FAT mach-o
+	fat=(struct fat_header*)faddr;
+	if((fat->magic==FAT_MAGIC)||(fat->magic==FAT_CIGAM))
+	{
+		file_type=FT_FAT_MACHO;
+		file_endian=big_endian;
+		if(verbose) printf("File type; FAT Mach-O\n");
 		return;
 	}
 	//probe if it is an ELF
@@ -180,6 +190,9 @@ void load_headers()
 		break;
 	case FT_MZ:
 		load_mz_hd();
+		break;
+	case FT_FAT_MACHO:
+		load_fat_macho_hd();
 		break;
 	default:
 		
@@ -336,6 +349,9 @@ int get_offset(char *s,char p)
 		case FT_MZ:
 			offset=get_offset_mz(s,p);
 			break;
+		case FT_FAT_MACHO:
+			offset=get_offset_fat_macho(s,p);
+			break;
 		default:
 			break;
 		};
@@ -375,6 +391,9 @@ void save_hd()
 		break;
 	case FT_MZ:
 		save_mz_hd();
+		break;
+	case FT_FAT_MACHO:
+		save_fat_macho_hd();
 		break;
 	default:
 		
@@ -785,6 +804,10 @@ void info()
 	case FT_MACHO:
 		printf("mac header    : s\n");
 		printf("load commands : lc[0 .. %d]\n",get_max_lc());
+		break;
+	case FT_FAT_MACHO:
+		printf("fat header    : fat\n");
+		printf("fat_arch      : fat->arch[0 .. %d]\n",get_max_arch());
 		break;
 	default:
 		break;

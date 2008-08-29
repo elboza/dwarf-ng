@@ -447,11 +447,12 @@ void make_table(char *path,char *nome,int num)
 }
 void print_s(struct _var *p)
 {
-	struct _gv *var,*ptr;
-	int count=0,x;
+	struct _gv *var,*ptr=NULL;
+	int count=0,x,segval;
 	char str[MAX_STR],*s1,*s2;
 	for(var=p->p.first;var;var=var->next)
 	{
+		segval=0;
 		if(var->v.type==TYPE_VAL)
 		{
 			if((strcmp("sh_name",var->v.name))==0)
@@ -480,13 +481,16 @@ void print_s(struct _var *p)
 			 	if((strcmp("lc",var->v.name))==0)
 			 	{
 			 		sprintf(str,"lc[%d]",count-1);
-			 		ptr=get_s_var_byname(str,"cmd");
-			 		if(ptr)
+			 		if(file_type==FT_MACHO) {ptr=get_s_var_byname(str,"cmd");segval=ptr->v.val;}
+			 		if(file_type==FT_FAT_MACHO) segval=var->v.p.first->v.val;
+			 		if(segval)
 			 		{
-			 			switch(ptr->v.val){
+			 			switch(segval){
 			 			case 1:
-			 				ptr=get_s_var_byname(str,"segname");
-			 				printf(" LC_SEGMENT [%s]",ptr->v.s);
+			 				if(file_type==FT_MACHO) {ptr=get_s_var_byname(str,"segname");s1=ptr->v.s;}
+			 				else
+			 				{s1=var->v.p.first->next->next->v.s;}
+			 				printf(" LC_SEGMENT [%s]",s1);
 			 				break;
 			 			case 2:
 			 				printf(" LC_SYMTAB");

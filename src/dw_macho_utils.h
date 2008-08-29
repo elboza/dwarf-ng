@@ -27,6 +27,11 @@ int get_max_lc(void);
 int get_max_sect(int lc);
 void add_section_lc(int num);
 void add_macho_sect(int num);
+void load_fat_macho_hd(void);
+void save_fat_macho_hd(void);
+int get_offset_fat_macho(char *s,char p);
+void load_macho_header(int xoffs,char *mainpath);
+int get_max_arch(void);
 
 #endif
 
