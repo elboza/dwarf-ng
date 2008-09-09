@@ -10,12 +10,12 @@ htmldir = $(docdir)
 #html_DATA = dwarf.man.html
 doc_DATA = MANUAL.txt
 
-all:
+all:	docs
 
-#docs:        dwarf.man.html
+docs:        dwarf.man.html
 
-#dwarf.man.html: dwarf.man
-#	man2html dwarf.man >  dwarf.man.html
+dwarf.man.html: dwarf.man
+	if [ -f man2html ];	then man2html dwarf.man>dwarf.man.html ;fi
 
 clean:
 	        rm -f  dwarf.man.html 

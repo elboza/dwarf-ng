@@ -19,7 +19,10 @@
 
 #ifndef DW_MAIN_H
 #define DW_MAIN_H
-#define VERSION "0.1.88"
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
+//#define VERSION "0.1.88"
 #define MAX_FILENAME 255
 #define MAX_STR 255
 #define MAX_CMD 1024

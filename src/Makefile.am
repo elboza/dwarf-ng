@@ -1,6 +1,6 @@
 AUTOMAKE_OPTION = nostdinc no-dependencies
 #dwarf_LDADD = 
-#AM_CFLAGS = 
+#AM_CFLAGS = -Wall
 bin_PROGRAMS = dwarf
 y.tab.o: y.tab.c
 y.tab.c: lang.y lang.l
@@ -45,3 +45,4 @@ noinst_HEADERS =
 man_MANS = 
 
 EXTRA_DIST = 
+#distdir=../$(PACKAGE)-$(VERSION)

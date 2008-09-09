@@ -1,8 +1,6 @@
-AC_INIT([src/main.h],[boz])
-AM_INIT_AUTOMAKE(dwarf,0.0.1)
+AC_INIT([dwarf],[0.1])
+AM_INIT_AUTOMAKE(dwarf,0.1)
 AM_CONFIG_HEADER(config.h)
-dnl test
-
 AC_PROG_CC
 AC_LANG_C
 AH_TEMPLATE([HAVE_MREMAP],[checks if have mremap function])
