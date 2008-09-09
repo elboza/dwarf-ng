@@ -12,4 +12,4 @@ CLEANFILES = autom4te.cache
 
 srcdir = src
 
-#distdir=./$(PACKAGE)-$(VERSION)
+distdir=./$(PACKAGE)-$(VERSION)
