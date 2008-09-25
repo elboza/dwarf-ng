@@ -18,7 +18,7 @@ CLEANFILES=$(BUILT_SOURCES) y.output
 dwarf_SOURCES = $(BUILT_SOURCES)\
 		dw_elf_utils.h \
 		dw_elf_utils.c \
-		dw_macho_urils.h \
+		dw_macho_utils.h \
 		dw_macho_utils.c \
 		dw_pe_utils.h \
 		dw_pe_utils.c \
