@@ -229,6 +229,7 @@ void execute(char *s)
 {
 	int pipedesc[2],r,len;
 	FILE  *fp;
+	if(!s) s="quit";
 	len=strlen(s);
 	r=pipe(pipedesc);
 	if(r!=0){die("pipe error\n");}
