@@ -7,7 +7,13 @@ AH_TEMPLATE([HAVE_MREMAP],[checks if have mremap function])
 AC_PROG_MAKE_SET
 AC_HEADER_STDC
 AC_PROG_LEX
+if test $LEX != "flex"; then
+AC_MSG_ERROR(flex is required)
+fi
 AC_PROG_YACC
+if test $YACC = ""; then 
+AC_MSG_ERROR(bison is required)
+fi
 dnl AC_CHECK_FUNC(mremap,AC_DEFINE([HAVE_MREMAP]))
 AC_CHECK_FUNC(mmap,,AC_MSG_ERROR(mmap is required))
 AC_CHECK_FUNC(munmap,,AC_MSG_ERROR(munmap is required))
