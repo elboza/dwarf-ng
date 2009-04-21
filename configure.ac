@@ -1,5 +1,5 @@
 AC_INIT([dwarf],[0.1])
-AM_INIT_AUTOMAKE(dwarf,0.1a)
+AM_INIT_AUTOMAKE(dwarf,0.1b)
 AM_CONFIG_HEADER(config.h)
 AC_PROG_CC
 AC_LANG_C
