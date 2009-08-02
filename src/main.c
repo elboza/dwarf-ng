@@ -31,7 +31,7 @@ struct m_files mfiles;
 
 void usage()
 {
-	printf("dwarf-%s (c) Fernando Iazeolla <xnando@yahoo.it>\n",VERSION);
+	printf("dwarf-%s (c) Fernando Iazeolla < xnando [at] yahoo [dot] it>\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
