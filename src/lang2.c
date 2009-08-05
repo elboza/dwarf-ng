@@ -1,7 +1,7 @@
 /*
  lang2.c : the parser execution commands.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -352,10 +352,10 @@ struct _var* ex(nodeType *p) {
         	file_close();
         	printf("file closed\n");
         	break;
-        case GROUTH:
+        case GROWTH:
         	v[0]=ex(p->opr.op[0]);
         	if(v[0]==NULL) break;
-        	grouth(v[0]->val);
+        	growth(v[0]->val);
         	break;
         case SHRINK:
         	v[0]=ex(p->opr.op[0]);

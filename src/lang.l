@@ -1,7 +1,7 @@
 /*
  lang.l : the lexical analyzer.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ int yywrap(void);
 "force"			return FORCE;
 "sizeof"		return SIZEOF;
 "flush"			return FLUSH;
-"grouth"		return GROUTH;
+"growth"		return GROWTH;
 "shrink"		return SHRINK;
 "refresh"		return REFRESH;
 "reload"		return RELOAD;

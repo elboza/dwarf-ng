@@ -1,7 +1,7 @@
 /*
  utils.h : miscellaneous definitions.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ int get_offset(char *s,char p);
 int get_offset_var(struct _var *var,char p);
 void get_format(char *s,struct output_format *fmt);
 void save_hd(void);
-void grouth(int len);
+void growth(int len);
 void shrink(int len);
 void mod_len(int len);
 void move(int from,int end,int to);

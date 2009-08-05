@@ -1,0 +1,16 @@
+******    dwarf-ng, Version 0.1
+
+* added more documentation in man page
+* fixed Readline parser
+TODO implement 'help' command
+
+
+******    dwarf-ng, Version 0.1 beta
+
+* ELF file format supported
+* MACH-O file format supported
+* PE (Portable executable) file format supported
+* GNU/Readline lib supported
+* tmp file working
+* inject function implemented
+* add/create header function implemented

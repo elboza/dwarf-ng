@@ -1,7 +1,7 @@
 /*
  lang.y : the parser.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ void yyerror(char *s);
 %token <sWord>	FILENAME
 %token <sWord>	STRING
 %token WHILE IF PRINT QUIT SAVE LOAD INFO TYPE FORCE SIZEOF FLUSH RELOAD FILE_BEGIN FILE_END
-%token REFRESH SHIFT MOVE REALLOC HELP INJECT NEW SHOW CLOSE DUMP GROUTH SHRINK
+%token REFRESH SHIFT MOVE REALLOC HELP INJECT NEW SHOW CLOSE DUMP GROWTH SHRINK
 %token ADDHD RMHD LEN MOVERPOS MOVERNEG EXTRACT
 %nonassoc IFX
 %nonassoc ELSE
@@ -108,7 +108,7 @@ stmt:
         | CLOSE							{$$=opr(CLOSE,2,NULL,NULL);}
         | DUMP '%' WORD expr ';'				{$$=opr(DUMP,2,id_word($3),$4);}
         | DUMP expr ';'						{$$=opr(DUMP,2,NULL,$2);}
-        | GROUTH expr ';'					{$$=opr(GROUTH,1,$2);}
+        | GROWTH expr ';'					{$$=opr(GROWTH,1,$2);}
         | SHRINK expr ';'					{$$=opr(SHRINK,1,$2);}
         | ADDHD '(' STRING ')'					{$$=opr(ADDHD,4,id_string($3),NULL,NULL,NULL);}
         | ADDHD '(' STRING ',' expr ')'				{$$=opr(ADDHD,4,id_string($3),$5,NULL,NULL);}

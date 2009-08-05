@@ -1,7 +1,7 @@
 /*
  utils.c : miscellaneous functions.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -418,7 +418,7 @@ int remap(len)
 {
 
 }
-void grouth(int len)
+void growth(int len)
 {
 	off_t offset;
 	int n;
@@ -457,7 +457,7 @@ void shrink(int len)
 }
 void mod_len(int len)
 {
-	if(len<0) shrink(-len); else grouth(len);
+	if(len<0) shrink(-len); else growth(len);
 }
 void move(int from,int end,int to)
 {

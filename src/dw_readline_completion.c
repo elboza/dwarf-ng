@@ -1,7 +1,7 @@
 /*
  dw_readline_completion.h : dwarf's readline completion functions.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ void add_cmds_completions()
 	add_completion("force",NULL,comp_fixed);
 //	add_completion("",NULL,comp_fixed);
 	add_completion("flush",NULL,comp_fixed);
-	add_completion("grouth",NULL,comp_fixed);
+	add_completion("growth",NULL,comp_fixed);
 	add_completion("shrink",NULL,comp_fixed);
 	add_completion("refresh",NULL,comp_fixed);
 	add_completion("reload",NULL,comp_fixed);

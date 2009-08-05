@@ -1,7 +1,7 @@
 /*
  dw_elf_utils.h : elf utils definitions.
 
- (c) 2007-2008 Fernando Iazeolla
+ (c) 2007-2009 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
