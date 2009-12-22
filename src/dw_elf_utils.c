@@ -45,7 +45,7 @@ void load_elf_hd()
 	Elf32_Ehdr *elf;
 	Elf32_Phdr *ph;
 	Elf32_Shdr *sh;
-	int x,num_ph,num_sh,m_e_phnum,m_e_shnum,m_e_phoff,m_e_shoff;
+	int x,num_ph,num_sh,m_e_phnum,m_e_shnum,m_e_phoff,m_e_shoff,m_shstrtabnum;
 	char path[255];
 	elf=(Elf32_Ehdr*)faddr;
 	make_table(NULL,"s",-1);
@@ -76,7 +76,7 @@ void load_elf_hd()
 	add_s_var("s","e_shnum",TYPE_VAL,&m_e_shnum);
 	x=get_data16(elf->e_shstrndx);
 	add_s_var("s","e_shstrndx",TYPE_VAL,&x);
-	sh_shstrtab=x;
+	m_shstrtabnum=x;
 	if(m_e_phnum>0)
 	{
 		make_table(NULL,"ph",m_e_phnum);
@@ -123,6 +123,10 @@ void load_elf_hd()
 			add_s_var(path,"sh_addr",TYPE_VAL,&x);
 			x=get_data32(sh->sh_offset);
 			add_s_var(path,"sh_offset",TYPE_VAL,&x);
+			if(num_sh==m_shstrtabnum)
+			{
+				sh_shstrtab=x;
+			}
 			x=get_data32(sh->sh_size);
 			add_s_var(path,"sh_size",TYPE_VAL,&x);
 			x=get_data32(sh->sh_link);
