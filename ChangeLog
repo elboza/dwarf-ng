@@ -14,3 +14,8 @@ TODO implement 'help' command
 * tmp file working
 * inject function implemented
 * add/create header function implemented
+
+******    dwarf-ng, Version
+
+* implemented a new elf sh_str_table
+

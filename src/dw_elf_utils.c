@@ -76,6 +76,7 @@ void load_elf_hd()
 	add_s_var("s","e_shnum",TYPE_VAL,&m_e_shnum);
 	x=get_data16(elf->e_shstrndx);
 	add_s_var("s","e_shstrndx",TYPE_VAL,&x);
+	sh_shstrtab=x;
 	if(m_e_phnum>0)
 	{
 		make_table(NULL,"ph",m_e_phnum);

@@ -148,7 +148,7 @@ void file_probe(int verbose)
 		if(elf->e_ident[EI_DATA]==2) file_endian=big_endian;
 		if(elf->e_ident[EI_CLASS]==ELFCLASS32) file_bit_class=bit32; //load 32 bit arch
 		if(elf->e_ident[EI_CLASS]==ELFCLASS64) file_bit_class=bit64; // load 64 bit arch
-		probe_sh_shstrtab();
+		//probe_sh_shstrtab();
 		if(verbose) printf("File type: Elf\n");
 		return;
 	}
