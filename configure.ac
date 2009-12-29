@@ -1,5 +1,7 @@
 AC_INIT([dwarf],[0.1])
-AM_INIT_AUTOMAKE(dwarf,0.1b)
+dwarf_version=`cat VERSION`
+VERSION=$dwarf_version
+AM_INIT_AUTOMAKE(dwarf,$dwarf_version)
 AM_CONFIG_HEADER(config.h)
 AC_PROG_CC
 AC_LANG_C
