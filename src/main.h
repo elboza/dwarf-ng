@@ -61,16 +61,18 @@ struct m_files{
 	char originalfilename[MAX_FILENAME];
 	char tmpcopy[MAX_FILENAME];
 	int fd,original_fd;	//fd is the tmpcopyworking file descriptor
+	int writable;
 };
 typedef enum {little_endian,big_endian} endian;
 typedef enum {bit8,bit16,bit32,bit64} filebitclass;
 //file types
-#define FT_NULL			0
-#define FT_ELF			1
-#define FT_MZ			2
-#define FT_MACHO		3
-#define FT_FAT_MACHO	4
-#define FT_PE			5
+typedef enum {FT_NULL,FT_ELF,FT_MZ,FT_MACHO,FT_FAT_MACHO,FT_PE} type_of_file;
+//#define FT_NULL			0
+//#define FT_ELF			1
+//#define FT_MZ			2
+//#define FT_MACHO		3
+//#define FT_FAT_MACHO	4
+//#define FT_PE			5
 
 #define QUITTING	123
 

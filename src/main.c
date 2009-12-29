@@ -31,7 +31,7 @@ struct m_files mfiles;
 
 void usage()
 {
-	printf("dwarf-ng-%s (c) Fernando Iazeolla < xnando@yahoo.it>\n",VERSION);
+	printf("dwarf-ng-%s (c) Fernando Iazeolla < xnando @ yahoo . it >\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
@@ -40,14 +40,7 @@ void usage()
 	printf("-c '<commands>' --command '<commands>'       command  mode (execute commands)\n");
 	printf("-x <file>       --execute <file>             execute file script\n");
 	printf("-t              --type                       file type\n");
-//	printf("-s <all,sh,main>  section headers\n");
-//	printf("-f type       force to treat as a <pe|elf|mach-o|mz> file\n");
-//	printf("-r            reloc (relocate section offsets)\n");
-//	printf("-S --size= ±val,val,±section\n");
-//	printf("--section= ±pos,name\n");
-//	printf("--rel= sectors, sectname,±offs      (relocate section(s) offset)\n");
-//	printf("--ph=±pos,name\n");
-//	printf("-m --move=init,[end,len,]init2       move block\n");
+	printf("-v		--version		     prints dwarf-ng version number\n");
 	exit(1);
 }
 void usage_b()
@@ -92,6 +85,7 @@ void parse_args(int argc,char **argv,struct m_action *action)
 			{"shell",no_argument,0,'i'},
 			{"type",required_argument,0,'t'},
 			{"help",no_argument,0,'h'},
+			{"version",no_argument,0,'v'},
 			{0,0,0,0,}
 			
 		};
@@ -135,8 +129,8 @@ void parse_args(int argc,char **argv,struct m_action *action)
 				if((strcmp(optarg,"mz"))==0) forced=FT_MZ;
 				file_type=forced;
 				break;
-			case 'r':
-				
+			case 'v':
+				usage_b();
 				break;
 			case 'S':
 				printf("size!...to develop.\n");
@@ -157,7 +151,7 @@ void parse_args(int argc,char **argv,struct m_action *action)
 				usage();
 				break;
 			default:
-				usage();
+				usage_b();
 				break;
 		}
 		
