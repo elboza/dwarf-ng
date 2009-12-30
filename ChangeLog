@@ -18,4 +18,4 @@ TODO implement 'help' command
 ******    dwarf-ng, Version
 
 * implemented a new elf sh_str_table
-
+* implemented comment in language

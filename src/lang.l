@@ -16,9 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-digit [0-9]
-letter [a-zA-Z_]
-hexletter [a-fA-F]
+
 %{
 #include <stdlib.h>
 #include"stdint.h"
@@ -28,6 +26,12 @@ hexletter [a-fA-F]
 void yyerror(char *);
 int yywrap(void);
 %}
+
+digit [0-9]
+letter [a-zA-Z_]
+hexletter [a-fA-F]
+comment #
+ws [ \t\n]+
 
 %%
 
@@ -113,9 +117,14 @@ int yywrap(void);
                    yylval.sWord[yyleng-2] = 0;
                    return STRING;
                        }
-
-
-[ \t\n]+        ;       /* ignore whitespace */
+{comment}	{
+			//printf("comment:");
+			register int c;
+			while((c=input())!='\n' && c!=EOF) ;
+			//printf(":ok");
+		}
+<<EOF>>		yyterminate();
+{ws}		;	/* ignore whitespace */
 
 .               yyerror("Unknown character");
 %%
