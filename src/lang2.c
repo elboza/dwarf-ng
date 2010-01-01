@@ -352,6 +352,12 @@ struct _var* ex(nodeType *p) {
         	file_close();
         	printf("file closed\n");
         	break;
+	case HELP:
+		if(p->opr.op[0]==NULL)
+			show_help_base();
+		else
+			help_cmd(p->opr.op[0]->id.s);
+		break;
         case GROWTH:
         	v[0]=ex(p->opr.op[0]);
         	if(v[0]==NULL) break;

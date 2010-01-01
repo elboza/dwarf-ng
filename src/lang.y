@@ -99,9 +99,14 @@ stmt:
         | SHIFT							{$$=opr(QUIT,2,NULL,NULL);}
         | MOVE '(' expr ',' expr ',' expr ')'			{$$=opr(MOVE,3,$3,$5,$7);}
         | MOVE '(' expr ',' '+' expr ',' expr ')'		{$$=opr(MOVERPOS,3,$3,$6,$8);}
-        | MOVE '(' expr ',' '-' expr ',' expr ')'		{$$=opr(MOVERNEG,3,$3,$6,$8);}
-        | HELP							{$$=opr(QUIT,2,NULL,NULL);}
-        | INJECT '(' expr ',' expr ')'				{$$=opr(INJECT,4,$3,$5,NULL,NULL);}
+        | MOVE '(' expr ',' '-' expr ',' expr ')'	
+{$$=opr(MOVERNEG,3,$3,$6,$8);}
+	| HELP WORD				
+{$$=opr(HELP,2,id_word($2),NULL);}
+        | HELP					
+{$$=opr(HELP,2,NULL,NULL);}
+        | INJECT '(' expr ',' expr ')'			
+{$$=opr(INJECT,4,$3,$5,NULL,NULL);}
         | INJECT '(' expr ',' expr ',' expr ')'			{$$=opr(INJECT,4,$3,$5,$7,NULL);}
         | INJECT '(' expr ',' expr ',' expr ',' expr ')'	{$$=opr(INJECT,4,$3,$5,$7,$9);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}

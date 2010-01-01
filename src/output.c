@@ -125,4 +125,40 @@ void print(struct output_format *fmt,struct _var *var)
 {
 
 }
-
+void show_help_base()
+{
+	printf("inline help\n");
+}
+void help_cmd(char *s)
+{
+	if((strcmp(s,"help"))==0) show_help_base ;
+// 	if((strcmp(s,"quit"))==0) show_help_quit ;
+// 	if((strcmp(s,"create"))==0) show_help_create ;
+// 	if((strcmp(s,"dump"))==0) show_help_dump ;
+// 	if((strcmp(s,"else"))==0) show_help_ifthenelse ;
+// 	if((strcmp(s,"extract"))==0) show_help_extract ;
+// 	if((strcmp(s,"flush"))==0) show_help_flush ;
+// 	if((strcmp(s,"force"))==0) show_help_force ;
+// 	if((strcmp(s,"growth"))==0) show_help_growth ;
+// 	if((strcmp(s,"if"))==0) show_help_ifthenele ;
+// 	if((strcmp(s,"info"))==0) show_help_info ;
+// 	if((strcmp(s,"inject"))==0) show_help_inject ;
+// 	if((strcmp(s,"len"))==0) show_help_len ;
+// 	if((strcmp(s,"load"))==0) show_help_load ;
+// 	if((strcmp(s,"move"))==0) show_help_move ;
+// 	if((strcmp(s,"open"))==0) show_help_load ;
+// 	if((strcmp(s,"pp"))==0) show_help_print ;
+// 	if((strcmp(s,"print"))==0) show_help_print ;
+// 	if((strcmp(s,"read"))==0) show_help_load ;
+// 	if((strcmp(s,"refresh"))==0) show_help_refresh ;
+// 	if((strcmp(s,"reload"))==0) show_help_reload ;
+// 	if((strcmp(s,"remove"))==0) show_help_remove ;
+// 	if((strcmp(s,"save"))==0) show_help_save ;
+// 	if((strcmp(s,"show"))==0) show_help_show ;
+// 	if((strcmp(s,"shrink"))==0) show_help_shrink ;
+// 	if((strcmp(s,"type"))==0) show_help_type ;
+// 	if((strcmp(s,"while"))==0) show_help_while ;
+// 	if((strcmp(s,"write"))==0) show_help_save ;
+// 	if((strcmp(s,""))==0) show_help_ ;
+	
+}
