@@ -128,11 +128,32 @@ void print(struct output_format *fmt,struct _var *var)
 void show_help_base()
 {
 	printf("inline help\n");
+	printf("commands:\n");
+	printf("help 	.::. show this help\n");
+	printf("quit 	.::. exit dwarf-ng interpreter\n");
+	printf("create 	.::. creates a new section header.\n");
+	printf("dump 	.::. show raw file data\n");
+	printf("extract .::. exports portion of opened file into a new raw file\n");
+	printf("flush 	.::. syncronize to disc the file structured variables\n");
+	printf("growth 	.::. increase the size of the opened file.\n");
+	printf("if-then-else .::. a tipical if-then-else construct.\n");
+	printf("info 	.::. shows the main structures of the opened file.\n");
+	printf("inject 	.::. inject code into the opened file.\n");
+	printf("len 	.::. increase or decrease the sze of the opened file.\n");
+	printf("load 	.::. open a new file.\n");
+	printf("move 	.::. moves code around the opened file.\n");
+	printf("print 	.::. prints variables.\n");
+	printf("save 	.::. save and close the file.\n");
+	printf("refresh .::. reload the file structure into memory.\n");
+	printf("reload 	.::. close and reopen the file.\n");
+	printf("shrink 	.::. decrease the size of the opened file.\n");
+	printf("remove	.::. removes a section header.\n");
+	printf("\ntype 'help command' for specific information.\n");
 }
 void help_cmd(char *s)
 {
 	if((strcmp(s,"help"))==0) show_help_base ;
-// 	if((strcmp(s,"quit"))==0) show_help_quit ;
+ 	if((strcmp(s,"quit"))==0) show_help_quit ;
 // 	if((strcmp(s,"create"))==0) show_help_create ;
 // 	if((strcmp(s,"dump"))==0) show_help_dump ;
 // 	if((strcmp(s,"else"))==0) show_help_ifthenelse ;
@@ -161,4 +182,8 @@ void help_cmd(char *s)
 // 	if((strcmp(s,"write"))==0) show_help_save ;
 // 	if((strcmp(s,""))==0) show_help_ ;
 	
+}
+void show_help_quit()
+{
+  printf("quit;	-- exit dwarf interpreter\n");
 }

@@ -34,6 +34,7 @@ void print(struct output_format *fmt,struct _var *var);
 void extended_dump(off_t ofset,struct output_format *fmt);
 void show_help_base(void);
 void help_cmd(char *s);
+void show_help_quit(void);
 
 
 #endif
