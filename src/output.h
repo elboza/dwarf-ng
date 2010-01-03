@@ -35,7 +35,27 @@ void extended_dump(off_t ofset,struct output_format *fmt);
 void show_help_base(void);
 void help_cmd(char *s);
 void show_help_quit(void);
-
+void show_help_info(void);
+void show_help_create(void);
+void show_help_dump(void);
+void show_help_extract(void);
+void show_help_flush(void);
+void show_help_force(void);
+void show_help_growth(void);
+void show_help_ifthenelse(void);
+void show_help_inject(void);
+void show_help_len(void);
+void show_help_load(void);
+void show_help_move(void);
+void show_help_print(void);
+void show_help_refresh(void);
+void show_help_reload(void);
+void show_help_remove(void);
+void show_help_save(void);
+void show_help_show(void);
+void show_help_shrink(void);
+void show_help_type(void);
+void show_help_while(void);
 
 #endif
 

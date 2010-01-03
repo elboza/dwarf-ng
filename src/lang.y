@@ -36,6 +36,8 @@ void yyerror(char *s);
 //int sym[26];                    /* symbol table */
 %}
 
+%expect 3
+
 %union {
     int iValue;                 /* integer value */
     char *sVar;                /* symbol table variable */
@@ -69,7 +71,7 @@ program:
         ;
 
 function:
-          function stmt         { ex($2); freeNode($2); }
+          stmt_list        { ex($1); freeNode($1); }
         | /* NULL */
         ;
 
@@ -100,9 +102,9 @@ stmt:
         | MOVE '(' expr ',' expr ',' expr ')'			{$$=opr(MOVE,3,$3,$5,$7);}
         | MOVE '(' expr ',' '+' expr ',' expr ')'		{$$=opr(MOVERPOS,3,$3,$6,$8);}
         | MOVE '(' expr ',' '-' expr ',' expr ')'		{$$=opr(MOVERNEG,3,$3,$6,$8);}
-	| HELP WORD						{$$=opr(HELP,2,id_word($2),NULL);}
+	| HELP STRING						{$$=opr(HELP,2,id_string($2),NULL);}
         | HELP							{$$=opr(HELP,2,NULL,NULL);}
-        | INJECT '(' expr ',' expr ')'				{$$=opr(INJECT,4,$3,$5,NULL,NULL);}
+	| INJECT '(' expr ',' expr ')'				{$$=opr(INJECT,4,$3,$5,NULL,NULL);}
         | INJECT '(' expr ',' expr ',' expr ')'			{$$=opr(INJECT,4,$3,$5,$7,NULL);}
         | INJECT '(' expr ',' expr ',' expr ',' expr ')'	{$$=opr(INJECT,4,$3,$5,$7,$9);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
@@ -127,7 +129,7 @@ stmt:
 
 stmt_list:
           stmt                  { $$ = $1; }
-        | stmt_list stmt        { $$ = opr(';', 2, $1, $2); }
+        | stmt_list ';' stmt        { $$ = opr(';', 2, $1, $3); }
         ;
 
 expr:

@@ -29,6 +29,9 @@ loads and executes file script.
 .B -t, --type
 shows the file type.
 .TP
+.B -v, --version
+show dwarf-ng's version number
+.TP
 If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)
 .SH THE DWARF'S LANGUAGE
 .TP 
@@ -59,11 +62,11 @@ a typical while construct.
 .B IF-ELSE [ if(expr) command(s); | if(expr) command(s); else command(s); ]
 a typical if-else costruct.
 .TP
-.B PRINT [print expr; | print %fmt expr; ]
+.B PRINT [print expr; | print %fmt expr; ] -- alias pp
 outputs the result of the expression (numerical or string). The \fB%fmt\fP force a different output mode. \fBfmt\fP indicates the output mode desired. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP for decimal, \fBb\fP for binary output. examples: \fIprint %x 16\fP (outputs 0xa), \fIprint %d 0xa\fP (outputs 16).
 .TP
 .B QUIT [ quit; ]
-quits dwarf.
+exit dwarf-ng interpreter.
 .TP
 .B INFO [ info; ]
 display info on opened file.
@@ -71,14 +74,14 @@ display info on opened file.
 .B TYPE [ type; ]
 display the file type of the opened file.
 .TP
-.B FORCE [ force filetype; | force(filetype); ]
+.B FORCE [ force filetype; | force(filetype); ] -- deprecate
 force the file type to be 'filetype' value.
 .TP
 .B GROWTH [ growth expr; | growth (expr);]
-growth the file.
+increase the size of the opened file.
 .TP
 .B SHRINK [ shrink expr; | shrink(expr); ]
-shrink the file.
+decrease the size of the opened file.
 .TP
 .B REFRESH [ refresh; ]
 unloads and reloads the file strucutres.
