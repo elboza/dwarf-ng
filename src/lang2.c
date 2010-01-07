@@ -408,13 +408,14 @@ struct _var* ex(nodeType *p) {
 			switch(i){
 			case 4:
 				if(v[3]->type!=TYPE_STRING) {printf("error on parameter 4\n");break;}
-				inject_file(v[0]->s,v[1]->val,v[2]->val,v[3]->s);
+				if((strncmp(v[3]->s,">>",2))!=0) {printf("error on parameter4\n");break;}
+				inject_file(v[0]->s,v[1]->val,v[2]->val,1);
 				break;
 			case 3:
 				if(v[2]->type==TYPE_STRING) 
 				{
 					if((strcmp(">>",v[2]->s))!=0) {printf("error parsing shift value (parameter 3)\n");break;}
-					inject_file(v[0]->s,v[1]->val,-1,">>");
+					inject_file(v[0]->s,v[1]->val,-1,1);
 				}
 				else { inject_file(v[0]->s,v[1]->val,v[2]->val,NULL);}
 				break;
@@ -428,10 +429,11 @@ struct _var* ex(nodeType *p) {
 			switch(i){
 			case 4:
 				if(v[3]->type!=TYPE_STRING) {printf("error on parameter 4\n");break;}
-				inject_byte(v[0]->val,v[1]->val,v[2]->val,v[3]->s);
+				if((strncmp(v[3]->s,">>",2))!=0) {printf("error on parameter4\n");break;}
+				inject_byte(v[0]->val,v[1]->val,v[2]->val,1);
 				break;
 			case 3:
-				if(v[2]->type==TYPE_STRING) {if((strcmp(">>",v[2]->s))!=0) {printf("error parsing shift value (parameter 3)\n");break;}inject_byte(v[0]->val,v[1]->val,1,">>");}
+				if(v[2]->type==TYPE_STRING) {if((strcmp(">>",v[2]->s))!=0) {printf("error parsing shift value (parameter 3)\n");break;}inject_byte(v[0]->val,v[1]->val,1,1);}
 				else { inject_byte(v[0]->val,v[1]->val,v[2]->val,NULL);}
 				break;
 			default:

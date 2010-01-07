@@ -504,20 +504,19 @@ void move_r_neg(int from,int len,int to)
 {
 	move(from,from+len,to);
 }
-void inject_file(char *file,int from,int len,char *shift)
+void inject_file(char *file,int from,int len,int shift)
 {
-	int to_shift,i;
+	int i;
 	char *mem,cdata,tmp_cmd[MAX_CMD];
 	FILE *fp;
 	if(!mfiles.fd) {printf("no file opened!\n");return;}
-	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
-	printf("inject from file...%s %d %d %d\n",file,from,len,to_shift);
+	printf("inject from file...%s %d %d %d\n",file,from,len,shift);
 	mem=(char*)faddr;
 	fp=fopen(file,"r");
 	if(fp==NULL) {printf("error opening file to inject.\n"); return;}
 	if(len==-1) if((fseek(fp,0L,SEEK_END))==0) len=(int)ftell(fp);
 	rewind(fp);
-	if(to_shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
+	if(shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
 	mem+=from;
 	for(i=0;i<len;i++,mem++)
 	{
@@ -527,16 +526,15 @@ void inject_file(char *file,int from,int len,char *shift)
 	}
 	fclose(fp);
 }
-void inject_byte(int data,int from,int len,char *shift)
+void inject_byte(int data,int from,int len,int shift)
 {
 	int to_shift,i;
 	char *mem,cdata,tmp_cmd[MAX_CMD];
 	if(!mfiles.fd) {printf("no file opened!\n");return;}
-	if(shift) { if((strcmp(">>",shift))==0) to_shift=1; else to_shift=0;} else to_shift=0;
-	printf("inject byte...%d %d %d %d\n",data,from,len,to_shift);
+	printf("inject byte...%d %d %d %d\n",data,from,len,shift);
 	cdata=(char)data;
 	mem=(char*)faddr;
-	if(to_shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
+	if(shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
 	mem+=from;
 	for(i=0;i<len;i++,mem++) *mem=cdata;
 }
