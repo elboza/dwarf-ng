@@ -516,7 +516,8 @@ void inject_file(char *file,int from,int len,int shift)
 	if(fp==NULL) {printf("error opening file to inject.\n"); return;}
 	if(len==-1) if((fseek(fp,0L,SEEK_END))==0) len=(int)ftell(fp);
 	rewind(fp);
-	if(shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
+	if(shift) {mod_len(len);move(from,get_offset("FILE_END",'.'),from+len); }
+//	{ sprintf(tmp_cmd,"len %d;;move(%d,@>,%d)",len,from,from+len);execute(tmp_cmd);}
 	mem+=from;
 	for(i=0;i<len;i++,mem++)
 	{
@@ -534,7 +535,8 @@ void inject_byte(int data,int from,int len,int shift)
 	printf("inject byte...%d %d %d %d\n",data,from,len,shift);
 	cdata=(char)data;
 	mem=(char*)faddr;
-	if(shift) { sprintf(tmp_cmd,"len %d;move(%d,@>,%d);",len,from,from+len);execute(tmp_cmd);}
+	if(shift) {mod_len(len);move(from,get_offset("FILE_END",'.'),from+len); }
+//	{ sprintf(tmp_cmd,"len %d;;move(%d,@>,%d)",len,from,from+len);execute(tmp_cmd);}
 	mem+=from;
 	for(i=0;i<len;i++,mem++) *mem=cdata;
 }

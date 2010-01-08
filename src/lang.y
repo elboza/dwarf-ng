@@ -64,28 +64,29 @@ void yyerror(char *s);
 
 %type <nPtr> stmt expr stmt_list filename ivar Tivar Offset TOffset
 
+%start program
 %%
 
-program:
-        function                { /*exit(-)*/; }
-        ;
+//program:
+//        function                { /*exit(-)*/; }
+//        ;
 
-function:
-          stmt_list        { ex($1); freeNode($1); }
+program:
+          stmt_list						{ ex($1); freeNode($1); }
         | /* NULL */
         ;
 
 stmt:
-          ';'                            { $$ = opr(';', 2, NULL, NULL); }
-        | expr ';'                       { $$ = $1; }
-        | PRINT '%' WORD expr ';'				{$$=opr(PRINT,2,id_word($3),$4);}
-        | PRINT expr ';'                 { $$ = opr(PRINT, 2,NULL, $2); }
-        | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id_var($1), $3); }
-        | ivar '=' expr ';' 	         { $$ = opr('=', 2, $1, $3); }
-        | WHILE '(' expr ')' stmt        { $$ = opr(WHILE, 2, $3, $5); }
-        | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
-        | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
-        | '{' stmt_list '}'              { $$ = $2; }
+          ';'							{ $$ = opr(';', 2, NULL, NULL); }
+        | expr							{ $$ = $1; }
+        | PRINT '%' WORD expr 					{$$=opr(PRINT,2,id_word($3),$4);}
+        | PRINT expr						{ $$ = opr(PRINT, 2,NULL, $2); }
+        | VARIABLE '=' expr					{ $$ = opr('=', 2, id_var($1), $3); }
+        | ivar '=' expr						{ $$ = opr('=', 2, $1, $3); }
+        | WHILE '(' expr ')' stmt				{ $$ = opr(WHILE, 2, $3, $5); }
+        | IF '(' expr ')' stmt %prec IFX			{ $$ = opr(IF, 2, $3, $5); }
+        | IF '(' expr ')' stmt ELSE stmt			{ $$ = opr(IF, 3, $3, $5, $7); }
+        | '{' stmt_list '}'					{ $$ = $2; }
 	| QUIT							{$$= opr(QUIT,2,NULL,NULL);}
 	| SAVE							{$$=opr(SAVE,2,NULL,NULL);}
         | LOAD filename						{$$=opr(LOAD,1,$2);}
@@ -128,32 +129,32 @@ stmt:
         ;
 
 stmt_list:
-          stmt                  { $$ = $1; }
-        | stmt_list ';' stmt        { $$ = opr(';', 2, $1, $3); }
+         stmt							{ $$ = $1; }
+        | stmt_list ';' stmt					{ $$ = opr(';', 2, $1, $3); }
         ;
 
 expr:
-          INTEGER               { $$ = con($1); }
-        | VARIABLE              { $$ = id_var($1); }
-        | ivar			{ $$ =$1; }
-        | FILE_BEGIN		{$$=con(get_offset("FILE_BEGIN",'.'));}
-        | FILE_END		{$$=con(get_offset("FILE_END",'.'));}
-        | FILE_END Offset	{$$=opr(OFFSET_ROOT,2,$2,id_word("e"));}
-        | FILE_BEGIN Offset	{$$=opr(OFFSET_ROOT,2,$2,id_word("b"));}
-        | FILENAME		{ $$ =id_word($1); }
-        | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
-        | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
-        | expr '-' expr         { $$ = opr('-', 2, $1, $3); }
-        | expr '*' expr         { $$ = opr('*', 2, $1, $3); }
-        | expr '/' expr         { $$ = opr('/', 2, $1, $3); }
-        | expr '<' expr         { $$ = opr('<', 2, $1, $3); }
-        | expr '>' expr         { $$ = opr('>', 2, $1, $3); }
-        | expr GE expr          { $$ = opr(GE, 2, $1, $3); }
-        | expr LE expr          { $$ = opr(LE, 2, $1, $3); }
-        | expr NE expr          { $$ = opr(NE, 2, $1, $3); }
-        | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
-        | '(' expr ')'          { $$ = $2; }
-        | STRING		{$$=id_string($1);}
+          INTEGER						{ $$ = con($1); }
+        | VARIABLE						{ $$ = id_var($1); }
+        | ivar							{ $$ =$1; }
+        | FILE_BEGIN						{$$=con(get_offset("FILE_BEGIN",'.'));}
+        | FILE_END						{$$=con(get_offset("FILE_END",'.'));}
+        | FILE_END Offset					{$$=opr(OFFSET_ROOT,2,$2,id_word("e"));}
+        | FILE_BEGIN Offset					{$$=opr(OFFSET_ROOT,2,$2,id_word("b"));}
+        | FILENAME						{ $$ =id_word($1); }
+        | '-' expr %prec UMINUS 				{ $$ = opr(UMINUS, 1, $2); }
+        | expr '+' expr						{ $$ = opr('+', 2, $1, $3); }
+        | expr '-' expr						{ $$ = opr('-', 2, $1, $3); }
+        | expr '*' expr						{ $$ = opr('*', 2, $1, $3); }
+        | expr '/' expr						{ $$ = opr('/', 2, $1, $3); }
+        | expr '<' expr						{ $$ = opr('<', 2, $1, $3); }
+        | expr '>' expr						{ $$ = opr('>', 2, $1, $3); }
+        | expr GE expr						{ $$ = opr(GE, 2, $1, $3); }
+        | expr LE expr						{ $$ = opr(LE, 2, $1, $3); }
+        | expr NE expr						{ $$ = opr(NE, 2, $1, $3); }
+        | expr EQ expr						{ $$ = opr(EQ, 2, $1, $3); }
+        | '(' expr ')'						{ $$ = $2; }
+        | STRING						{$$=id_string($1);}
         ;
 
 filename:
@@ -172,8 +173,8 @@ Tivar:
 		| WORD					{$$=opr(STRUCT1,1,id_word($1));}
 		;
 Offset:
-		TOffset '-' '>' Offset		{$$=opr(OFFSET,2,$1,$4);}
-		| TOffset					{$$=opr(OFFSET,2,$1,NULL);}
+		TOffset '-' '>' Offset			{$$=opr(OFFSET,2,$1,$4);}
+		| TOffset				{$$=opr(OFFSET,2,$1,NULL);}
 		;
 
 TOffset:
