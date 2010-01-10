@@ -494,3 +494,23 @@ void add_section_pe(int num)
 	}
 	populate_new_pe_sect(sec_pos);
 }
+void update_cascade_sec_pe_s(int sec_pos,int sec_add_rm)
+{
+	struct _var *var;
+	int x;
+	var=get_s_var_byname("pe->FileHeader","NumberOfSections");
+	x=var->val;
+	switch(sec_add_rm){
+	case SEC_ADD:
+		x++;
+		break;
+	case SEC_RM:
+		x--;
+		break;
+	default:
+		printf("add or remove section ?!?! update manually\n");
+		break;
+	}
+	set_s_var(var,TYPE_VAL,&x);
+	
+}

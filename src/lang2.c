@@ -456,11 +456,11 @@ struct _var* ex(nodeType *p) {
 		case 4:
 			if((strcmp(v[2]->s,"u"))!=0) {printf("error in parameter 3 (update parameter).\n"); break;}
 			if((strcmp(v[3]->s,">>"))!=0) {printf("error in parameter 4 (shift file).\n"); break;}
-			create_hd(v[0]->s,v[1]->val,v[2]->s,v[3]->s);
+			create_hd(v[0]->s,v[1]->val,1,1);
 			break;
 		case 3:
-			if((strcmp(v[2]->s,"u"))==0) {create_hd(v[0]->s,v[1]->val,v[2]->s,NULL);break;}
-			if((strcmp(v[2]->s,">>"))==0) {create_hd(v[0]->s,v[1]->val,NULL,v[2]->s);break;}
+			if((strcmp(v[2]->s,"u"))==0) {create_hd(v[0]->s,v[1]->val,1,NULL);break;}
+			if((strcmp(v[2]->s,">>"))==0) {create_hd(v[0]->s,v[1]->val,NULL,1);break;}
 			printf("error in parameter 3.\n");
 			break;
 		case 2:

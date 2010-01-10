@@ -57,7 +57,7 @@ void move_r_pos(int from,int len,int to);
 void move_r_neg(int from,int len,int to);
 void inject_file(char *file,int from,int len,int shift);
 void inject_byte(int data,int from,int len,int shift);
-void create_hd(char *type,int offs,char *update,char *shift);
+void create_hd(char *type,int offs,int update,int shift);
 void remove_hd(char *type,int offs,char *update,char *shift);
 int type_look_up(char *type);
 void refresh(void);
@@ -69,6 +69,7 @@ void save_file(void);
 int section_name(char *name);
 void info(void);
 void extract(int from,int len,char *file);
+void update_cascade_sect(int sec_type,int sec_pos,int sec_add_rm);
 
 #endif
 

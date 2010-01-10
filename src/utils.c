@@ -507,7 +507,7 @@ void move_r_neg(int from,int len,int to)
 void inject_file(char *file,int from,int len,int shift)
 {
 	int i;
-	char *mem,cdata,tmp_cmd[MAX_CMD];
+	char *mem,cdata;
 	FILE *fp;
 	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	printf("inject from file...%s %d %d %d\n",file,from,len,shift);
@@ -529,8 +529,8 @@ void inject_file(char *file,int from,int len,int shift)
 }
 void inject_byte(int data,int from,int len,int shift)
 {
-	int to_shift,i;
-	char *mem,cdata,tmp_cmd[MAX_CMD];
+	int i;
+	char *mem,cdata;
 	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	printf("inject byte...%d %d %d %d\n",data,from,len,shift);
 	cdata=(char)data;
@@ -605,14 +605,12 @@ int type_look_up(char *type)
 	}
 	return -1;
 }
-void create_hd(char *type,int offs,char *update,char *shift)
+void create_hd(char *type,int offs,int update,int shift)
 {
-	int to_shift,to_update,len,from,sec_num,max_secs,max_macho_sects,n_type;
-	char tmp_cmd[MAX_CMD],str[MAX_STR];
+	int len,from,sec_num,max_secs,max_macho_sects,n_type;
+	char str[MAX_STR];
 	sec_num=offs;
-	if(update==NULL) to_update=0; else to_update=1;
-	if(shift==NULL) to_shift=0; else to_shift=1;
-	printf("create: %s %d %d %d....still coding it...sorry :)\n",type,offs,to_update,to_shift);
+	printf("create: %s %d %d %d....still coding it...sorry :)\n",type,offs,update,shift);
 	if(!mfiles.fd) {printf("no file opened!\n");return;}
 	//from=offs;
 	len=type_look_up(type);
@@ -708,10 +706,12 @@ void create_hd(char *type,int offs,char *update,char *shift)
 		printf("wrong section name!\n");
 		return;
 	}
-	if(to_shift) {sprintf(tmp_cmd,"inject(0,%d,%d,\">>\");",from,len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
-	printf("%s\n",tmp_cmd);
-	execute(tmp_cmd);
-	if(to_update) printf("update cascade is not implemented yet.\n");
+	inject_byte(0,from,len,shift);
+//	if(shift) {} else {}
+//	{sprintf(tmp_cmd,"inject(0,%d,%d,\">>\");",from,len);execute(tmp_cmd);} else { sprintf(tmp_cmd,"inject(0,%d,%d);",from,len);}
+//	printf("%s\n",tmp_cmd);
+//	execute(tmp_cmd);
+	if(update) update_cascade_sect(n_type,sec_num,SEC_ADD); else printf("remember to update tables manually.\n");
 	//refresh();
 }
 int section_name(char *name)
@@ -740,6 +740,25 @@ void remove_hd(char *type,int offs,char *update,char *shift)
 	//remove hd in var table !!!
 	if(to_update) printf("update cascade is not implemented yet.\n");
 	//refresh();
+}
+void update_cascade_sect(int sec_type,int sec_pos,int sec_add_rm)
+{
+	printf("update cascade...still coding...\n");
+	switch(sec_type){
+	case SEC_SH:
+		break;
+	case SEC_PH:
+		break;
+	case SEC_SECT:
+		break;
+	case SEC_LC:
+		break;
+	case SEC_PE_S:
+		update_cascade_sec_pe_s(sec_pos,sec_add_rm);
+		break;
+	default:
+		break;
+	}
 }
 void refresh()
 {

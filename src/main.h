@@ -65,6 +65,7 @@ struct m_files{
 };
 typedef enum {little_endian,big_endian} endian;
 typedef enum {bit8,bit16,bit32,bit64} filebitclass;
+typedef enum {SEC_NULL,SEC_ADD,SEC_RM} _update_sections;
 //file types
 typedef enum {FT_NULL,FT_ELF,FT_MZ,FT_MACHO,FT_FAT_MACHO,FT_PE} type_of_file;
 //#define FT_NULL			0

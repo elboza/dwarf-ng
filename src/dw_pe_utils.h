@@ -28,6 +28,7 @@ void save_mz_hd(void);
 void save_pe_hd(void);
 int get_max_pe_sect(void);
 void add_section_pe(int num);
+void update_cascade_sec_pe_s(int sec_pos,int sec_add_rm);
 
 #endif
 

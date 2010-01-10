@@ -110,10 +110,10 @@ stmt:
         | INJECT '(' expr ',' expr ',' expr ',' expr ')'	{$$=opr(INJECT,4,$3,$5,$7,$9);}
         | SHOW							{$$=opr(QUIT,2,NULL,NULL);}
         | CLOSE							{$$=opr(CLOSE,2,NULL,NULL);}
-        | DUMP '%' WORD expr ';'				{$$=opr(DUMP,2,id_word($3),$4);}
-        | DUMP expr ';'						{$$=opr(DUMP,2,NULL,$2);}
-        | GROWTH expr ';'					{$$=opr(GROWTH,1,$2);}
-        | SHRINK expr ';'					{$$=opr(SHRINK,1,$2);}
+        | DUMP '%' WORD expr 					{$$=opr(DUMP,2,id_word($3),$4);}
+        | DUMP expr 						{$$=opr(DUMP,2,NULL,$2);}
+        | GROWTH expr 						{$$=opr(GROWTH,1,$2);}
+        | SHRINK expr 						{$$=opr(SHRINK,1,$2);}
         | ADDHD '(' STRING ')'					{$$=opr(ADDHD,4,id_string($3),NULL,NULL,NULL);}
         | ADDHD '(' STRING ',' expr ')'				{$$=opr(ADDHD,4,id_string($3),$5,NULL,NULL);}
         | ADDHD '(' STRING ',' expr ',' STRING ')'		{$$=opr(ADDHD,4,id_string($3),$5,id_string($7),NULL);}
