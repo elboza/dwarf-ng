@@ -497,7 +497,8 @@ void add_section_pe(int num)
 void update_cascade_sec_pe_s(int sec_pos,int sec_add_rm)
 {
 	struct _var *var;
-	int x;
+	int x,sec_len,sec_num,i;
+	char str[255];
 	var=get_s_var_byname("pe->FileHeader","NumberOfSections");
 	x=var->val;
 	switch(sec_add_rm){
@@ -512,5 +513,25 @@ void update_cascade_sec_pe_s(int sec_pos,int sec_add_rm)
 		break;
 	}
 	set_s_var(var,TYPE_VAL,&x);
-	
+	sec_len=type_look_up("s");
+	sec_num=x;
+	//printf("n sec:%d\n",sec_num);
+	for(i=0;i<sec_num;i++)
+	{
+		sprintf(str,"s[%d]",i);
+		var=get_s_var_byname(str,"PointerToRawData");
+		x=var->val;
+		switch(sec_add_rm){
+			case SEC_ADD:
+				x+=sec_len;
+				break;
+			case SEC_RM:
+				x-=sec_len;
+				break;
+			default:
+				printf("add or remove section ?!?! update manually\n");
+				break;
+		}
+		set_s_var(var,TYPE_VAL,&x);
+	}
 }
