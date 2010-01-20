@@ -187,30 +187,30 @@ void help_cmd(char *s)
 }
 void show_help_quit()
 {
-  printf("quit;	-- exit dwarf interpreter\n");
+  printf("quit	-- exit dwarf interpreter\n");
 }
 void show_help_info()
 {
-	printf("info; -- shows the main structures of the opened file.\n");
+	printf("info -- shows the main structures of the opened file.\n");
 }
 void show_help_create()
 {
-	printf("create(type,offs[,update][,shift]);\n");
+	printf("create(type,offs[,update][,shift])\n");
 	printf("creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (\">>\") tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file.\n");
 }
 void show_help_dump()
 {
-	printf("dump [%fmt] expr;\n");
-	printf("dumps portion of opened file from expr offset in various formats depending on %fmt. The %fmt force a different output mode. fmt is in the form: xnn (<letter><number>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: x for hex output, d for decimal putput s for string output c for char output, b for binary output,e (default) for a nice dump output. examples: dump @<; (dumps the beginning of the file), dump %x3 @<+10; (displays 3 bytes in hex format from 10 positions from the beginning of the file).\n");
+	printf("dump [%fmt] expr\n");
+	printf("dumps portion of opened file from expr offset in various formats depending on %fmt. The %fmt force a different output mode. fmt is in the form: xnn (<letter><number>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: x for hex output, d for decimal putput s for string output c for char output, b for binary output,e (default) for a nice dump output. examples: dump @< (dumps the beginning of the file), dump %x3 @<+10 (displays 3 bytes in hex format from 10 positions from the beginning of the file).\n");
 }
 void show_help_extract()
 {
-	printf("extract(from,len,file);\n");
+	printf("extract(from,len,file)\n");
 	printf("extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.\n");
 }
 void show_help_flush()
 {
-	printf("flush; -- writes data structured on disc.\n");
+	printf("flush -- writes data structured on disc.\n");
 }
 void show_help_force()
 {
@@ -218,7 +218,7 @@ void show_help_force()
 }
 void show_help_growth()
 {
-	printf("growth expr; | growth (expr);\n");
+	printf("growth expr | growth (expr)\n");
 	printf("increase the size of the opened file.\n");
 }
 void show_help_ifthenelse()
@@ -227,44 +227,44 @@ void show_help_ifthenelse()
 }
 void show_help_inject()
 {
-	printf("inject(expr1,expr2[,expr3][,expr4]);\n");
-	printf("injects data inside the opened file. ( expr1=file|byte, expr2=offs-from, expr3=len, expr4=\">>\"(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \">>\" or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (\">>\") or to the len-offset...dwarf is able to disambiguate. examples: inject(0,ph[3]->offset,12); writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]->offset.\n");
+	printf("inject(expr1,expr2[,expr3][,expr4])\n");
+	printf("injects data inside the opened file. ( expr1=file|byte, expr2=offs-from, expr3=len, expr4=\">>\"(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \">>\" or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (\">>\") or to the len-offset...dwarf is able to disambiguate. examples: inject(0,ph[3]->offset,12) writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]->offset.\n");
 }
 void show_help_len()
 {
-	printf("len expr; -- increase or decrease the sze of the opened file.\n");
+	printf("len expr -- increase or decrease the sze of the opened file.\n");
 }
 void show_help_load()
 {
-	printf("open filename; | open(filename);\n");
+	printf("open filename | open(filename)\n");
 	printf("(...guess?!?!) open a new file.\n");
 }
 void show_help_move()
 {
-	printf("move(expr1,expr2,expr3); | move(expr1,+expr2,expr3); | move(expr1,-expr2,expr3);\n");
-	printf("move blocks of file around. (expr1=from, expr2=[len|end], expr3=to). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move(@<,+10,@>ph[0]); moves 10 bytes from the beginning of the file to the end of the first(0) program's header.\n");
+	printf("move(expr1,expr2,expr3) | move(expr1,+expr2,expr3) | move(expr1,-expr2,expr3)\n");
+	printf("move blocks of file around. (expr1=from, expr2=[len|end], expr3=to). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move(@<,+10,@>ph[0]) moves 10 bytes from the beginning of the file to the end of the first(0) program's header.\n");
 }
 void show_help_print()
 {
-	printf("print expr; | print %fmt expr; -- alias pp\n");
+	printf("print expr | print %fmt expr -- alias pp\n");
 	printf("outputs the result of the expression (numerical or string). The %fmt force a different output mode. fmt indicates the output mode desired. Valid option for the output modes are: x for hex output, d for decimal, b for binary output. examples: print %x 16 (outputs 0xa), print %d 0xa (outputs 16).\n");
 }
 void show_help_refresh()
 {
-	printf("refresh; -- reload the file structure into memory.\n");
+	printf("refresh -- reload the file structure into memory.\n");
 }
 void show_help_reload()
 {
-	printf("reload; -- closes the opened file and reopens it reloading all the data structures.\n");
+	printf("reload -- closes the opened file and reopens it reloading all the data structures.\n");
 }
 void show_help_remove()
 {
-	printf("remove(type,offs[,update[,shift]]);\n");
+	printf("remove(type,offs[,update[,shift]])\n");
 	printf("removes a section header. see create for parameters explanation.\n");
 }
 void show_help_save()
 {
-	printf("save; | save(filename);\n");
+	printf("save | save(filename)\n");
 	printf("saves all the changes into the opened file. This action once performed is unreversible: changes will be permanently written on the disk.\n");
 }
 void show_help_show()
@@ -273,12 +273,12 @@ void show_help_show()
 }
 void show_help_shrink()
 {
-	printf("shrink expr; | shrink(expr);\n");
+	printf("shrink expr | shrink(expr)\n");
 	printf("decrease the size of the opened file.\n");
 }
 void show_help_type()
 {
-	printf("type;\n");
+	printf("type\n");
 	printf("display the file type of the opened file.\n");
 }
 void show_help_while()

@@ -40,83 +40,83 @@ If more than one or all options are given at the same time the execution order w
 recognizes two types of variables: the normal variables (simply called variables) and the structured variables.
 The normal \fBvariables\fP are preceded by the dollar symbol (\fB$\fP) and are created by the user for normal variable operation (\fIi.e. $a=5; $b=$a+3; print $b;\fP ).
 The \fBstructured variables\fP are created by \fBdwarf\fP when it loads a file into memory. The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
-\fIprint s->ph_num;\fP will print the ph_num variable of the main header (s) of a Elf file.
-\fIs->sh_num=3;\fP will modify the sh_num (number of section headers) in the main header (s) of the Elf file.
+\fIprint s->ph_num\fP will print the ph_num variable of the main header (s) of a Elf file.
+\fIs->sh_num=3\fP will modify the sh_num (number of section headers) in the main header (s) of the Elf file.
 .TP
 .B EXPRESSIONS
-Expressions \fBEXPR\fP are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a \fB0x\fP...example: $a=0x10; ($a is 16 decimal!).
+Expressions \fBEXPR\fP are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a \fB0x\fP...example: $a=0x10 ($a is 16 decimal!).
 .TP
 .B OFFSETS
-offsets syntax is \f @<foo \fP or \f @>foo \fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (>) or minor (<) symbol indicate if the offset point to the end (>) or the beginning (<) of the specified data structure. whith \fB@<\fP we indicate the beginning of the file. Whith \fB@>\fP wh indicate the end of the file. For example \fIprint @>;\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@>+3; will assign to the variable $a the length of the file plus 3).
+offsets syntax is \f @<foo \fP or \f @>foo \fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (>) or minor (<) symbol indicate if the offset point to the end (>) or the beginning (<) of the specified data structure. whith \fB@<\fP we indicate the beginning of the file. Whith \fB@>\fP wh indicate the end of the file. For example \fIprint @>\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@>+3 will assign to the variable $a the length of the file plus 3).
 .SH COMMANDS
 .TP
-.B SAVE [ save; | save(filename); ]
+.B SAVE [ save | save(filename) ]
 saves all the changes into the opened file. This action once performed is unreversible: changes will be permanently written on the disk.
 .TP
-.B OPEN [ open filename; | open(filename); ]
+.B OPEN [ open filename | open(filename) ]
 Closes the file opened if any and then load the specified file and creates all related data structures associated to the file.
 .TP
-.B WHILE [ while(expr) command(s); ]
+.B WHILE [ while(expr) command(s) ]
 a typical while construct.
 .TP
-.B IF-ELSE [ if(expr) command(s); | if(expr) command(s); else command(s); ]
+.B IF-ELSE [ if(expr) command(s) | if(expr) command(s) else command(s) ]
 a typical if-else costruct.
 .TP
-.B PRINT [print expr; | print %fmt expr; ] -- alias pp
+.B PRINT [print expr | print %fmt expr ] -- alias pp
 outputs the result of the expression (numerical or string). The \fB%fmt\fP force a different output mode. \fBfmt\fP indicates the output mode desired. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP for decimal, \fBb\fP for binary output. examples: \fIprint %x 16\fP (outputs 0xa), \fIprint %d 0xa\fP (outputs 16).
 .TP
-.B QUIT [ quit; ]
+.B QUIT [ quit ]
 exit dwarf-ng interpreter.
 .TP
-.B INFO [ info; ]
+.B INFO [ info ]
 display info on opened file.
 .TP
-.B TYPE [ type; ]
+.B TYPE [ type ]
 display the file type of the opened file.
 .TP
-.B FORCE [ force filetype; | force(filetype); ] -- deprecate
+.B FORCE [ force filetype | force(filetype) ] -- deprecate
 force the file type to be 'filetype' value.
 .TP
-.B GROWTH [ growth expr; | growth (expr);]
+.B GROWTH [ growth expr | growth (expr)]
 increase the size of the opened file.
 .TP
-.B SHRINK [ shrink expr; | shrink(expr); ]
+.B SHRINK [ shrink expr | shrink(expr) ]
 decrease the size of the opened file.
 .TP
-.B REFRESH [ refresh; ]
+.B REFRESH [ refresh ]
 unloads and reloads the file strucutres.
 .TP
-.B RELOAD [ reload; ]
+.B RELOAD [ reload ]
 closes the opened file and reopens it reloading all the data structures.
 .TP
-.B MOVE [ move(expr1,expr2,expr3); | move(expr1,+expr2,expr3); | move(expr1,-expr2,expr3); ]
-move blocks of file around. (\fBexpr1=from, expr2=[len|end], expr3=to\fP). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: \flmove(@<,+10,@>ph[0]);\fP moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
+.B MOVE [ move(expr1,expr2,expr3) | move(expr1,+expr2,expr3) | move(expr1,-expr2,expr3) ]
+move blocks of file around. (\fBexpr1=from, expr2=[len|end], expr3=to\fP). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: \flmove(@<,+10,@>ph[0])\fP moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
 .TP
-.B HELP [ help; ]
+.B HELP [ help ]
 display the help menu.
 .TP
-.B INJECT [ inject(expr1,expr2,expr3,expr4); | inject(expr1,expr2,expr3); | inject(expr1,expr2); ]
-injects data inside the opened file. ( \fBexpr1=file|byte, expr2=offs-from, expr3=len, expr4=">>"\fP(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \fB">>"\fP or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (">>") or to the len-offset...dwarf is able to disambiguate. examples: \flinject(0,ph[3]->offset,12);\fP writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]->offset.
+.B INJECT [ inject(expr1,expr2,expr3,expr4) | inject(expr1,expr2,expr3) | inject(expr1,expr2) ]
+injects data inside the opened file. ( \fBexpr1=file|byte, expr2=offs-from, expr3=len, expr4=">>"\fP(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \fB">>"\fP or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (">>") or to the len-offset...dwarf is able to disambiguate. examples: \flinject(0,ph[3]->offset,12)\fP writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]->offset.
 .TP
-.B CREATE [ create(type,offs[,update][,shift]); ]
+.B CREATE [ create(type,offs[,update][,shift]) ]
 creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (\fB">>"\fP) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file.
 .TP
-.B REMOVE [ remove(type,offs[,update[,shift]]); ]
+.B REMOVE [ remove(type,offs[,update[,shift]]) ]
 removes a header. see CREATE for parameters explanation.
 .TP
-.B LEN [ len expr; ]
+.B LEN [ len expr ]
 grouth or shrinks the opened file depending if expr is >0 or <0. LEN will call GROUTH or SHRINK depending on expr sign.
 .TP
-.B NEW [ new; | new filename; | new(filename); ]
+.B NEW [ new | new filename | new(filename) ]
 creates a new empty file.
 .TP
-.B CLOSE [ close; ]
+.B CLOSE [ close ]
 closes the opened file.
 .TP
-.B DUMP [ dump [%fmt] expr; ]
-dumps portion of opened file from expr offset in various formats depending on %fmt. The \fB%fmt\fP force a different output mode. \fBfmt\fP is in the form: xnn (<letter><number>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP for decimal putput \fBs\fP for string output \fBc\fP for char output, \fBb\fP for binary output,\fBe\fP (default) for a nice dump output. examples: \fIdump @<;\fP (dumps the beginning of the file), \fIdump %x3 @<+10;\fP (displays 3 bytes in hex format from 10 positions from the beginning of the file).
+.B DUMP [ dump [%fmt] expr ]
+dumps portion of opened file from expr offset in various formats depending on %fmt. The \fB%fmt\fP force a different output mode. \fBfmt\fP is in the form: xnn (<letter><number>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP for decimal putput \fBs\fP for string output \fBc\fP for char output, \fBb\fP for binary output,\fBe\fP (default) for a nice dump output. examples: \fIdump @<\fP (dumps the beginning of the file), \fIdump %x3 @<+10\fP (displays 3 bytes in hex format from 10 positions from the beginning of the file).
 .TP
-.B EXTRACT [ extract(from,len,file); ]
+.B EXTRACT [ extract(from,len,file) ]
 extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
 .SH FILE TYPES
 .TP
