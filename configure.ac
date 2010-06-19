@@ -1,4 +1,4 @@
-AC_INIT([dwarf],[0.1])
+AC_INIT([dwarf],[0.2])
 dwarf_version=`cat VERSION`
 VERSION=$dwarf_version
 AM_INIT_AUTOMAKE(dwarf,$dwarf_version)
