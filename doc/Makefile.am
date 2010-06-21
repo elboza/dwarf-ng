@@ -15,7 +15,7 @@ all:	docs
 docs:        dwarf.man.html
 
 dwarf.man.html: dwarf.man
-	if [ -f man2html ];	then man2html dwarf.man>dwarf.man.html ;fi
+	if [ -f /usr/bin/man2html ];	then man2html dwarf.man>dwarf.man.html ;fi
 
 clean:
 	        rm -f  dwarf.man.html 

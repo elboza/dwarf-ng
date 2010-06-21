@@ -1,3 +1,4 @@
+EXTRA_DIST = lang.l lang.y
 AUTOMAKE_OPTION = nostdinc no-dependencies
 #dwarf_LDADD = 
 #AM_CFLAGS = -Wall
@@ -44,5 +45,4 @@ noinst_HEADERS =
 
 man_MANS = 
 
-EXTRA_DIST = 
 #distdir=../$(PACKAGE)-$(VERSION)
