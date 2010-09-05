@@ -4,7 +4,7 @@ Content-type: text/html
 <HTML><HEAD><TITLE>Man page of dwarf-ng</TITLE>
 </HEAD><BODY>
 <H1>dwarf-ng</H1>
-Section: User Commands  (1)<BR>Updated: (c) 2007-2009 Fernando Iazeolla<BR><A HREF="#index">Index</A>
+Section: User Commands  (1)<BR>Updated: (c) 2007-2010 Fernando Iazeolla<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -39,7 +39,7 @@ command mode (executes commands)
 <P>
 
 For example,
-<B>dwarf -c 'print 2+2;'</B>
+<B>dwarf -c 'print 2+2'</B>
 
 will output:
 4
@@ -56,6 +56,10 @@ loads and executes file script.
 
 <DD>
 shows the file type.
+<DT><B>-v, --version</B>
+
+<DD>
+show dwarf-ng's version number
 <DT>If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)<DD>
 </DL>
 <A NAME="lbAF">&nbsp;</A>
@@ -70,110 +74,110 @@ shows the file type.
 recognizes two types of variables: the normal variables (simply called variables) and the structured variables.
 The normal <B>variables</B> are preceded by the dollar symbol (<B>$</B>) and are created by the user for normal variable operation (<I>i.e. $a=5; $b=$a+3; print $b;</I> ).
 The <B>structured variables</B> are created by <B>dwarf</B> when it loads a file into memory. The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
-<I>print s-&gt;ph_num;</I> will print the ph_num variable of the main header (s) of a Elf file.
-<I>s-&gt;sh_num=3;</I> will modify the sh_num (number of section headers) in the main header (s) of the Elf file.
+<I>print s-&gt;ph_num</I> will print the ph_num variable of the main header (s) of a Elf file.
+<I>s-&gt;sh_num=3</I> will modify the sh_num (number of section headers) in the main header (s) of the Elf file.
 <DT><B>EXPRESSIONS</B>
 
 <DD>
-Expressions <B>EXPR</B> are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a <B>0x</B>...example: $a=0x10; ($a is 16 decimal!).
+Expressions <B>EXPR</B> are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a <B>0x</B>...example: $a=0x10 ($a is 16 decimal!).
 <DT><B>OFFSETS</B>
 
 <DD>
-offsets syntax is @&lt;foo  or @&gt;foo  where <I>foo</I> is a symbol referring to a specific file data structure. The major (&gt;) or minor (&lt;) symbol indicate if the offset point to the end (&gt;) or the beginning (&lt;) of the specified data structure. whith <B>@&lt;</B> we indicate the beginning of the file. Whith <B>@&gt;</B> wh indicate the end of the file. For example <I>print @&gt;;</I> will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@&gt;+3; will assign to the variable $a the length of the file plus 3).
+offsets syntax is @&lt;foo  or @&gt;foo  where <I>foo</I> is a symbol referring to a specific file data structure. The major (&gt;) or minor (&lt;) symbol indicate if the offset point to the end (&gt;) or the beginning (&lt;) of the specified data structure. whith <B>@&lt;</B> we indicate the beginning of the file. Whith <B>@&gt;</B> wh indicate the end of the file. For example <I>print @&gt;</I> will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@&gt;+3 will assign to the variable $a the length of the file plus 3).
 </DL>
 <A NAME="lbAG">&nbsp;</A>
 <H2>COMMANDS</H2>
 
 <DL COMPACT>
-<DT><B>SAVE [ save; | save(filename); ]</B>
+<DT><B>SAVE [ save | save(filename) ]</B>
 
 <DD>
 saves all the changes into the opened file. This action once performed is unreversible: changes will be permanently written on the disk.
-<DT><B>OPEN [ open filename; | open(filename); ]</B>
+<DT><B>OPEN [ open filename | open(filename) ]</B>
 
 <DD>
 Closes the file opened if any and then load the specified file and creates all related data structures associated to the file.
-<DT><B>WHILE [ while(expr) command(s); ]</B>
+<DT><B>WHILE [ while(expr) command(s) ]</B>
 
 <DD>
 a typical while construct.
-<DT><B>IF-ELSE [ if(expr) command(s); | if(expr) command(s); else command(s); ]</B>
+<DT><B>IF-ELSE [ if(expr) command(s) | if(expr) command(s) else command(s) ]</B>
 
 <DD>
 a typical if-else costruct.
-<DT><B>PRINT [print expr; | print %fmt expr; ]</B>
+<DT><B>PRINT [print expr | print %fmt expr ] -- alias pp</B>
 
 <DD>
 outputs the result of the expression (numerical or string). The <B>%fmt</B> force a different output mode. <B>fmt</B> indicates the output mode desired. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> for decimal, <B>b</B> for binary output. examples: <I>print %x 16</I> (outputs 0xa), <I>print %d 0xa</I> (outputs 16).
-<DT><B>QUIT [ quit; ]</B>
+<DT><B>QUIT [ quit ]</B>
 
 <DD>
-quits dwarf.
-<DT><B>INFO [ info; ]</B>
+exit dwarf-ng interpreter.
+<DT><B>INFO [ info ]</B>
 
 <DD>
 display info on opened file.
-<DT><B>TYPE [ type; ]</B>
+<DT><B>TYPE [ type ]</B>
 
 <DD>
 display the file type of the opened file.
-<DT><B>FORCE [ force filetype; | force(filetype); ]</B>
+<DT><B>FORCE [ force filetype | force(filetype) ] -- deprecate</B>
 
 <DD>
 force the file type to be 'filetype' value.
-<DT><B>GROWTH [ growth expr; | growth (expr);]</B>
+<DT><B>GROWTH [ growth expr | growth (expr)]</B>
 
 <DD>
-growth the file.
-<DT><B>SHRINK [ shrink expr; | shrink(expr); ]</B>
+increase the size of the opened file.
+<DT><B>SHRINK [ shrink expr | shrink(expr) ]</B>
 
 <DD>
-shrink the file.
-<DT><B>REFRESH [ refresh; ]</B>
+decrease the size of the opened file.
+<DT><B>REFRESH [ refresh ]</B>
 
 <DD>
 unloads and reloads the file strucutres.
-<DT><B>RELOAD [ reload; ]</B>
+<DT><B>RELOAD [ reload ]</B>
 
 <DD>
 closes the opened file and reopens it reloading all the data structures.
-<DT><B>MOVE [ move(expr1,expr2,expr3); | move(expr1,+expr2,expr3); | move(expr1,-expr2,expr3); ]</B>
+<DT><B>MOVE [ move(expr1,expr2,expr3) | move(expr1,+expr2,expr3) | move(expr1,-expr2,expr3) ]</B>
 
 <DD>
-move blocks of file around. (<B>expr1=from, expr2=[len|end], expr3=to</B>). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move(@&lt;,+10,@&gt;ph[0]); moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
-<DT><B>HELP [ help; ]</B>
+move blocks of file around. (<B>expr1=from, expr2=[len|end], expr3=to</B>). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move(@&lt;,+10,@&gt;ph[0]) moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
+<DT><B>HELP [ help ]</B>
 
 <DD>
 display the help menu.
-<DT><B>INJECT [ inject(expr1,expr2,expr3,expr4); | inject(expr1,expr2,expr3); | inject(expr1,expr2); ]</B>
+<DT><B>INJECT [ inject(expr1,expr2,expr3,expr4) | inject(expr1,expr2,expr3) | inject(expr1,expr2) ]</B>
 
 <DD>
-injects data inside the opened file. ( <B>expr1=file|byte, expr2=offs-from, expr3=len, expr4=&quot;&gt;&gt;&quot;</B>(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be <B>&quot;&gt;&gt;&quot;</B> or omitted. if omitted the file is not grouth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is moitted expr3 can refer to the shift value (&quot;&gt;&gt;&quot;) or to the len-offset...dwarf is able to disambiguate. examples: inject(0,ph[3]-&gt;offset,12); writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]-&gt;offset.
-<DT><B>CREATE [ create(type,offs[,update][,shift]); ]</B>
+injects data inside the opened file. ( <B>expr1=file|byte, expr2=offs-from, expr3=len, expr4=&quot;&gt;&gt;&quot;</B>(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be <B>&quot;&gt;&gt;&quot;</B> or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (&quot;&gt;&gt;&quot;) or to the len-offset...dwarf is able to disambiguate. examples: inject(0,ph[3]-&gt;offset,12) writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]-&gt;offset.
+<DT><B>CREATE [ create(type,offs[,update][,shift]) ]</B>
 
 <DD>
 creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (<B>&quot;&gt;&gt;&quot;</B>) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file.
-<DT><B>REMOVE [ remove(type,offs[,update[,shift]]); ]</B>
+<DT><B>REMOVE [ remove(type,offs[,update[,shift]]) ]</B>
 
 <DD>
 removes a header. see CREATE for parameters explanation.
-<DT><B>LEN [ len expr; ]</B>
+<DT><B>LEN [ len expr ]</B>
 
 <DD>
 grouth or shrinks the opened file depending if expr is &gt;0 or &lt;0. LEN will call GROUTH or SHRINK depending on expr sign.
-<DT><B>NEW [ new; | new filename; | new(filename); ]</B>
+<DT><B>NEW [ new | new filename | new(filename) ]</B>
 
 <DD>
 creates a new empty file.
-<DT><B>CLOSE [ close; ]</B>
+<DT><B>CLOSE [ close ]</B>
 
 <DD>
 closes the opened file.
-<DT><B>DUMP [ dump [%fmt] expr; ]</B>
+<DT><B>DUMP [ dump [%fmt] expr ]</B>
 
 <DD>
-dumps portion of opened file from expr offset in various formats depending on %fmt. The <B>%fmt</B> force a different output mode. <B>fmt</B> is in the form: xnn (&lt;letter&gt;&lt;number&gt;) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> for decimal putput <B>s</B> for string output <B>c</B> for char output, <B>b</B> for binary output,<B>e</B> (default) for a nice dump output. examples: <I>dump @&lt;;</I> (dumps the beginning of the file), <I>dump %x3 @&lt;+10;</I> (displays 3 bytes in hex format from 10 positions from the beginning of the file).
-<DT><B>EXTRACT [ extract(from,len,file); ]</B>
+dumps portion of opened file from expr offset in various formats depending on %fmt. The <B>%fmt</B> force a different output mode. <B>fmt</B> is in the form: xnn (&lt;letter&gt;&lt;number&gt;) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> for decimal putput <B>s</B> for string output <B>c</B> for char output, <B>b</B> for binary output,<B>e</B> (default) for a nice dump output. examples: <I>dump @&lt;</I> (dumps the beginning of the file), <I>dump %x3 @&lt;+10</I> (displays 3 bytes in hex format from 10 positions from the beginning of the file).
+<DT><B>EXTRACT [ extract(from,len,file) ]</B>
 
 <DD>
 extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
@@ -211,12 +215,12 @@ foo
 <H2>AUTHOR</H2>
 
 <PRE>
-Fernando Iazeolla &lt; <A HREF="mailto:xnando@yahoo.it">xnando@yahoo.it</A> &gt; - founder &amp; core developer.
+Fernando Iazeolla &lt; xnando _GUESS_ cryptolab.net &gt; - founder &amp; core developer.
 </PRE><A NAME="lbAL">&nbsp;</A>
 <H2>COPYRIGHT</H2>
 
 <PRE>
-Copyright (C) 2007-2008 Fernando Iazeolla &lt; <A HREF="mailto:xnando@yahoo.it">xnando@yahoo.it</A> &gt;
+Copyright (C) 2007-2010 Fernando Iazeolla &lt; xnando _GUESS_ cryptolab.net &gt;
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -251,6 +255,6 @@ along with this program. If not, see &lt;<A HREF="http://www.gnu.org/licenses/">
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 18:15:14 GMT, August 05, 2009
+Time: 20:45:50 GMT, June 21, 2010
 </BODY>
 </HTML>

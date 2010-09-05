@@ -31,7 +31,7 @@ struct m_files mfiles;
 
 void usage()
 {
-	printf("dwarf-ng-%s (c) Fernando Iazeolla < xnando @ yahoo . it >\n",VERSION);
+	printf("dwarf-ng-%s (c) Fernando Iazeolla < xnando _GUESS_ cryptolab . net >\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
@@ -45,7 +45,7 @@ void usage()
 }
 void usage_b()
 {
-	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2009\n",VERSION);
+	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2010\n",VERSION);
 	printf("for help type: dwarf --help\n");
 }
 void get_defaults_arg(struct m_action *action)
