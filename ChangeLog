@@ -15,7 +15,12 @@ TODO implement 'help' command
 * inject function implemented
 * add/create header function implemented
 
-******    dwarf-ng, Version
+******    dwarf-ng, Version 0.2
 
 * implemented a new elf sh_str_table
 * implemented comment in language
+
+******    dwarf-ng, Version 0.2.1
+
+* fixed bug on command line input string
+* fixed bug in extended_dump putput

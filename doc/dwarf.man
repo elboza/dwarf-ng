@@ -35,10 +35,14 @@ show dwarf-ng's version number
 If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)
 .SH THE DWARF'S LANGUAGE
 .TP 
+.B COMMAND SEPARATOR
+the command separator is the semicolon character '\fB;\fP' .
+{cmd};{cmd}
+.TP
 .B VARIABLES
 .B dwarf-ng 
 recognizes two types of variables: the normal variables (simply called variables) and the structured variables.
-The normal \fBvariables\fP are preceded by the dollar symbol (\fB$\fP) and are created by the user for normal variable operation (\fIi.e. $a=5; $b=$a+3; print $b;\fP ).
+The normal \fBvariables\fP are preceded by the dollar symbol (\fB$\fP) and are created by the user for normal variable operation (\fIi.e. $a=5; $b=$a+3; print $b\fP ).
 The \fBstructured variables\fP are created by \fBdwarf\fP when it loads a file into memory. The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
 \fIprint s->ph_num\fP will print the ph_num variable of the main header (s) of a Elf file.
 \fIs->sh_num=3\fP will modify the sh_num (number of section headers) in the main header (s) of the Elf file.

@@ -227,19 +227,24 @@ char* rl_gets (char *prompt)
 }
 void execute(char *s)
 {
-	int pipedesc[2],r,len;
-	FILE  *fp;
+	//int pipedesc[2],r,len;
+	//FILE  *fp;
+	//if(!s) s="quit";
+	//len=strlen(s);
+	//r=pipe(pipedesc);
+	//if(r!=0){die("pipe error\n");}
+	//r=write(pipedesc[1],s,len);
+	//if(r!=len){die("pipe write error");}
+	//close(pipedesc[1]);
+	//fp=fdopen(pipedesc[0],"r");
+	//yyin=fp;
+	//yyparse();
+	//fclose(fp);
+	
 	if(!s) s="quit";
-	len=strlen(s);
-	r=pipe(pipedesc);
-	if(r!=0){die("pipe error\n");}
-	r=write(pipedesc[1],s,len);
-	if(r!=len){die("pipe write error");}
-	close(pipedesc[1]);
-	fp=fdopen(pipedesc[0],"r");
-	yyin=fp;
+	yy_scan_string(s);
 	yyparse();
-	fclose(fp);
+	yylex_destroy();
 }
 void execute_script(char *file)
 {

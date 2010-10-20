@@ -1,0 +1,27 @@
+******** LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+    
+    
+******** HOWTO INSTALL
+
+$ ./autogen.sh
+$ ./configure
+$ make
+# sudo make install
+
+* readline/history
+
+to take advantage of all the features of the readline/history library, make sure to use the GNU version 5.0 or above.
+In Mac OS X the default readline is the BSD 4 version. you can substitute or soft link the GNU versions (sould be located at /opt/local/include/readline/ and /opt/local/lib/librealine.dylib).

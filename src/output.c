@@ -106,13 +106,14 @@ void extended_dump(off_t offset,struct output_format *fmt)
 	{
 		printf("%.10x ",(unsigned int)temp_offset);
 		uc=(uint8_t*)(faddr+temp_offset);
-		for(n=0;n<=DUMP_MAX_LINE;n++)
+		for(n=0;n<DUMP_MAX_LINE;n++)
 		{
 			printf("%.2x",*(uc++));
-			if(n==DUMP_MAX_LINE/2) printf("-"); else printf(" ");
+			if(n==(DUMP_MAX_LINE/2)-1) printf("-"); else printf(" ");
 		}
 		uc=(uint8_t*)(faddr+temp_offset);
-		for(n=0;n<=DUMP_MAX_LINE;n++)
+		printf(" ");
+		for(n=0;n<DUMP_MAX_LINE;n++)
 		{
 			if(isprint(*uc)) printf("%c",*uc); else printf(".");
 			uc++;

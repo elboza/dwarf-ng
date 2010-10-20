@@ -95,7 +95,7 @@ void parse_args(int argc,char **argv,struct m_action *action)
 		switch(c)
 		{
 			case 'i':
-				printf("dwarf-ng Copyright (C) 2007-2009 Fernando Iazeolla\n");
+				printf("dwarf-ng Copyright (C) 2007-2010 Fernando Iazeolla\n");
     				printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
     				printf("This is free software (GNU GPLv2), and you are welcome to redistribute it\n");
     				printf("under GNU GPL version 2 (see <http://www.gnu.org/licenses/>).\n");
