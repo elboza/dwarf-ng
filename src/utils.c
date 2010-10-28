@@ -122,11 +122,13 @@ void file_probe(int verbose)
 	//probe if is mach-o
 	if(faddr==NULL) {printf("no file loaded!\n"); return;}
 	mac=(struct mach_header*)faddr;
-	if((mac->magic==MH_MAGIC)||(mac->magic==MH_CIGAM))
+	if((mac->magic==MH_MAGIC)||(mac->magic==MH_CIGAM)||(mac->magic==MH_MAGIC_64)||(mac->magic==MH_CIGAM_64))
 	{
 		file_type=FT_MACHO;
 		if(mac->magic==MH_MAGIC) file_endian=cpu_endian;
 		if(mac->magic==MH_CIGAM) file_endian=(~cpu_endian) & 1;
+		if(mac->magic==MH_MAGIC_64) file_endian=cpu_endian;
+		if(mac->magic==MH_CIGAM_64) file_endian=(~cpu_endian) & 1;
 		if(verbose) printf("File type: Mach-O\n");
 		return;
 	}
