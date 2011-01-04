@@ -6,7 +6,7 @@ dwarf-ng - a little and powerful object file manipulation tool.
 .SH DESCRIPTION
 .B dwarf-ng
 is a powerful object file manipulation tools in the spirit of \fIgdb\fP. with \fIdwarf-ng\fP you can read and edit all the file's section headers as well as the raw data. With \fIdwarf-ng\fP you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. \fIdwarf-ng\fP also permits to inject easily new headers and pieces of code/data into the file.
-\fIdwarf-ng\fP currently handles \fIelf\fP, \fIPE\fP (Portable executables) and \fIMach-O\fP files format. In the future new files type will be added.
+\fIdwarf-ng\fP currently handles \fIelf\fP (32bit), \fIPE\fP (Portable executables, 32bit) and \fIMach-O (32bit)\fP files format. In the future new files type will be added.
 .SH OPTIONS
 .TP
 .B -i, --interactive, --shell
