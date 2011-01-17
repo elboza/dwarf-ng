@@ -1,0 +1,478 @@
+/*
+ libdwarf.c : functions implementation.
+ 
+ (c) 2007-2011 Fernando Iazeolla
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#include<stdlib.h>
+#include<string.h>
+#include<stdio.h>
+#include<errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include<sys/mman.h>
+#include<fcntl.h>
+#include<math.h>
+#include"libdwarf.h"
+
+extern FILE *cfgyyin;
+extern int errno,cfgyydebug;
+
+void dw_init()
+{
+	char *envstr,str[FILENAME_LEN];
+	cfg_reset();
+	
+	filecfg_first=NULL;
+	filecfg_last=NULL;
+	fc_ptr=NULL;
+	gv_first=NULL;
+	gv_last=NULL;
+	
+	envstr=getenv("TMPDIR");
+	if(envstr) strncpy(cfg.copydir,envstr,FILENAME_LEN);
+	readcfg("/etc/dwarfrc");
+	envstr=getenv("HOME");
+	if(envstr)
+	{
+		sprintf(str,"%s/.dwarfrc",envstr);
+		readcfg(str);
+	}
+}
+void readcfg(char *s)
+{
+	FILE *fp;
+	int x;
+	fp=fopen(s,"r");
+	if(fp==NULL) return;
+	cfgyyin=fp;
+//	cfgyydebug=1;   /*use -t parameter in bison*/
+	cfgyyparse();
+	fclose(fp);
+}
+void cfg_reset(void)
+{
+	cfg.writable=false;
+	cfg.can_grow=false;
+	cfg.work_on_copy=false;
+	cfg.changed_altered=false;
+	cfg.verbose=0;
+	cfg.fd=0;
+	cfg.cpu_endian=probe_cpu_endian();
+	cfg.file_endian=little_endian;
+	cfg.file_bit_class=0;
+	cfg.file_cpu_type=0;
+	cfg.faddr=NULL;
+	strcpy(cfg.copydir,"/tmp");
+	strcpy(cfg.copyname,"dw_temp_file");
+	cfg.next=NULL;
+	cfg.prev=NULL;
+}
+struct _cfg* newfilecfg(void)
+{
+	struct _cfg *ptr;
+	ptr=malloc(sizeof(struct _cfg));
+	if(!ptr) {warn("error allocating new filecfg struct"); return NULL;}
+	ptr->writable=cfg.writable;
+	ptr->can_grow=cfg.can_grow;
+	ptr->work_on_copy=cfg.work_on_copy;
+	ptr->changed_altered=cfg.changed_altered;
+	ptr->verbose=cfg.verbose;
+	ptr->fd=cfg.fd;
+	ptr->cpu_endian=cfg.cpu_endian;
+	ptr->file_endian=cfg.file_endian;
+	ptr->file_bit_class=cfg.file_bit_class;
+	ptr->file_cpu_type=cfg.file_cpu_type;
+	ptr->faddr=cfg.faddr;
+	strcpy(ptr->copydir,cfg.copydir);
+	strcpy(ptr->copyname,cfg.copyname);
+	ptr->prev=NULL;
+	ptr->next=NULL;
+	
+	return ptr;
+}
+int addfilecfg(struct _cfg *ptr)
+{
+	if(ptr==NULL) return -1;
+	if(filecfg_first==NULL)
+	{
+		filecfg_first=ptr;
+	}
+	else
+	{
+		filecfg_last->next=ptr;
+		ptr->prev=filecfg_last;
+	}
+	filecfg_last=ptr;
+	return 0;
+}
+void rmfilecfg(struct _cfg *ptr)
+{
+	if(ptr==NULL) return;
+	if(ptr->prev) ptr->prev->next=ptr->next;
+	if(ptr->next) ptr->next->prev=ptr->prev;
+	if(ptr==filecfg_first) filecfg_first=ptr->next;
+	if(ptr==filecfg_last) filecfg_last=ptr->prev;
+	free(ptr);
+}
+struct _cfg* getnewfilecfg(void)
+{
+	struct _cfg *ptr;
+	ptr=newfilecfg();
+	addfilecfg(ptr);
+	return ptr;
+}
+void deleteallfilecfg(void)
+{
+	struct _cfg *ptr;
+	ptr=filecfg_first;
+	while(ptr)
+	{
+		if(ptr->next)
+		{
+			ptr=ptr->next;
+			if(ptr) free(ptr->prev);
+		}
+		else
+		{
+			free(ptr);
+			ptr=NULL;
+		}
+	}
+}
+void getcopyname(char *s)
+{
+	static int num=0;
+	char tmp[FILENAME_LEN];
+	strncpy(tmp,s,FILENAME_LEN);
+	sprintf(s,"%s/%d%s",fc_ptr->copydir,num++,tmp);
+}
+void file_open(char *s)
+{
+	enum{opencpspec,opencpnorm,opennorm,noopen};
+	struct stat st;
+	int x,opentype;
+	char openstr[255],execstr[1024];
+	off_t filesize;
+	fc_ptr=getnewfilecfg();
+	if(!fc_ptr) {warn("error getting new file cfg");return;}
+	x=stat(s,&st);
+	if(x==-1) {warn("error obtaining stat info");return;}
+	switch (st.st_mode & S_IFMT) {
+		case S_IFBLK:
+		case S_IFCHR:
+			opentype=opencpspec;
+			break;
+		case S_IFDIR:  warn("cannot open directory files\n"); opentype=noopen;break;
+		case S_IFIFO:  warn("cannot open FIFO/pipe files\n"); opentype=noopen;break;
+		case S_IFLNK:  warn("cannot open symlink files\n");   opentype=noopen;break;
+		case S_IFSOCK: warn("cannot open socket files\n");    opentype=noopen;break;
+		case S_IFREG:  if(fc_ptr->work_on_copy) opentype=opencpnorm; else opentype=opennorm;            
+			break;
+		default:       warn("unknown file\n");                opentype=noopen;break;
+	}
+	if(opentype==noopen) {rmfilecfg(fc_ptr); return;}
+	if((opentype==opencpspec)||(opentype==opencpnorm))
+	{
+		fc_ptr->work_on_copy=true;
+		getcopyname(fc_ptr->copyname);
+		x=512*10;
+		if(opentype==opencpspec)
+		{
+			sprintf(openstr,"bs=%d count=1",x);
+			fc_ptr->can_grow=false;
+			fc_ptr->writable=false;
+		}
+		else 
+		{
+			strcpy(openstr,"");
+			fc_ptr->can_grow=true;
+			fc_ptr->writable=true;
+		}
+		sprintf(execstr,"dd if=%s of=%s %s",s,fc_ptr->copyname,openstr);
+		x=system(execstr);
+		if(x==-1) {warn("error making copyfile");rmfilecfg(fc_ptr);return;}
+		fc_ptr->fd=open(fc_ptr->copyname,O_RDWR);
+	}
+	if(opentype==opennorm)
+	{
+		fc_ptr->can_grow=true;
+		fc_ptr->fd=open(s,O_RDWR);
+	}
+	if(fc_ptr->fd==-1)
+	{
+		printf("error opening file.\n");
+		if(errno==EACCES) printf("file access not allowed, check permissions.\n");
+		rmfilecfg(fc_ptr);
+		return;
+	}
+	strncpy(fc_ptr->name,s,FILENAME_LEN);
+	filesize=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
+	fc_ptr->faddr=(char*)mmap(NULL,(size_t)filesize,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
+	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");close(fc_ptr->fd);rmfilecfg(fc_ptr);}
+	file_probe();
+}
+void file_close(void)
+{
+	int x;
+	char cmd[1024];
+	off_t filesize;
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(fc_ptr->fd)
+	{
+		filesize=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
+		x=munmap(fc_ptr->faddr,(size_t)filesize);
+		close(fc_ptr->fd);
+		if(fc_ptr->work_on_copy)
+		{
+			sprintf(cmd,"rm %s",fc_ptr->copyname);
+			x=system(cmd);
+			if(x==-1) warn("could not remove the temp file !");
+		}
+		rmfilecfg(fc_ptr);
+		fc_ptr=NULL;
+	}
+	
+}
+void file_save(char *s)
+{
+	int x;
+	char cmd[4096];
+	x=0;
+	if(!fc_ptr) {printf("no file opened.\n"); return;}
+	if(!s) s=strdup(fc_ptr->name);
+	if(!s) {printf("error saving file.\n"); return;}
+	if(!fc_ptr->writable) {warn("file not writable"); return;}
+	if(fc_ptr->work_on_copy)
+	{
+		sprintf(cmd,"cp %s %s",fc_ptr->copyname,s);
+		x=system(cmd);
+		if(x==-1) warn("error saving file!");
+	}
+	if(x!=-1) printf("file saved.\n");
+}
+off_t filesize(int fd)
+{
+	off_t len;
+	if(!fc_ptr) {printf("no file opened!\n");return -1;}
+	if(fd<1) {printf("no file opened.\n");return -1;}
+	len=lseek(fd,(off_t)0,SEEK_END);
+	return len;
+}
+void prettybyte(char *s,off_t num)
+{
+	off_t Gb,Mb,kB,b;
+	off_t x;
+	char a[255];
+	Gb=1000000000;
+	Mb=1000000;
+	kB=1000;
+	b=1;
+	if(num>=Gb)
+	{
+			x=(off_t)(lround(num/Gb));
+			dottedbyte(a,x);
+			sprintf(s,"%s Gb",a);
+	}
+	if(num>=Mb)
+	{
+			x=(off_t)(round(num/Mb));
+			dottedbyte(a,x);
+			sprintf(s,"%s Mb",a);
+	}
+	if(num>=kB)
+	{
+			x=(off_t)(round(num/kB));
+			dottedbyte(a,x);
+			sprintf(s,"%s kB",a);
+			return;
+	}
+	if(num>=b)
+	{
+			x=num;
+			dottedbyte(a,x);
+			sprintf(s,"%s bytes",a);
+	}
+}
+void dottedbyte(char *s,off_t num)
+{
+	int x,y,z;
+	char aux[255];
+	sprintf(s,"%ld",num);
+	x=strlen(s)-1;
+	y=0;
+	z=0;
+	while(x>=0)
+	{
+			aux[y++]=s[x--];
+			z++;
+			if((z % 3)==0) aux[y++]='.';
+	}
+	aux[y]='\0';
+	x=strlen(aux)-1;
+	y=0;
+	while(x>=0)
+	{
+			s[y++]=aux[x--];
+	}
+	s[y]='\0';
+}
+int growth(off_t len)
+{
+	off_t offset;
+	int n;
+	char *x;
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr->can_grow) {printf("this file cannot change its size\n"); return false;}
+	if(!fc_ptr->fd) {printf("no file opened!\n");return false;}
+	x=(char*)malloc(len);
+	if(x==NULL) {warn("error allocating mem");return false;}
+	offset=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
+	n=write(fc_ptr->fd,x,(size_t) len);
+	free(x);
+	fc_ptr->changed_altered=true;
+	#if HAVE_MREMAP
+	fc_ptr->faddr=(char*)mremap(fc_ptr->faddr,(size_t) offset,(size_t) (offset+len),MAP_FILE|MAP_SHARED);
+	#else
+	munmap(fc_ptr->faddr,(size_t) offset);
+	fc_ptr->faddr=(char*)mmap(NULL,(size_t) (offset+len),PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
+	#endif
+	if(fc_ptr->faddr==MAP_FAILED) die("error on mmap(ing) the file");
+	return true;
+}
+int shrink(off_t len)
+{
+	off_t offset,new_offset;
+	int n;
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr->can_grow) {printf("this file cannot change its size\n"); return false;}
+	if(!fc_ptr->fd) {warn("no file opened!\n");return false;}
+	offset=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
+	new_offset=offset-len;
+	n=ftruncate(fc_ptr->fd,new_offset);
+	fc_ptr->changed_altered=true;
+	if(n==-1) die("error shrinking file");
+	#if HAVE_MREMAP
+	fc_ptr->faddr=(char*)mremap(fc_ptr->faddr,(size_t) offset,(size_t) new_offset,MAP_FILE|MAP_SHARED);
+	#else
+	munmap(fc_ptr->faddr,(size_t) offset);
+	fc_ptr->faddr=(char*)mmap(NULL,(size_t)new_offset,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
+	#endif
+	if(fc_ptr->faddr==MAP_FAILED) die("error on mmap(ing) the file");
+	return true;
+}
+void extract(off_t from,off_t len,char *file)
+{
+	char *mem;
+	off_t i;
+	FILE *fp;
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	mem=(char*)fc_ptr->faddr;
+	mem+=from;
+	fp=fopen(file,"a");
+	if(!fp) {printf("error opening %s file.\n",file); return;}
+	for(i=0;i<len;i++)
+	{
+		fputc((int)(*(mem++)),fp);
+	}
+	fclose(fp);
+}
+void move(off_t from,off_t end,off_t to)
+{
+	#define reversed 1
+	#define normal 0
+	off_t to_end,tmp,i;
+	int direction;
+	char *mem;
+	//printf("move from:%d end:%d to%d\n",from,end,to);
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr->faddr) {printf("no files is opened!\n");return;}
+	if(end<from)
+	{
+		tmp=from;
+		from=end;
+		end=tmp;
+	}
+	to_end=end-from+to;
+	//printf("* from:%d end:%d to:%d to_end:%d\n",from,end,to,to_end);
+	if((from<to) && (to<end)) direction=reversed; else direction=normal;
+	mem=(char*)fc_ptr->faddr;
+	if(direction==reversed)
+	{
+		printf("reversed\n");
+		for(i=end;i>=from;i--)
+		{
+			mem[to_end]=mem[i];
+			to_end--;
+		}
+	}
+	else
+	{
+		printf("normal\n");
+		for(i=from;i<=end;i++)
+		{
+			mem[to]=mem[i];
+			to++;
+		}
+	}
+	fc_ptr->changed_altered=true;
+}
+int mod_len(off_t len)
+{
+	if(len<0) return (shrink(-len)); else return (growth(len));
+}
+void move_r_pos(off_t from,off_t len,off_t to)
+{
+	move(from,from+len,to);
+}
+void inject_byte(int data,off_t from,off_t len,int shift)
+{
+	off_t i;
+	char *mem,cdata;
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr->fd) {printf("no file opened!\n");return;}
+	//printf("inject byte...%d %d %d %d\n",data,from,len,shift);
+	cdata=(char)data;
+	mem=(char*)fc_ptr->faddr;
+	if(shift) {if(!(mod_len(len))){return;};move(from,filesize(fc_ptr->fd),from+len); }
+	mem+=from;
+	for(i=0;i<len;i++,mem++) *mem=cdata;
+	fc_ptr->changed_altered=true;
+}
+void inject_file(char *file,off_t from,off_t len,int shift)
+{
+	off_t i;
+	char *mem,cdata;
+	FILE *fp;
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr->fd) {printf("no file opened!\n");return;}
+	//printf("inject from file...%s %d %d %d\n",file,from,len,shift);
+	mem=(char*)fc_ptr->faddr;
+	fp=fopen(file,"r");
+	if(fp==NULL) {printf("error opening file to inject.\n"); return;}
+	if(len==-1) if((fseek(fp,0L,SEEK_END))==0) len=ftell(fp);
+	rewind(fp);
+	if(shift) {if(!(mod_len(len))){fclose(fp);return;};move(from,filesize(fc_ptr->fd),from+len); }
+	mem+=from;
+	for(i=0;i<len;i++,mem++)
+	{
+		cdata=(char)fgetc(fp);
+		*mem=cdata;
+		//to code: check if mem goes out of bound !!!
+	}
+	fclose(fp);
+	fc_ptr->changed_altered=true;
+}
