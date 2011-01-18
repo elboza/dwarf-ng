@@ -1,10 +1,8 @@
-Content-type: text/html
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML><HEAD><TITLE>Man page of dwarf-ng</TITLE>
 </HEAD><BODY>
 <H1>dwarf-ng</H1>
-Section: User Commands  (1)<BR>Updated: (c) 2007-2010 Fernando Iazeolla<BR><A HREF="#index">Index</A>
+Section: User Commands  (1)<BR>Updated: (c) 2007-2011 Fernando Iazeolla<BR><A HREF="#index">Index</A>
 <A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
 
 <A NAME="lbAB">&nbsp;</A>
@@ -22,7 +20,7 @@ dwarf-ng - a little and powerful object file manipulation tool.
 <B>dwarf-ng</B>
 
 is a powerful object file manipulation tools in the spirit of <I>gdb</I>. with <I>dwarf-ng</I> you can read and edit all the file's section headers as well as the raw data. With <I>dwarf-ng</I> you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. <I>dwarf-ng</I> also permits to inject easily new headers and pieces of code/data into the file.
-<I>dwarf-ng</I> currently handles <I>elf</I> (32bit), <I>PE</I> (Portable executables, 32bit) and <I>Mach-O (32bit)</I> files format. In the future new files type will be added.
+<I>dwarf-ng</I> currently handles <I>Raw</I>, <I>elf</I> (Elf32 and Elf64), <I>PE</I> (Portable executables, PE32 and PE+) and <I>Mach-O (32 and 64 bit)</I> files format. In the future new files type will be added.
 <A NAME="lbAE">&nbsp;</A>
 <H2>OPTIONS</H2>
 
@@ -77,43 +75,43 @@ the command separator is the semicolon character '<B>;</B>' .
 <B>dwarf-ng </B>
 
 recognizes two types of variables: the normal variables (simply called variables) and the structured variables.
-The normal <B>variables</B> are preceded by the dollar symbol (<B>$</B>) and are created by the user for normal variable operation (<I>i.e. $a=5; $b=$a+3; print $b</I> ).
-The <B>structured variables</B> are created by <B>dwarf</B> when it loads a file into memory. The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
-<I>print s-&gt;ph_num</I> will print the ph_num variable of the main header (s) of a Elf file.
-<I>s-&gt;sh_num=3</I> will modify the sh_num (number of section headers) in the main header (s) of the Elf file.
+The normal <B>variables</B> are litteral words and are created by the user for normal variable operation (<I>i.e. a=5; b=a+3; print b</I> ).
+The <B>structured variables</B> are created by <B>dwarf</B> when it loads a file into memory and are preceded by the dollar symbol (<B>$</B>). The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
+<I>print $elf::ph_num</I> will print the ph_num variable of the main header ($elf) of a Elf file.
+<I>$elf::sh_num=3</I> will modify the sh_num (number of section headers) in the main header ($elf) of the Elf file.
 <DT><B>EXPRESSIONS</B>
 
 <DD>
-Expressions <B>EXPR</B> are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a <B>0x</B>...example: $a=0x10 ($a is 16 decimal!).
+Expressions <B>EXPR</B> are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a <B>0x</B>...example: a=0x10 (a is 16 decimal!).
 <DT><B>OFFSETS</B>
 
 <DD>
-offsets syntax is @&lt;foo  or @&gt;foo  where <I>foo</I> is a symbol referring to a specific file data structure. The major (&gt;) or minor (&lt;) symbol indicate if the offset point to the end (&gt;) or the beginning (&lt;) of the specified data structure. whith <B>@&lt;</B> we indicate the beginning of the file. Whith <B>@&gt;</B> wh indicate the end of the file. For example <I>print @&gt;</I> will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. $a=@&gt;+3 will assign to the variable $a the length of the file plus 3).
+offsets syntax is <I> @foo&lt; </I> or <I> @foo&gt; </I> where <I>foo</I> is a symbol referring to a specific file data structure. The major (&gt;) or minor (&lt;) symbol indicate if the offset point to the end (&gt;) or the beginning (&lt;) of the specified data structure. whith <B>@&lt;</B> we indicate the beginning of the file. Whith <B>@&gt;</B> wh indicate the end of the file. For example <I>print @&gt;</I> will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. a=@&gt;+3 will assign to the variable a the length of the file plus 3).
 </DL>
 <A NAME="lbAG">&nbsp;</A>
 <H2>COMMANDS</H2>
 
 <DL COMPACT>
-<DT><B>SAVE [ save | save(filename) ]</B>
+<DT><B>SAVE [ save | save filename ]</B>
 
 <DD>
 saves all the changes into the opened file. This action once performed is unreversible: changes will be permanently written on the disk.
-<DT><B>OPEN [ open filename | open(filename) ]</B>
+<DT><B>OPEN [ open filename ]</B>
 
 <DD>
-Closes the file opened if any and then load the specified file and creates all related data structures associated to the file.
+Loads the specified file and creates all related data structures associated to the file.
 <DT><B>WHILE [ while(expr) command(s) ]</B>
 
 <DD>
-a typical while construct.
+a typical while construct. (deprecated in version 0.3.x)
 <DT><B>IF-ELSE [ if(expr) command(s) | if(expr) command(s) else command(s) ]</B>
 
 <DD>
-a typical if-else costruct.
+a typical if-else costruct. (deprecated in version 0.3.x)
 <DT><B>PRINT [print expr | print %fmt expr ] -- alias pp</B>
 
 <DD>
-outputs the result of the expression (numerical or string). The <B>%fmt</B> force a different output mode. <B>fmt</B> indicates the output mode desired. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> for decimal, <B>b</B> for binary output. examples: <I>print %x 16</I> (outputs 0xa), <I>print %d 0xa</I> (outputs 16).
+outputs the result of the expression (numerical or string). The <B>%fmt</B> force a different output mode. <B>fmt</B> indicates the output mode desired. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> or <B>i</B> for decimal, <B>o</B> for octal output. examples: <I>print %x 16</I> (outputs 0xa), <I>print %d 0xa</I> (outputs 16).
 <DT><B>QUIT [ quit ]</B>
 
 <DD>
@@ -121,48 +119,32 @@ exit dwarf-ng interpreter.
 <DT><B>INFO [ info ]</B>
 
 <DD>
-display info on opened file.
-<DT><B>TYPE [ type ]</B>
-
-<DD>
-display the file type of the opened file.
-<DT><B>FORCE [ force filetype | force(filetype) ] -- deprecate</B>
-
-<DD>
-force the file type to be 'filetype' value.
-<DT><B>GROWTH [ growth expr | growth (expr)]</B>
+display info and main structures of the current working file.
+<DT><B>GROW [ growth expr ]</B>
 
 <DD>
 increase the size of the opened file.
-<DT><B>SHRINK [ shrink expr | shrink(expr) ]</B>
+<DT><B>SHRINK [ shrink expr ]</B>
 
 <DD>
 decrease the size of the opened file.
-<DT><B>REFRESH [ refresh ]</B>
+<DT><B>MOVE [ move expr1 expr2 expr3 | move expr1 +expr2 expr3 | move expr1 -expr2 expr3 ]</B>
 
 <DD>
-unloads and reloads the file strucutres.
-<DT><B>RELOAD [ reload ]</B>
-
-<DD>
-closes the opened file and reopens it reloading all the data structures.
-<DT><B>MOVE [ move(expr1,expr2,expr3) | move(expr1,+expr2,expr3) | move(expr1,-expr2,expr3) ]</B>
-
-<DD>
-move blocks of file around. (<B>expr1=from, expr2=[len|end], expr3=to</B>). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move(@&lt;,+10,@&gt;ph[0]) moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
+move blocks of file around. (<B>expr1=from, expr2=[len|end], expr3=to</B>). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move @&lt; +10 @ph[0]&gt;) moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
 <DT><B>HELP [ help ]</B>
 
 <DD>
-display the help menu.
-<DT><B>INJECT [ inject(expr1,expr2,expr3,expr4) | inject(expr1,expr2,expr3) | inject(expr1,expr2) ]</B>
+display the inline shell help menu.
+<DT><B>INJECT [ inject expr1 expr2 expr3 expr4 | inject expr1 expr2 expr3 | inject expr1 expr2 ]</B>
 
 <DD>
-injects data inside the opened file. ( <B>expr1=file|byte, expr2=offs-from, expr3=len, expr4=&quot;&gt;&gt;&quot;</B>(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be <B>&quot;&gt;&gt;&quot;</B> or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (&quot;&gt;&gt;&quot;) or to the len-offset...dwarf is able to disambiguate. examples: inject(0,ph[3]-&gt;offset,12) writes 12 bytes of zeros at the absolute addres pointed from the variable ph[3]-&gt;offset.
-<DT><B>CREATE [ create(type,offs[,update][,shift]) ]</B>
+injects data inside the opened file. ( <B>expr1=file|byte, expr2=offs-from, expr3=len, expr4=&quot;&gt;&gt;&quot;</B>(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be <B>&quot;&gt;&gt;&quot;</B> or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (&quot;&gt;&gt;&quot;) or to the len-offset...dwarf is able to disambiguate. examples: inject 0 $ph[3]::offset 12 writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset.
+<DT><B>CREATE [ create type offs shift [update]) ]</B>
 
 <DD>
 creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (<B>&quot;&gt;&gt;&quot;</B>) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file.
-<DT><B>REMOVE [ remove(type,offs[,update[,shift]]) ]</B>
+<DT><B>REMOVE [ remove type offs shift [update] ]</B>
 
 <DD>
 removes a header. see CREATE for parameters explanation.
@@ -170,10 +152,6 @@ removes a header. see CREATE for parameters explanation.
 
 <DD>
 grouth or shrinks the opened file depending if expr is &gt;0 or &lt;0. LEN will call GROUTH or SHRINK depending on expr sign.
-<DT><B>NEW [ new | new filename | new(filename) ]</B>
-
-<DD>
-creates a new empty file.
 <DT><B>CLOSE [ close ]</B>
 
 <DD>
@@ -181,13 +159,45 @@ closes the opened file.
 <DT><B>DUMP [ dump [%fmt] expr ]</B>
 
 <DD>
-dumps portion of opened file from expr offset in various formats depending on %fmt. The <B>%fmt</B> force a different output mode. <B>fmt</B> is in the form: xnn (&lt;letter&gt;&lt;number&gt;) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> for decimal putput <B>s</B> for string output <B>c</B> for char output, <B>b</B> for binary output,<B>e</B> (default) for a nice dump output. examples: <I>dump @&lt;</I> (dumps the beginning of the file), <I>dump %x3 @&lt;+10</I> (displays 3 bytes in hex format from 10 positions from the beginning of the file).
-<DT><B>EXTRACT [ extract(from,len,file) ]</B>
+dumps portion of opened file from expr offset in various formats depending on %fmt. The <B>%fmt</B> force a different output mode. <B>fmt</B> is in the form: nnx (&lt;number&gt;&lt;letter&gt;) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: <B>x</B> for hex output, <B>d</B> or <I>i</I> for decimal putput <B>s</B> for string output <B>c</B> for char output, <B>o</B> for octal output,<B>e</B> (default) for a nice dump output. examples: <I>dump @&lt;</I> (dumps the beginning of the file), <I>dump %x3 @&lt;+10</I> (displays 3 bytes in hex format from 10 positions from the beginning of the file).
+<DT><B>EXTRACT [ extract from len file ]</B>
 
 <DD>
 extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
+<DT><B>FILESIZE [ filesize [-h] ]</B>
+
+<DD>
+shows the size in bytes of the current working file. The -h option gives the result in human readable format.
+<DT><B>FILELIST [ filelist ]</B>
+
+<DD>
+display a list of all current opened files.
+<DT><B>FILEUSE [ fileuse expr ]</B>
+
+<DD>
+set expr number (taken from filelist command) file as current working file.
 </DL>
 <A NAME="lbAH">&nbsp;</A>
+<H2>CONFIG FILE</H2>
+
+<DL COMPACT>
+<DT><B>dwarfrc</B>
+
+<DD>
+<B>dwarf-ng</B> look for config files: <I>/etc/dwarfrc</I> first and then <I>.dwarfrc</I> in the $HOME directory. If no config file is founded dwarf-ng runs with default values. A snapshot of a config file il listed below:
+<PRE>
+#dwarf config file.
+work_on_tmpcopy=yes
+verbose=0 #yyy 
+tmpdir=&quot;/tmp&quot;
+tmpname=&quot;dw_temp_filex&quot;
+
+</PRE>
+
+where a comment line begins with a <B>#</B>.
+<P>
+</DL>
+<A NAME="lbAI">&nbsp;</A>
 <H2>FILE TYPES</H2>
 
 <DL COMPACT>
@@ -208,24 +218,24 @@ foo
 <DD>
 foo
 </DL>
-<A NAME="lbAI">&nbsp;</A>
+<A NAME="lbAJ">&nbsp;</A>
 <H2>EXAMPLES</H2>
 
 foo
-<A NAME="lbAJ">&nbsp;</A>
+<A NAME="lbAK">&nbsp;</A>
 <H2>SEE ALSO</H2>
 
 <A HREF="/cgi-bin/man/man2html?1+readelf">readelf</A>(1), <A HREF="/cgi-bin/man/man2html?1+objdump">objdump</A>(1), <A HREF="/cgi-bin/man/man2html?1+ht">ht</A>(1), <A HREF="/cgi-bin/man/man2html?1+otool">otool</A>(1), <A HREF="/cgi-bin/man/man2html?1+gdb">gdb</A>(1), <A HREF="/cgi-bin/man/man2html?5+elf">elf</A>(5), <A HREF="/cgi-bin/man/man2html?1+elfsh">elfsh</A>(1), <A HREF="/cgi-bin/man/man2html?1+elfdump">elfdump</A>(1)
-<A NAME="lbAK">&nbsp;</A>
+<A NAME="lbAL">&nbsp;</A>
 <H2>AUTHOR</H2>
 
 <PRE>
 Fernando Iazeolla &lt; xnando _GUESS_ cryptolab.net &gt; - founder &amp; core developer.
-</PRE><A NAME="lbAL">&nbsp;</A>
+</PRE><A NAME="lbAM">&nbsp;</A>
 <H2>COPYRIGHT</H2>
 
 <PRE>
-Copyright (C) 2007-2010 Fernando Iazeolla &lt; xnando _GUESS_ cryptolab.net &gt;
+Copyright (C) 2007-2011 Fernando Iazeolla &lt; xnando _GUESS_ cryptolab.net &gt;
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -250,16 +260,17 @@ along with this program. If not, see &lt;<A HREF="http://www.gnu.org/licenses/">
 <DT><A HREF="#lbAE">OPTIONS</A><DD>
 <DT><A HREF="#lbAF">THE DWARF'S LANGUAGE</A><DD>
 <DT><A HREF="#lbAG">COMMANDS</A><DD>
-<DT><A HREF="#lbAH">FILE TYPES</A><DD>
-<DT><A HREF="#lbAI">EXAMPLES</A><DD>
-<DT><A HREF="#lbAJ">SEE ALSO</A><DD>
-<DT><A HREF="#lbAK">AUTHOR</A><DD>
-<DT><A HREF="#lbAL">COPYRIGHT</A><DD>
+<DT><A HREF="#lbAH">CONFIG FILE</A><DD>
+<DT><A HREF="#lbAI">FILE TYPES</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+<DT><A HREF="#lbAL">AUTHOR</A><DD>
+<DT><A HREF="#lbAM">COPYRIGHT</A><DD>
 </DL>
 <HR>
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 14:17:21 GMT, January 04, 2011
+Time: 23:32:32 GMT, January 18, 2011
 </BODY>
 </HTML>

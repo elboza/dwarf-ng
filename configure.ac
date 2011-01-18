@@ -36,5 +36,5 @@ AC_CHECK_FUNC(isalnum,,AC_MSG_ERROR(isalnum is required))
 AC_CHECK_FUNC(isdigit,,AC_MSG_ERROR(isdigit is required))
 AC_CHECK_FUNCS(mremap)
 AC_CHECK_LIB(readline,main,,AC_MSG_ERROR(readline library required))
-AC_OUTPUT(Makefile src/Makefile src/cmdline/Makefile src/libdwarf/Makefile)
+AC_OUTPUT(Makefile src/Makefile src/cmdline/Makefile src/libdwarf/Makefile doc/Makefile)
 
