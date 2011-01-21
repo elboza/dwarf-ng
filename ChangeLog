@@ -24,3 +24,20 @@ TODO implement 'help' command
 
 * fixed bug on command line input string
 * fixed bug in extended_dump putput
+
+******    dwarf-ng, Version 0.2.2
+
+* 
+
+******    dwarf-ng, Version 0.3.0
+
+* program rewrited from the scratch
+* libdwarf architecture
+* added raw files and 64 bit of PE, Macho, Elf
+* removed parse tree and consequently if-then else construct and while construct from dwarf's language (parse tree, if-then-else, and while will be reintroduced in future versions).
+* now structured variables are no more stored in memory but directly accessed from the file when needed.
+* dwarf's language syntax changed (funcion calls, and variables - structured variables)
+* introduced dwarfrc config file.
+* multiple files open/working simultaneously.
+
+

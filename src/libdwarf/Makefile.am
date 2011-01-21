@@ -45,4 +45,4 @@ noinst_HEADERS =
 
 man_MANS = 
 
-#distdir=../$(PACKAGE)-$(VERSION)
+#distdir=../../$(PACKAGE)-$(VERSION)
