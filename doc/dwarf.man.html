@@ -292,8 +292,10 @@ inject &quot;vir.bin&quot; @ph[4]&gt;        #inject the content of &quot;vir.bi
 <B>#//header create</B>
 
 <PRE>
-create &quot;ph&quot; @ph[2]&gt; !&gt;&gt;         #create a program header from the end of the 3rd program header's section and don't expand the file (it will overwrite data)
-create &quot;sh&quot; @sh[4] &gt;&gt;           #create a section header from the beginning of the 5th section and shift file so it won't overwrite data. olf $sh[4] is now $sh[5] and the section createdis $sh[4]
+create &quot;ph&quot; @ph[2]&gt; !&gt;&gt;         #create a program header from the end of the 3rd program header's section 
+                                #and don't expand the file (it will overwrite data)
+create &quot;sh&quot; @sh[4] &gt;&gt;           #create a section header from the beginning of the 5th section and shift file so it won't overwrite data. 
+                                #old $sh[4] is now $sh[5] and the section created is $sh[4]
 $elf::sh_num=$elf::sh_num+1     #remember to increase the section number from the main elf header
 create &quot;sh&quot; @sh[4] &gt;&gt; ++        #the '++' option at the end updates automatically the number of section from the main header
 </PRE>
@@ -357,6 +359,6 @@ along with this program. If not, see &lt;<A HREF="http://www.gnu.org/licenses/">
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 18:13:38 GMT, January 21, 2011
+Time: 18:22:40 GMT, January 21, 2011
 </BODY>
 </HTML>

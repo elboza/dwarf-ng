@@ -69,6 +69,10 @@ show dwarf-ng's version number
 <DD>
 the command separator is the semicolon character '<B>;</B>' .
 {cmd};{cmd}
+<DT><B>COMMENTS</B>
+
+<DD>
+a comment begins with the '#' symbol and ends at the end of the line (CRLF)
 <DT><B>VARIABLES</B>
 
 <DD>
@@ -187,8 +191,8 @@ set expr number (taken from filelist command) file as current working file.
 <B>dwarf-ng</B> look for config files: <I>/etc/dwarfrc</I> first and then <I>.dwarfrc</I> in the $HOME directory. If no config file is founded dwarf-ng runs with default values. A snapshot of a config file il listed below:
 <PRE>
 #dwarf config file.
-work_on_tmpcopy=yes
-verbose=0 #yyy 
+work_on_tmpcopy=yes #(yes|no)
+verbose=0 #this is a comment
 tmpdir=&quot;/tmp&quot;
 tmpname=&quot;dw_temp_filex&quot;
 
@@ -204,24 +208,106 @@ where a comment line begins with a <B>#</B>.
 <DT><B>ELF</B>
 
 <DD>
-foo
+<PRE>
+main elf struct: $elf
+program header: $ph[0..n]
+section header: $sh[0..n]
+</PRE>
+
 <DT><B>PE</B>
 
 <DD>
-foo
+<PRE>
+MZEXE struct: $mz
+pe main header: $pe
+$pe::FileHeader
+$pe::OptionalHeader
+PE section: $sect[0..n]
+</PRE>
+
 <DT><B>MACH-O</B>
 
 <DD>
-foo
+<PRE>
+Macho main header: $mac
+load command: $lc[0..n]
+Macho section: $lc::sect[0..n]
+</PRE>
+
 <DT><B>MACH-O FAT BINARY (UNIVERSAL BINARY)</B>
 
 <DD>
-foo
+<PRE>
+main fat header: $fat
+file's architectures: $arch[0..n]
+</PRE>
+
 </DL>
 <A NAME="lbAJ">&nbsp;</A>
 <H2>EXAMPLES</H2>
 
-foo
+<B>#//var assignment</B>
+
+<PRE>
+a=5; print a
+a=7
+print a
+b=3
+c=a+b+7
+print c
+print %x c              #prints c variable in hexadecimal format
+</PRE>
+
+<P>
+<B>#//structured variable</B>
+
+<PRE>
+open myfile                     #open the file
+info                            #prints file's main structures
+print $elf                      #prints the main elf structure (assuming an elf file :) )
+print $elf::ph_num      #prints program header's number
+$elf::ph_num=7          #sets program header number
+a=$sh[7]::offset        #puts into 'a' variable the 'offset' member of the 8th section header
+print $ph                       #prints a list of all program header
+print $sh[0]            #prints the 1st section header details
+</PRE>
+
+<P>
+<B>#//offsets</B>
+
+<PRE>
+print @&lt;        #prints the offset of the beginnig of the opened file (zero ;) )
+print @&gt;        #prints the offset of the end of size (filesize ;) )
+filesize        #equivalent to print @&gt;
+a=@sh[1]        #a is the offset of the beginning of the 2nd section header
+c=@sh[1]&lt;       #c=a
+b=@sh[1]&gt;       #b is the offset of the end of the 2nd section header
+inject 0 $sh[4]::offset 10      #inject 10 times the value 0 (zero) from '$sh[4]::offset' offset
+inject &quot;vir.bin&quot; @ph[4]&gt;        #inject the content of &quot;vir.bin&quot; file from the end of the 5th program header
+</PRE>
+
+<P>
+<B>#//header create</B>
+
+<PRE>
+create &quot;ph&quot; @ph[2]&gt; !&gt;&gt;         #create a program header from the end of the 3rd program header's section 
+                                #and don't expand the file (it will overwrite data)
+create &quot;sh&quot; @sh[4] &gt;&gt;           #create a section header from the beginning of the 5th section and shift file so it won't overwrite data. 
+                                #old $sh[4] is now $sh[5] and the section created is $sh[4]
+$elf::sh_num=$elf::sh_num+1     #remember to increase the section number from the main elf header
+create &quot;sh&quot; @sh[4] &gt;&gt; ++        #the '++' option at the end updates automatically the number of section from the main header
+</PRE>
+
+and remember also to update the offset of the shifted sections manually
+<PRE>
+a=5
+while(a&lt;=$elf::sh_num)
+{
+        $sh[a]::offset=$sh[a]::offset+$elf::sh_entsize
+        a=a+1
+}
+</PRE>
+
 <A NAME="lbAK">&nbsp;</A>
 <H2>SEE ALSO</H2>
 
@@ -271,6 +357,6 @@ along with this program. If not, see &lt;<A HREF="http://www.gnu.org/licenses/">
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 23:32:32 GMT, January 18, 2011
+Time: 18:22:40 GMT, January 21, 2011
 </BODY>
 </HTML>
