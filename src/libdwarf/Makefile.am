@@ -1,4 +1,4 @@
-EXTRA_DIST = cfglang.l cfglang.y
+EXTRA_DIST = cfglang.l cfglang.y cfglang.h
 AUTOMAKE_OPTION = nostdinc no-dependencies
 
 AM_LFLAGS = -P cfgyy
