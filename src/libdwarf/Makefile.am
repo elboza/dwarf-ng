@@ -13,7 +13,7 @@ lex.cfgyy.c: cfglang.l cfglang.h
 
 DWARF_LIB_OBJECTS = vars.o utils.o y.tab.o lex.yy.o
 BUILT_SOURCES = y.tab.c lex.cfgyy.c y.tab.h
-CLEANFILES=$(BUILT_SOURCES) y.output y.tab.h
+CLEANFILES=$(BUILT_SOURCES) y.output
 BUILT_LIB_SOURCES = 	$(BUILT_SOURCES)\
 			vars.c\
 			vars.h\
@@ -42,7 +42,7 @@ libdwarf_a_CFLAGS = -O0 -lm
 #libdwarf_a_LIBADD =
 #libdwarf_a_LDFLAGS =
 noinst_HEADERS = 
-
+#nodist_libdwarf_a_SOURCES=$(BUILT_SOURCES)
 man_MANS = 
 
 #distdir=../../$(PACKAGE)-$(VERSION)

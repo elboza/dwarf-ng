@@ -3,7 +3,6 @@ AUTOMAKE_OPTION = nostdinc no-dependencies
 AM_LFLAGS =
 AM_YFLAGS = -y -d -v
 bin_PROGRAMS= dwarf
-nodist_dwarf_SOURCES= y.tab.c y.tab.h
 y.tab.o: y.tab.c
 y.tab.c: shlang.y shlang.l
 	$(YACC) $(AM_YFLAGS) shlang.y -o y.tab.c
@@ -12,8 +11,8 @@ lex.yy.c: shlang.l shlang.h
 	$(LEX) $(AM_LFLAGS) shlang.l
 
 DWARF_LIB_OBJECTS = y.tab.o lex.yy.o
-BUILT_SOURCES = y.tab.c lex.yy.c
-CLEANFILES=$(BUILT_SOURCES) y.output y.tab.h
+BUILT_SOURCES = y.tab.c lex.yy.c y.tab.h
+CLEANFILES=$(BUILT_SOURCES) y.output
 dwarf_SOURCES= 	$(BUILT_SOURCES)\
 		main.c\
 		main.h\
@@ -33,3 +32,4 @@ dwarf_SOURCES= 	$(BUILT_SOURCES)\
 		sh_pe_utils.c
 LIBS=../libdwarf/libdwarf.a
 dwarf_CFLAGS= -O0 -lm -lreadline
+#nodist_dwarf_SOURCES= $(BUILT_SOURCES)
