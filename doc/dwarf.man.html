@@ -52,10 +52,6 @@ print usage info
 
 <DD>
 loads and executes file script.
-<DT><B>-t, --type</B>
-
-<DD>
-shows the file type.
 <DT><B>-v, --version</B>
 
 <DD>
@@ -109,11 +105,11 @@ Loads the specified file and creates all related data structures associated to t
 <DT><B>WHILE [ while(expr) command(s) ]</B>
 
 <DD>
-a typical while construct. (deprecated in version 0.3.x)
+a typical while construct. example: a=5;while(a&gt;0){print a;a=a-1} (deprecated in version 0.3.x)
 <DT><B>IF-ELSE [ if(expr) command(s) | if(expr) command(s) else command(s) ]</B>
 
 <DD>
-a typical if-else costruct. (deprecated in version 0.3.x)
+a typical if-else costruct. example: a=5;if(a&gt;1) {print &quot;ok&quot;} else {print &quot;no&quot;} (deprecated in version 0.3.x)
 <DT><B>PRINT [print expr | print %fmt expr ] -- alias pp</B>
 
 <DD>
@@ -145,11 +141,11 @@ display the inline shell help menu.
 <DT><B>INJECT [ inject expr1 expr2 expr3 expr4 | inject expr1 expr2 expr3 | inject expr1 expr2 ]</B>
 
 <DD>
-injects data inside the opened file. ( <B>expr1=file|byte, expr2=offs-from, expr3=len, expr4=&quot;&gt;&gt;&quot;</B>(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be <B>&quot;&gt;&gt;&quot;</B> or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (&quot;&gt;&gt;&quot;) or to the len-offset...dwarf is able to disambiguate. examples: inject 0 $ph[3]::offset 12 writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset.
+injects data inside the opened file. ( <B>expr1=file|byte, expr2=offs-from, expr3=len, expr4=&quot;&gt;&gt;&quot;</B>(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be <B>&quot;&gt;&gt;&quot;</B> or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (&quot;&gt;&gt;&quot;) or to the len-offset...dwarf is able to disambiguate. examples: inject 0 $ph[3]::offset 12 , writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset.
 <DT><B>CREATE [ create type offs shift [update]) ]</B>
 
 <DD>
-creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (<B>&quot;&gt;&gt;&quot;</B>) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file.
+creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (<B>&quot;&gt;&gt;&quot;</B>) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file (!&gt;&gt; indicates to not groe the file).
 <DT><B>REMOVE [ remove type offs shift [update] ]</B>
 
 <DD>
@@ -157,7 +153,7 @@ removes a header. see CREATE for parameters explanation.
 <DT><B>LEN [ len expr ]</B>
 
 <DD>
-grouth or shrinks the opened file depending if expr is &gt;0 or &lt;0. LEN will call GROUTH or SHRINK depending on expr sign.
+grows or shrinks the opened file depending if expr is &gt;0 or &lt;0. LEN will call GROW or SHRINK depending on expr sign.
 <DT><B>CLOSE [ close ]</B>
 
 <DD>
@@ -170,15 +166,15 @@ dumps portion of opened file from expr offset in various formats depending on %f
 
 <DD>
 extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
-<DT><B>FILESIZE [ filesize [-h] ]</B>
+<DT><B>FILESIZE [ filesize [-h] ] -- alias fs</B>
 
 <DD>
 shows the size in bytes of the current working file. The -h option gives the result in human readable format.
-<DT><B>FILELIST [ filelist ]</B>
+<DT><B>FILELIST [ filelist ] -- alias fl</B>
 
 <DD>
 display a list of all current opened files.
-<DT><B>FILEUSE [ fileuse expr ]</B>
+<DT><B>FILEUSE [ fileuse expr ] -- alias fu</B>
 
 <DD>
 set expr number (taken from filelist command) file as current working file.
@@ -359,6 +355,6 @@ along with this program. If not, see &lt;<A HREF="http://www.gnu.org/licenses/">
 This document was created by
 <A HREF="/cgi-bin/man/man2html">man2html</A>,
 using the manual pages.<BR>
-Time: 18:22:40 GMT, January 21, 2011
+Time: 14:47:34 GMT, January 22, 2011
 </BODY>
 </HTML>
