@@ -34,7 +34,7 @@ BUILT_LIB_SOURCES = 	$(BUILT_SOURCES)\
 			dw_macho_utils.c\
 			dw_pe_utils.h\
 			dw_pe_utils.c
-
+i
 lib_LIBRARIES=libdwarf.a
 libdwarf_a_SOURCES=     $(BUILT_LIB_SOURCES)
 
@@ -42,7 +42,7 @@ libdwarf_a_CFLAGS = -O0 -lm
 #libdwarf_a_LIBADD =
 #libdwarf_a_LDFLAGS =
 noinst_HEADERS = 
-
+nodist_libdwarf_a_SOURCES= y.tab.c y.tab.h
 man_MANS = 
 
 #distdir=../../$(PACKAGE)-$(VERSION)

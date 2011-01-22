@@ -3,6 +3,7 @@ AUTOMAKE_OPTION = nostdinc no-dependencies
 AM_LFLAGS =
 AM_YFLAGS = -y -d -v
 bin_PROGRAMS= dwarf
+nodist_dwarf_SOURCES= y.tab.c y.tab.h
 y.tab.o: y.tab.c
 y.tab.c: shlang.y shlang.l
 	$(YACC) $(AM_YFLAGS) shlang.y -o y.tab.c
