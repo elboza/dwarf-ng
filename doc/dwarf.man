@@ -26,9 +26,6 @@ print usage info
 .B -x < file >, --execute < file >
 loads and executes file script.
 .TP
-.B -t, --type
-shows the file type.
-.TP
 .B -v, --version
 show dwarf-ng's version number
 .TP
@@ -64,10 +61,10 @@ saves all the changes into the opened file. This action once performed is unreve
 Loads the specified file and creates all related data structures associated to the file.
 .TP
 .B WHILE [ while(expr) command(s) ]
-a typical while construct. (deprecated in version 0.3.x)
+a typical while construct. example: a=5;while(a>0){print a;a=a-1} (deprecated in version 0.3.x)
 .TP
 .B IF-ELSE [ if(expr) command(s) | if(expr) command(s) else command(s) ]
-a typical if-else costruct. (deprecated in version 0.3.x)
+a typical if-else costruct. example: a=5;if(a>1) {print "ok"} else {print "no"} (deprecated in version 0.3.x)
 .TP
 .B PRINT [print expr | print %fmt expr ] -- alias pp
 outputs the result of the expression (numerical or string). The \fB%fmt\fP force a different output mode. \fBfmt\fP indicates the output mode desired. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP or \fBi\fP for decimal, \fBo\fP for octal output. examples: \fIprint %x 16\fP (outputs 0xa), \fIprint %d 0xa\fP (outputs 16).
@@ -91,16 +88,16 @@ move blocks of file around. (\fBexpr1=from, expr2=[len|end], expr3=to\fP). moves
 display the inline shell help menu.
 .TP
 .B INJECT [ inject expr1 expr2 expr3 expr4 | inject expr1 expr2 expr3 | inject expr1 expr2 ]
-injects data inside the opened file. ( \fBexpr1=file|byte, expr2=offs-from, expr3=len, expr4=">>"\fP(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \fB">>"\fP or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (">>") or to the len-offset...dwarf is able to disambiguate. examples: \flinject 0 $ph[3]::offset 12\fP writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset.
+injects data inside the opened file. ( \fBexpr1=file|byte, expr2=offs-from, expr3=len, expr4=">>"\fP(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \fB">>"\fP or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (">>") or to the len-offset...dwarf is able to disambiguate. examples: \flinject 0 $ph[3]::offset 12\fP , writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset.
 .TP
 .B CREATE [ create type offs shift [update]) ]
-creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (\fB">>"\fP) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file.
+creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (\fB">>"\fP) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file (!>> indicates to not groe the file).
 .TP
 .B REMOVE [ remove type offs shift [update] ]
 removes a header. see CREATE for parameters explanation.
 .TP
 .B LEN [ len expr ]
-grouth or shrinks the opened file depending if expr is >0 or <0. LEN will call GROUTH or SHRINK depending on expr sign.
+grows or shrinks the opened file depending if expr is >0 or <0. LEN will call GROW or SHRINK depending on expr sign.
 .TP
 .B CLOSE [ close ]
 closes the opened file.
@@ -111,13 +108,13 @@ dumps portion of opened file from expr offset in various formats depending on %f
 .B EXTRACT [ extract from len file ]
 extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
 .TP
-.B FILESIZE [ filesize [-h] ]
+.B FILESIZE [ filesize [-h] ] -- alias fs
 shows the size in bytes of the current working file. The -h option gives the result in human readable format.
 .TP
-.B FILELIST [ filelist ]
+.B FILELIST [ filelist ] -- alias fl
 display a list of all current opened files.
 .TP
-.B FILEUSE [ fileuse expr ]
+.B FILEUSE [ fileuse expr ] -- alias fu
 set expr number (taken from filelist command) file as current working file.
 .SH CONFIG FILE
 .TP
