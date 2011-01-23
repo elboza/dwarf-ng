@@ -1,6 +1,6 @@
 EXTRA_DIST = cfglang.l cfglang.y cfglang.h
 AUTOMAKE_OPTION = nostdinc no-dependencies
-
+doc_DATA= dwarfrc
 AM_LFLAGS = -P cfgyy
 AM_YFLAGS = -y -d -v -p cfgyy
 
