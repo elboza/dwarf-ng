@@ -33,7 +33,7 @@ struct m_action{
 };
 void usage()
 {
-	printf("dwarf-ng-%s (c) Fernando Iazeolla < xnando _GUESS_ cryptolab . net >\n",VERSION);
+	printf("dwarf-ng-%s (c) Fernando Iazeolla < fernando.iazeolla _GUESS_ gmail . com >\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
