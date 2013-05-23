@@ -38,7 +38,7 @@ BUILT_LIB_SOURCES = 	$(BUILT_SOURCES)\
 lib_LIBRARIES=libdwarf.a
 libdwarf_a_SOURCES=     $(BUILT_LIB_SOURCES)
 
-libdwarf_a_CFLAGS = -O0 -lm
+libdwarf_a_CFLAGS = -Wl,--no-as-needed -O0 -lm
 #libdwarf_a_LIBADD =
 #libdwarf_a_LDFLAGS =
 noinst_HEADERS = 
