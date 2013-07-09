@@ -12,7 +12,7 @@ AC_MSG_NOTICE([
         Please read BUGS and README and report any bug found to dwarf-ng maintainer!
 ])
 AM_INIT_AUTOMAKE(dwarf,$dwarf_version)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS(config.h)
 AC_PROG_CC
 AC_LANG_C
 AH_TEMPLATE([HAVE_MREMAP],[checks if have mremap function])
