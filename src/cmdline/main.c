@@ -33,7 +33,7 @@ struct m_action{
 };
 void usage()
 {
-	printf("dwarf-ng-%s (c) Fernando Iazeolla < fernando.iazeolla _GUESS_ gmail . com >\n",VERSION);
+  printf("dwarf-ng-%s (c) Fernando Iazeolla < fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . >\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
@@ -46,13 +46,17 @@ void usage()
 }
 void usage_b()
 {
-	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2011\n",VERSION);
+	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013\n",VERSION);
 	printf("for help type: dwarf --help\n");
 }
 void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds)
 {
 	char *s1;
 	int c;
+	action->shell=0;
+	action->script=0;
+	action->file=0;
+	action->exec=0;
 	while (1)
 	{
 		static struct option long_options[] =
