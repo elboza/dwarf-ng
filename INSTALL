@@ -17,9 +17,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 ******** HOWTO INSTALL
 
 $ ./autogen.sh
-$ ./configure
+( $ ./configure --help=short     # prints all ./configure compiling options)
+$ ./configure (or ./configure --enable-no-as-needed)
 $ make
 # sudo make install
+
+* gcc version
+in gcc version =>4.6.1 (on linux) it may fail compiling. to avoid compiling failure enable the --no-as-needed flag
+by running the following configuration:
+./configure --enable-no-as-needed
 
 * readline/history
 

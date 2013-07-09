@@ -2,3 +2,8 @@
 
 to take advantage of all the features of the readline/history library, make sure to use the GNU version 5.0 or above.
 In Mac OS X the default readline is the BSD 4 version. you can substitute or soft link the GNU versions (sould be located at /opt/local/include/readline/ and /opt/local/lib/librealine.dylib).
+
+* gcc version
+in gcc version =>4.6.1 (on linux) it may fail compiling. to avoid compiling failure enable the --no-as-needed flag
+by running the following configuration:
+./configure --enable-no-as-needed

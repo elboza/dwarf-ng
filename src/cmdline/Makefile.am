@@ -31,5 +31,11 @@ dwarf_SOURCES= 	$(BUILT_SOURCES)\
 		sh_pe_utils.h\
 		sh_pe_utils.c
 LIBS=../libdwarf/libdwarf.a
-dwarf_CFLAGS= -Wl,--no-as-needed -O0 -lm -lreadline
+dwarf_CFLAGS= $(dw_no_as_needed_flag) -O0 -lm -lreadline
+#dwarf_CFLAGS= -Wl,--no-as-needed -O0 -lm -lreadline
+#dwarf_CFLAGS = -O0
+#dwarf_LDADD= -lm -lreadline
+#dwarf_LDFLAGS = -lm -lreadline
+#AM_LDFLAGS = -lm -lreadline
+#dwarf_LDLIBS = -lm -lreadline
 #nodist_dwarf_SOURCES= $(BUILT_SOURCES)

@@ -1,6 +1,11 @@
 ************** NEWS
 
 
+******    dwarf-ng, Version 0.3.1
+
+* modified compiling scripts so that now works also on gcc version => 4.6.1 (see README file for more information).
+
+
 ******    rewriting dwarf-ng v 0.3 from scratch improving efficiency, stability, code readability, function scalability, and more....
 you can find svn code in: branches/dwarf2 directory.
 
