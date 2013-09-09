@@ -19,17 +19,17 @@ long_description	\
 				(Portable executables PE32, PE+) and Mach-O (os x executables 32&64bit) files format. \
 				In the future new files type will be added.
 					
-homepage            http://code.google.com/p/dwarf-ng/
-master_sites        http://download.savannah.gnu.org/releases/dwarf-ng/
-					http://www.autistici.org/0xFE/software/releases/dwarf-ng/	
+homepage		http://code.google.com/p/dwarf-ng/
+master_sites	http://download.savannah.gnu.org/releases/dwarf-ng/
+				http://www.autistici.org/0xFE/software/releases/dwarf-ng/	
 
-checksums           md5    17743b4aa7d9408a44388ce9a8421433 \
-                    sha1    ce0f90d07feaeba874fe5948e4f1334bbee25c51 \
-                    rmd160  5303b949666f63949d77a9de7cf7fc91e414497c
+checksums		md5    17743b4aa7d9408a44388ce9a8421433 \
+				sha1    ce0f90d07feaeba874fe5948e4f1334bbee25c51 \
+				rmd160  5303b949666f63949d77a9de7cf7fc91e414497c
 
-depends_lib         port:readline
-depends_build       port:flex \
-                    port:bison
+depends_lib		port:readline
+depends_build	port:flex \
+				port:bison
 
 variant no-as-needed description {enable no-as-needed flag to compile on gcc>=4.6.1 on linux platform} { configure.args-append -Wl, --no-as-needed}
 
