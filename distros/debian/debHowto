@@ -5,3 +5,17 @@ sudo dh_make -e youremail@site.org -f ../dwarf-0.3.1.tar.gz -p <name>_<version>
 sudo dpkg-buildpackage -rfakeroot
 ls ../dwarf_0.3.1-i386.deb
 
+# or manually ......
+mkdir foo-0.1
+cd foo-0.1
+dh_make --createorig --indep # this will prompt you to hit enter
+mkdir essentials
+mv debian/{changelog,compat,rules,control} essentials
+rm -r debian
+mv essentials debian
+echo './example-src/* ./' > debian/foo.install
+mkdir -p example-src/usr/share/example
+touch example-src/usr/share/example/file # create the empty file to be installed
+dpkg-buildpackage -uc -tc -rfakeroot
+dpkg --contents ../foo_0.1-1_all.deb # inspect the resulting Debian package
+
