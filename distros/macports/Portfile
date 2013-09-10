@@ -20,7 +20,7 @@ long_description	\
 				In the future new files type will be added.
 					
 homepage		http://code.google.com/p/dwarf-ng/
-master_sites	http://download.savannah.gnu.org/releases/dwarf-ng/
+master_sites	http://download.savannah.gnu.org/releases/dwarf-ng/ \
 				http://www.autistici.org/0xFE/software/releases/dwarf-ng/	
 
 checksums		md5    17743b4aa7d9408a44388ce9a8421433 \
