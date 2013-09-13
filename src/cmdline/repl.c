@@ -97,7 +97,7 @@ void shell()
 void funny_shell_disclaimer()
 {
 printf("   ________________________________________  \n");
-printf("  / dwarf-ng Copyright (C) 2007-2011       \\ \n");
+printf("  / dwarf-ng Copyright (C) 2007-2013       \\ \n");
 printf("  | Fernando Iazeolla. This program comes  | \n");
 printf("  | with ABSOLUTELY NO WARRANTY. This is   | \n");
 printf("  | free software (GNU GPLv2), and you are | \n");
@@ -114,7 +114,7 @@ printf("                  ||     ||                  \n");
 }
 void normal_shell_disclaimer()
 {
-	printf("dwarf-ng Copyright (C) 2007-2011 Fernando Iazeolla.\n");
+	printf("dwarf-ng Copyright (C) 2007-2013 Fernando Iazeolla.\n");
 	printf("This program comes with ABSOLUTELY NO WARRANTY.\n");
 	printf("This is free software (GNU GPLv2), and you are welcome to redistribute it\n");
 	printf("under GNU GPL version 2 (see <http://www.gnu.org/licenses/>).\n");
