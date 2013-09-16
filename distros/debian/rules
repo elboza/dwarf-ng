@@ -13,5 +13,4 @@ override_dh_auto_configure:
 	dh_auto_configure -- --enable-no-as-needed
 
 %:
-	dh $@  --with autotools-dev 
-	
+	dh $@  --with autotools-dev

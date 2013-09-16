@@ -1,8 +1,8 @@
 # apt-get install autotools-dev fakeroot dh-make build-essential
 cd dwarf-0.3.1
-sudo dh_make -e youremail@site.org -f ../dwarf-0.3.1.tar.gz -p <name>_<version>
+(sudo?) dh_make -e youremail@site.org -f ../dwarf-0.3.1.tar.gz -p <name>_<version>
 (edit control file)
-sudo dpkg-buildpackage -rfakeroot
+(sudo?) dpkg-buildpackage -rfakeroot
 ls ../dwarf_0.3.1-i386.deb
 
 # or manually ......
