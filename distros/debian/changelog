@@ -1,5 +1,5 @@
 dwarf (0.3.1-1) unstable; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release (Closes: #611498)
 
- -- Fernando Iazeolla <xnando@yahoo.it>  Fri, 13 Sep 2013 23:14:24 +0200
+ -- Fernando Iazeolla <xnando@yahoo.it>  Mon, 16 Dec 2013 00:01:01 +0100

@@ -230,7 +230,7 @@ void do_printvar(struct _fmt *fmt,char *name)
 			printf("%s\n",ptr->val.s);
 			break;
 		default:
-			printf("unkown variable type.\n");
+			printf("unknown variable type.\n");
 			break;
 	}
 }
@@ -393,7 +393,7 @@ void show_help_info()
 void show_help_create()
 {
 	printf("create \"type\" offs grow [update]\n");
-	printf("creates a new header. type is the header type (\"pe\",\"ph\",\"elf\",\"sect\"...), offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers), the default value is not-update. grow (>> grow, !>> dont grow) tells dwarf to eventually shift/grow the opened file so that the new header does not overwrite portions of the file.\n");
+	printf("creates a new header. type is the header type (\"pe\",\"ph\",\"elf\",\"sect\"...), offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers), the default value is not-update. grow (>> grow, !>> don't grow) tells dwarf to eventually shift/grow the opened file so that the new header does not overwrite portions of the file.\n");
 }
 void show_help_dump()
 {

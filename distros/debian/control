@@ -1,8 +1,8 @@
 Source: dwarf
-Section: utilities
+Section: utils
 Priority: extra
 Maintainer: Fernando Iazeolla <xnando@yahoo.it>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, flex, bison, readline-common, libreadline6-dev
+Build-Depends: debhelper (>= 9.0.0), autotools-dev, flex, bison, readline-common, libreadline6-dev
 Standards-Version: 3.9.4
 Homepage: http://github.com/elboza/dwarf-ng
 #Vcs-Git: git://git.debian.org/collab-maint/dwarf.git
@@ -11,6 +11,15 @@ Homepage: http://github.com/elboza/dwarf-ng
 Package: dwarf
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: dwarf-ng -- a little and powerful object file manipulation tool.
- dwarf-ng is a powerful object file manipulation tools in the spirit of gdb. with dwarf-ng you can read and edit all the file's section headers as well as the raw data. With dwarf-ng you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. dwarf-ng also permits to inject easily new headers and pieces of code/data into the file. dwarf-ng currently handles: Raw,ELF (Elf32, Elf64),PE (Portable executables PE32, PE+) and Mach-O (os x executables 32&64bit) files format. In the future new files type will be added.
+Description: little and powerful object file manipulation tool
+ dwarf-ng is a powerful object file manipulation tools in the spirit of gdb.
+ With dwarf-ng you can read and edit all the file's section headers as 
+ well as the raw data. With dwarf-ng you can create and customize new 
+ file's header and it can be used as a compiler back-end to create 
+ executables/object files. dwarf-ng also permits one to inject easily new 
+ headers and pieces of code/data into the file. 
+ dwarf-ng currently handles: Raw,ELF (Elf32, Elf64),
+ PE (Portable executables PE32, PE+) and 
+ Mach-O (os x executables 32&64bit) files format. 
+ In the future new files type will be added.
  

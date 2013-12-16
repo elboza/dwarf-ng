@@ -1,16 +1,18 @@
-This package was debianized by Fernando iazeolla <xnando@cryptolab.net> on
-	Wed, 26 Jan 2011 01:06:16 +0100.
-	
-	It was downloaded from http://download.savannah.gnu.org/releases/dwarf-ng/dwarf-0.3.1.tar.gz
-	
-	Copyright:
-	
-	    Copyright (C) 2013 Fernando Iazeolla
-	
-	License:
-	
-	    GPLv2
-	
-	The Debian packaging is (C) 2013, Fernando Iazeolla <xnando@cryptolab.net> and
-	is licensed under the GPL, see http://www.gnu.org/licenses/ .
-	
+Copyright: 2013 Fernando Iazeolla <xnando@yahoo.it>
+License: GPL-2+
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>
+ .
+ On Debian systems, the complete text of the GNU General
+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
+
