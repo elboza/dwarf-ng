@@ -155,7 +155,7 @@ struct _var* get_s_val(struct _structvar *ptr)
 }
 void set_s_val(struct _structvar *ptr,struct _var *val)
 {
-	if(!fc_ptr) {printf("unknown file.\n"); return NULL;}
+	if(!fc_ptr) {printf("unknown file.\n"); return;}
 	switch(fc_ptr->file_type){
 		case FT_ELF:
 			elf_set_s_val(ptr,val);

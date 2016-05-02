@@ -572,7 +572,7 @@ off_t get_pe_offset2(int sect,int num,int endoffset)
 	off_t offs;
 	char ss[15];
 	
-	if(!fc_ptr) return;
+	if(!fc_ptr) return 0;
 	maxsect=get_max_pesect();
 	mz=(_IMAGE_DOS_HEADER*)fc_ptr->faddr;
 	peoff=get_data32(mz->e_lfanew);

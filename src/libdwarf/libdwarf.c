@@ -335,7 +335,7 @@ int growth(off_t len)
 	off_t offset;
 	int n;
 	char *x;
-	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr) {printf("no file opened!\n");return false;}
 	if(!fc_ptr->can_grow) {printf("this file cannot change its size\n"); return false;}
 	if(!fc_ptr->fd) {printf("no file opened!\n");return false;}
 	x=(char*)malloc(len);
@@ -357,7 +357,7 @@ int shrink(off_t len)
 {
 	off_t offset,new_offset;
 	int n;
-	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr) {printf("no file opened!\n");return false;}
 	if(!fc_ptr->can_grow) {printf("this file cannot change its size\n"); return false;}
 	if(!fc_ptr->fd) {warn("no file opened!\n");return false;}
 	offset=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
