@@ -17,12 +17,13 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 %{
+#include <stdint.h>
 #include <stdlib.h>
 #include "utils.h"
 #include "libdwarf.h"
 #include "y.tab.h"
 void cfgyyerror(char *s);
-int yywrap(void);
+int cfgyywrap(void);
 unsigned int lang_mx;
 extern int cfgyylineno;
 %}
@@ -94,7 +95,7 @@ newline \n
 			unput('\n');
 			cfgyylineno++;
 		}
-<<EOF>>		yyterminate();
+<<EOF>>		cfgyyterminate();
 {ws}		;	/* ignore whitespace */
 {newline}	{cfgyylineno++;return NEWLINE;}
 

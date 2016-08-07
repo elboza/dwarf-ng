@@ -4,6 +4,9 @@ doc_DATA= dwarfrc
 AM_LFLAGS = -P cfgyy
 AM_YFLAGS = -y -d -v -p cfgyy
 
+#AM_LFLAGS =
+#AM_YFLAGS = -y -d -v
+
 y.tab.o: y.tab.c
 y.tab.c: cfglang.y cfglang.l
 	$(YACC) $(AM_YFLAGS) cfglang.y -o y.tab.c

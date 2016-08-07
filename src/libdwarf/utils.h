@@ -20,7 +20,7 @@
 #ifndef DW_UTILS_H
 #define DW_UTILS_H
 
-#include"stdint.h"
+#include<stdint.h>
 typedef enum {bitNULL,bit8,bit16,bit32,bit64,bit128} filebitclass;
 #define DUMP_SIZE 128
 #define DUMP_MAX_LINE 16

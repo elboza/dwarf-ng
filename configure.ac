@@ -1,5 +1,4 @@
-AC_INIT([dwarf-ng],[0.3.1],[fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a .])
-dwarf_version=`cat VERSION`
+AC_INIT([dwarf-ng],m4_esyscmd_s([cat VERSION]),[fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a .])
 AC_MSG_NOTICE([
         Welcome to the dwarf-ng configure script!
         This script will create the right Makefile for building dwarf-ng on your system.
@@ -11,7 +10,7 @@ AC_MSG_NOTICE([
 
         Please read BUGS and README and report any bug found to dwarf-ng maintainer!
 ])
-AM_INIT_AUTOMAKE(dwarf,$dwarf_version)
+AM_INIT_AUTOMAKE
 AC_CONFIG_HEADERS(config.h)
 AC_PROG_CC
 AC_LANG_C
