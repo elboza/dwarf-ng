@@ -17,6 +17,7 @@ AC_LANG_C
 AH_TEMPLATE([HAVE_MREMAP],[checks if have mremap function])
 AC_PROG_MAKE_SET
 AC_HEADER_STDC
+AC_TYPE_INTMAX_T
 AC_PROG_LEX
 if test "$LEX" != flex; then
 AC_MSG_ERROR(flex is required)

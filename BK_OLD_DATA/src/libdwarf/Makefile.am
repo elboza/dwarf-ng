@@ -16,6 +16,7 @@ lex.cfgyy.c: cfglang.l cfglang.h
 
 DWARF_LIB_OBJECTS = vars.o utils.o y.tab.o lex.yy.o
 BUILT_SOURCES = y.tab.c lex.cfgyy.c y.tab.h
+#BUILT_SOURCES =
 CLEANFILES=$(BUILT_SOURCES) y.output
 BUILT_LIB_SOURCES = 	$(BUILT_SOURCES)\
 			vars.c\

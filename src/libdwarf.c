@@ -59,7 +59,7 @@ void readcfg(char *s)
 	fp=fopen(s,"r");
 	if(fp==NULL) return;
 	cfgyyin=fp;
-//	cfgyydebug=1;   /*use -t parameter in bison*/
+	//cfgyydebug=1;   /*use -t parameter in bison*/
 	cfgyyparse();
 	fclose(fp);
 }
