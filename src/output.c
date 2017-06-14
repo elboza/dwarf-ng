@@ -20,11 +20,15 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <ctype.h>
 #include"libdwarf.h"
 #include"repl.h"
 #include"output.h"
 #include"dw_readline_completion.h"
 #include"sh_switchers.h"
+#include"sh_elf_utils.h"
+#include"sh_macho_utils.h"
+#include"sh_pe_utils.h"
 //#include"../../config.h"
 
 void do_filesize(struct _cfg *ptr,int human)
@@ -261,17 +265,17 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 	do{
 		switch(fmt->type){
 			case 'x':
-				printf("0x%x ",x);
+				printf("0x%lx ",x);
 				break;
 			case 'd':
 			case 'i':
 				printf("%lld ",(long long)x);
 				break;
 			case 'c':
-				printf("%c ",x);
+				printf("%c ",(int)x);
 				break;
 			case 'o':
-				printf("%o ",x);
+				printf("%lo ",x);
 				break;
 			default:
 				printf("%lld ",(long long)x);
@@ -284,7 +288,7 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 void do_dump(struct _fmt *fmt,off_t offset)
 {
 	int m_count=0;
-	char *buff;
+	//char *buff;
 	uint8_t *uc;
 	void *mem;
 	if(!fc_ptr) return;

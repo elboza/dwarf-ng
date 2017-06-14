@@ -29,7 +29,7 @@
 #include"libdwarf.h"
 
 extern FILE *cfgyyin;
-extern int errno,cfgyydebug;
+extern int errno,cfgyydebug,cfgyyparse(void);
 
 void dw_init()
 {
@@ -55,7 +55,7 @@ void dw_init()
 void readcfg(char *s)
 {
 	FILE *fp;
-	int x;
+	//int x;
 	fp=fopen(s,"r");
 	if(fp==NULL) return;
 	cfgyyin=fp;
@@ -333,15 +333,15 @@ void dottedbyte(char *s,off_t num)
 int growth(off_t len)
 {
 	off_t offset;
-	int n;
+	//int n;
 	char *x;
-	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr) {printf("no file opened!\n");return false;}
 	if(!fc_ptr->can_grow) {printf("this file cannot change its size\n"); return false;}
 	if(!fc_ptr->fd) {printf("no file opened!\n");return false;}
 	x=(char*)malloc(len);
 	if(x==NULL) {warn("error allocating mem");return false;}
 	offset=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
-	n=write(fc_ptr->fd,x,(size_t) len);
+	write(fc_ptr->fd,x,(size_t) len);
 	free(x);
 	fc_ptr->changed_altered=true;
 	#if HAVE_MREMAP
@@ -357,7 +357,7 @@ int shrink(off_t len)
 {
 	off_t offset,new_offset;
 	int n;
-	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(!fc_ptr) {printf("no file opened!\n");return false;}
 	if(!fc_ptr->can_grow) {printf("this file cannot change its size\n"); return false;}
 	if(!fc_ptr->fd) {warn("no file opened!\n");return false;}
 	offset=lseek(fc_ptr->fd,(off_t)0,SEEK_END);

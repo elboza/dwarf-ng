@@ -28,19 +28,22 @@
 #include<readline/history.h>
 #include"stdint.h"
 #include"dw_readline_completion.h"
+#include"utils.h"
 
 void initialize_readline()
 {
 	rl_readline_name="dwarf";
-	rl_attempted_completion_function=(CPPFunction *)dwarf_completion;
+	rl_attempted_completion_function=(rl_completion_func_t *)dwarf_completion;
+	//rl_attempted_completion_function=(CPPFunction *)dwarf_completion;
 	rl_completer_word_break_characters = " \t\n\"\\'<=;+*/%^~#{}(),.->$@";
 	rl_completion_append_character = ' ';
 }
-char ** dwarf_completion(char *text,int start,int end)
+//char** dwarf_completion(const char *text,int start,int end)
+char** dwarf_completion(char *text,int start,int end)
 {
 	char **matches;
 	matches=(char **)NULL;
-	matches=completion_matches(text,dwarf_command_generator);
+	matches=rl_completion_matches(text,dwarf_command_generator);
 	return (matches);
 }
 char* dwarf_command_generator(char *text,int state)

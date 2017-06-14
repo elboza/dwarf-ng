@@ -159,15 +159,15 @@ struct _var* get_pe_var(int sect,int num,char *varname)
 	_IMAGE_NT_HEADERS *pe;
 	_IMAGE_NT_HEADERS64 *pe64;
 	_IMAGE_SECTION_HEADER *pe_sect;
-	int x,n,maxsect,peoff;
-	off_t offset;
-	char ss[15];
+	int n,peoff;
+	//off_t offset;
+	//char ss[15];
 	struct _var *var;
 	
 	var=createtmpvar();
 	if(!var) {return NULL;}
 	if(!fc_ptr) return NULL;
-	maxsect=get_max_pesect();
+	//int maxsect=get_max_pesect();
 	mz=(_IMAGE_DOS_HEADER*)fc_ptr->faddr;
 	peoff=get_data32(mz->e_lfanew);
 	switch(sect) {
@@ -316,8 +316,8 @@ struct _var* get_pe_var(int sect,int num,char *varname)
 void pe_set_s_val(struct _structvar *ptr,struct _var *val)
 {
 	int sect=SECT_NULL;
-	struct _var *var;
-	var=NULL;
+	//struct _var *var;
+	//var=NULL;
 	if((strcmp(ptr->name,"mz"))==0) sect=SECT_MZ;
 	if((strcmp(ptr->name,"pe"))==0) sect=SECT_PE;
 	if((strcmp(ptr->name,"sect"))==0) sect=SECT_PESECT;
@@ -365,12 +365,12 @@ void set_pe_var(int sect,int num,char *varname,struct _var *val)
 	_IMAGE_NT_HEADERS *pe;
 	_IMAGE_NT_HEADERS64 *pe64;
 	_IMAGE_SECTION_HEADER *pe_sect;
-	int x,n,maxsect,peoff;
-	off_t offset;
-	char ss[15];
+	int n,peoff;
+	//off_t offset;
+	//char ss[15];
 	
 	if(!fc_ptr) return;
-	maxsect=get_max_pesect();
+	//int maxsect=get_max_pesect();
 	mz=(_IMAGE_DOS_HEADER*)fc_ptr->faddr;
 	peoff=get_data32(mz->e_lfanew);
 	switch(sect) {
@@ -498,7 +498,7 @@ void set_pe_var(int sect,int num,char *varname,struct _var *val)
 					}
 					break;
 			}
-			if((strcmp(varname,"Name"))==0) {if(val->type==VART_WORD){strncpy(pe_sect->Name,val->val.s,8);}else{printf("wrong var type.\n");}}
+			if((strcmp(varname,"Name"))==0) {if(val->type==VART_WORD){strncpy((char *)pe_sect->Name,val->val.s,8);}else{printf("wrong var type.\n");}}
 			if((strcmp(varname,"PhysicalAddress"))==0) {if(val->type==VART_NUM){pe_sect->Misc.PhysicalAddress=get_data32(val->val.num);}else{printf("wrong var type.\n");}}
 			if((strcmp(varname,"VirtualAddress"))==0) {if(val->type==VART_NUM){pe_sect->VirtualAddress=get_data32(val->val.num);}else{printf("wrong var type.\n");}}
 			if((strcmp(varname,"SizeOfRawData"))==0) {if(val->type==VART_NUM){pe_sect->SizeOfRawData=get_data32(val->val.num);}else{printf("wrong var type.\n");}}
@@ -565,15 +565,15 @@ off_t get_pe_offset(struct _structvar *ptr,int endoffset)
 off_t get_pe_offset2(int sect,int num,int endoffset)
 {
 	_IMAGE_DOS_HEADER *mz;
-	_IMAGE_NT_HEADERS *pe;
-	_IMAGE_NT_HEADERS64 *pe64;
+	//_IMAGE_NT_HEADERS *pe;
+	//_IMAGE_NT_HEADERS64 *pe64;
 	_IMAGE_SECTION_HEADER *pe_sect;
-	int x,n,maxsect,peoff;
+	int n,peoff;
 	off_t offs;
-	char ss[15];
+	//char ss[15];
 	
-	if(!fc_ptr) return;
-	maxsect=get_max_pesect();
+	if(!fc_ptr) return 0;
+	//int maxsect=get_max_pesect();
 	mz=(_IMAGE_DOS_HEADER*)fc_ptr->faddr;
 	peoff=get_data32(mz->e_lfanew);
 	switch(sect) {

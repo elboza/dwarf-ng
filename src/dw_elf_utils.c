@@ -102,7 +102,7 @@ struct _var* get_elf_var(int sect,int num,char *varname)
 			switch(fc_ptr->file_bit_class) {
 				case bit64:
 					elf64=(Elf64_Ehdr*) fc_ptr->faddr;
-					if((strcmp(varname,"e_ident"))==0) {var->type=VART_WORD;var->val.s=(char*)malloc(10);if(!var->val.s) die("error allocating str mem");strncpy(var->val.s,elf64->e_ident,4);}
+					if((strcmp(varname,"e_ident"))==0) {var->type=VART_WORD;var->val.s=(char*)malloc(10);if(!var->val.s) die("error allocating str mem");strncpy(var->val.s,(char *)elf64->e_ident,4);}
 					else if((strcmp(varname,"e_type"))==0) {var->type=VART_NUM;var->val.num=get_data16(elf64->e_type);}
 					else if((strcmp(varname,"e_machine"))==0) {var->type=VART_NUM;var->val.num=get_data16(elf64->e_machine);}
 					else if((strcmp(varname,"e_version"))==0) {var->type=VART_NUM;var->val.num=get_data32(elf64->e_version);}
@@ -120,7 +120,7 @@ struct _var* get_elf_var(int sect,int num,char *varname)
 				case bit32:
 				default:
 					elf32=(Elf32_Ehdr*) fc_ptr->faddr;
-					if((strcmp(varname,"e_ident"))==0) {var->type=VART_WORD;var->val.s=(char*)malloc(10);if(!var->val.s) die("error allocating str mem");strncpy(var->val.s,elf32->e_ident,4);}
+					if((strcmp(varname,"e_ident"))==0) {var->type=VART_WORD;var->val.s=(char*)malloc(10);if(!var->val.s) die("error allocating str mem");strncpy(var->val.s,(char *)elf32->e_ident,4);}
 					else if((strcmp(varname,"e_type"))==0) {var->type=VART_NUM;var->val.num=get_data16(elf32->e_type);}
 					else if((strcmp(varname,"e_machine"))==0) {var->type=VART_NUM;var->val.num=get_data16(elf32->e_machine);}
 					else if((strcmp(varname,"e_version"))==0) {var->type=VART_NUM;var->val.num=get_data32(elf32->e_version);}
@@ -317,7 +317,7 @@ void set_elf_var(int sect,int num,char *varname,struct _var *val)
 			switch(fc_ptr->file_bit_class) {
 				case bit64:
 					elf64=(Elf64_Ehdr*) fc_ptr->faddr;
-					if((strcmp(varname,"e_ident"))==0) {if(val->type==VART_WORD){strncpy(elf64->e_ident,val->val.s,4);}else{printf("wrong var type.\n");}}
+					if((strcmp(varname,"e_ident"))==0) {if(val->type==VART_WORD){strncpy((char *)elf64->e_ident,val->val.s,4);}else{printf("wrong var type.\n");}}
 					if((strcmp(varname,"e_type"))==0) {if(val->type==VART_NUM){elf64->e_type=get_data16(val->val.num);}else{printf("wrong var type.\n");}}
 					if((strcmp(varname,"e_machine"))==0) {if(val->type==VART_NUM){elf64->e_machine=get_data16(val->val.num);}else{printf("wrong var type.\n");}}
 					if((strcmp(varname,"e_version"))==0) {if(val->type==VART_NUM){elf64->e_version=get_data32(val->val.num);}else{printf("wrong var type.\n");}}
@@ -335,7 +335,7 @@ void set_elf_var(int sect,int num,char *varname,struct _var *val)
 				case bit32:
 				default:
 					elf32=(Elf32_Ehdr*) fc_ptr->faddr;
-					if((strcmp(varname,"e_ident"))==0) {if(val->type==VART_WORD){strncpy(elf32->e_ident,val->val.s,4);}else{printf("wrong var type.\n");}}
+					if((strcmp(varname,"e_ident"))==0) {if(val->type==VART_WORD){strncpy((char *)elf32->e_ident,val->val.s,4);}else{printf("wrong var type.\n");}}
 					if((strcmp(varname,"e_type"))==0) {if(val->type==VART_NUM){elf32->e_type=get_data16(val->val.num);}else{printf("wrong var type.\n");}}
 					if((strcmp(varname,"e_machine"))==0) {if(val->type==VART_NUM){elf32->e_machine=get_data16(val->val.num);}else{printf("wrong var type.\n");}}
 					if((strcmp(varname,"e_version"))==0) {if(val->type==VART_NUM){elf32->e_version=get_data32(val->val.num);}else{printf("wrong var type.\n");}}
@@ -455,12 +455,12 @@ off_t get_elf_offset(struct _structvar *ptr,int endoffset)
 }
 off_t get_elf_offset2(int sect,int num,int endoffset)
 {
-	Elf32_Ehdr *elf32;
-	Elf64_Ehdr *elf64;
-	Elf32_Phdr *ph32;
-	Elf64_Phdr *ph64;
-	Elf32_Shdr *sh32;
-	Elf64_Shdr *sh64;
+	//Elf32_Ehdr *elf32;
+	//Elf64_Ehdr *elf64;
+	//Elf32_Phdr *ph32;
+	//Elf64_Phdr *ph64;
+	//Elf32_Shdr *sh32;
+	//Elf64_Shdr *sh64;
 	int shentsize,n,phentsize;
 	off_t shoffset,phoffset,offs;
 	if(!fc_ptr) {printf("no file opened.\n"); return 0;}

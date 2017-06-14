@@ -24,6 +24,8 @@
 #include"libdwarf.h"
 #include"repl.h"
 #include "config.h"
+#include "dw_readline_completion.h"
+#include "sh_switchers.h"
 
 
 struct m_action{
@@ -53,7 +55,7 @@ void usage_b()
 }
 void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds)
 {
-	char *s1;
+	//char *s1;
 	int c;
 	action->shell=0;
 	action->script=0;

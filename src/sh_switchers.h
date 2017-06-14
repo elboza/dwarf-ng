@@ -16,7 +16,10 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef DW_SH_SWITCHERS_H
+#define DW_SH_SWITCHERS_H
 void sw_do_info(void);
 off_t get_offset(struct _structvar *ptr,int endoffset);
 void add_sh_completion(void);
 void do_create(char *ss,off_t offs,int grow,int update);
+#endif

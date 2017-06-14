@@ -25,5 +25,8 @@ int quit_shell;
 void funny_shell_disclaimer(void);
 void normal_shell_disclaimer(void);
 int check_funny(void);
+void execute(char *s);
+void run_script(char *file);
+void shell(void);
 
 #endif

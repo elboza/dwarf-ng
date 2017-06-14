@@ -35,6 +35,9 @@
 
 extern FILE *yyin;
 extern int errno;
+extern int yy_scan_string(const char *str);
+extern int yyparse (void);
+extern void yylex_destroy(void);
 
 char* rl_gets (char *prompt)
 {
@@ -73,7 +76,7 @@ void run_script(char *file)
 	yyparse();
 	fclose(fp);
 }
-void shell()
+void shell(void)
 {
 	char *cmd;
 	quit_shell=false;

@@ -72,7 +72,7 @@ void print_fatmacho_hdr()
 }
 void print_fatarch(int num)
 {
-	struct fat_header *fat;
+	//struct fat_header *fat;
 	struct fat_arch *arch;
 	int archentsize,n;
 	off_t archoffset;
@@ -92,7 +92,7 @@ void print_fatarch(int num)
 }
 void print_fatarchlist()
 {
-	struct fat_header *fat;
+	//struct fat_header *fat;
 	struct fat_arch *arch;
 	int archentsize,n;
 	off_t archoffset;
@@ -111,7 +111,7 @@ void print_mac_hdr(int arch)
 	struct mach_header *mac32;
 	struct mach_header_64 *mac64;
 	off_t arch_offs;
-	int n,x;
+	//int n,x;
 	if(!fc_ptr) {printf("no file opened.\n"); return;}
 	arch_offs=get_arch_off(arch);
 	switch(fc_ptr->file_bit_class) {
@@ -160,7 +160,7 @@ void print_lclist(int arch)
 	}
 	for(n=0;n<=max_lc(arch);n++)
 	{
-		lc=(struct lc*)offs;
+		lc=(struct load_command *)offs;
 		printf("lc[%d] [%s]\n",n,get_lc_type(get_data32(lc->cmd)));
 		offs=(off_t)(offs+get_data32(lc->cmdsize));
 	}
@@ -215,22 +215,22 @@ void print_macho_s_var(struct _fmt *fmt,struct _structvar *ptr)
 void print_lc(int arch,int lcnum)
 {
 	off_t offs;
-	int x,n;
-	struct mach_header *mac32;
-	struct mach_header_64 *mac64;
+	int n;
+	//struct mach_header *mac32;
+	//struct mach_header_64 *mac64;
 	struct load_command *lc;
 	struct segment_command *seg32;
 	struct segment_command_64 *seg64;
-	struct section *sect32;
-	struct section_64 *sect64;
-	struct uuid_command *uuid;
-	//struct lc_str *lcstr;
-	struct twolevel_hints_command *twolevel;
-	struct dylib_command *dylib;
-	struct dylinker_command *dylinker;
-	struct symtab_command *symtab;
-	struct dysymtab_command *dysymtab;
-	struct thread_command *thread;
+	//struct section *sect32;
+	//struct section_64 *sect64;
+	//struct uuid_command *uuid;
+	////struct lc_str *lcstr;
+	//struct twolevel_hints_command *twolevel;
+	//struct dylib_command *dylib;
+	//struct dylinker_command *dylinker;
+	//struct symtab_command *symtab;
+	//struct dysymtab_command *dysymtab;
+	//struct thread_command *thread;
 	
 	if(!fc_ptr) {printf("no file opened.\n"); return;}
 	offs=get_arch_off(arch);
@@ -250,10 +250,10 @@ void print_lc(int arch,int lcnum)
 					printf("cmd: 0x%x (%d) [%s]\n",get_data32(seg64->cmd),get_data32(seg64->cmd),get_lc_type(get_data32(seg64->cmd)));
 					printf("cmdsize: 0x%x (%d)\n",get_data32(seg64->cmdsize),get_data32(seg64->cmdsize));
 					printf("segname: %s\n",seg64->segname);
-					printf("vmaddr: 0x%x (%d)\n",get_data64(seg64->vmaddr),get_data64(seg64->vmaddr));
-					printf("vmsize: 0x%x (%d)\n",get_data64(seg64->vmsize),get_data64(seg64->vmsize));
-					printf("fileoff: 0x%x (%d)\n",get_data64(seg64->fileoff),get_data64(seg64->fileoff));
-					printf("filesize: 0x%x (%d)\n",get_data64(seg64->filesize),get_data64(seg64->filesize));
+					printf("vmaddr: 0x%llx (%lld)\n",get_data64(seg64->vmaddr),get_data64(seg64->vmaddr));
+					printf("vmsize: 0x%llx (%lld)\n",get_data64(seg64->vmsize),get_data64(seg64->vmsize));
+					printf("fileoff: 0x%llx (%lld)\n",get_data64(seg64->fileoff),get_data64(seg64->fileoff));
+					printf("filesize: 0x%llx (%lld)\n",get_data64(seg64->filesize),get_data64(seg64->filesize));
 					printf("maxprot: 0x%x (%d)\n",get_data32(seg64->maxprot),get_data32(seg64->maxprot));
 					printf("initprot: 0x%x (%d)\n",get_data32(seg64->initprot),get_data32(seg64->initprot));
 					printf("nsects: 0x%x (%d)\n",get_data32(seg64->nsects),get_data32(seg64->nsects));
@@ -336,8 +336,8 @@ void print_sect(int arch,int lc,int sect)
 {
 	int x,n;
 	off_t offs;
-	struct mach_header *mac32;
-	struct mach_header_64 *mac64;
+	//struct mach_header *mac32;
+	//struct mach_header_64 *mac64;
 	struct load_command *lcmd;
 	struct segment_command *seg32;
 	struct segment_command_64 *seg64;
@@ -366,8 +366,8 @@ void print_sect(int arch,int lc,int sect)
 			sect64=(struct section_64*)(offs+fc_ptr->faddr);
 			printf("sectname: %s\n",sect64->sectname);
 			printf("segname: %s\n",sect64->segname);
-			printf("addr: 0x%x (%d)\n",get_data64(sect64->addr),get_data64(sect64->addr));
-			printf("size: 0x%x (%d)\n",get_data64(sect64->size),get_data64(sect64->size));
+			printf("addr: 0x%llx (%lld)\n",get_data64(sect64->addr),get_data64(sect64->addr));
+			printf("size: 0x%llx (%lld)\n",get_data64(sect64->size),get_data64(sect64->size));
 			printf("offset: 0x%x (%d)\n",get_data32(sect64->offset),get_data32(sect64->offset));
 			printf("align: 0x%x (%d)\n",get_data32(sect64->align),get_data32(sect64->align));
 			printf("reloff: 0x%x (%d)\n",get_data32(sect64->reloff),get_data32(sect64->reloff));
@@ -411,11 +411,11 @@ void print_sectlist(int arch,int lc)
 {
 	int x,n;
 	off_t offs;
-	struct mach_header *mac32;
-	struct mach_header_64 *mac64;
+	//struct mach_header *mac32;
+	//struct mach_header_64 *mac64;
 	struct load_command *lcmd;
-	struct segment_command *seg32;
-	struct segment_command_64 *seg64;
+	//struct segment_command *seg32;
+	//struct segment_command_64 *seg64;
 	struct section *sect32;
 	struct section_64 *sect64;
 	if(!fc_ptr) return;
@@ -434,7 +434,7 @@ void print_sectlist(int arch,int lc)
 			for(n=0;n<=max_sect(arch,lc);n++)
 			{
 				sect64=(struct section_64*)(offs+fc_ptr->faddr);
-				printf("sect[%d] [%s] offs:0x%x size:0x%x\n",n,sect64->sectname,get_data32(sect64->offset),get_data64(sect64->size));
+				printf("sect[%d] [%s] offs:0x%x size:0x%llx\n",n,sect64->sectname,get_data32(sect64->offset),get_data64(sect64->size));
 				offs=offs+sizeof(struct section_64);
 			}
 			break;

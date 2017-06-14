@@ -28,7 +28,7 @@ void file_probe()
 	_IMAGE_DOS_HEADER *mzexe;
 	_IMAGE_NT_HEADERS *pe;
 	_IMAGE_FILE_HEADER *pe2;
-	int x,count;
+	int x;
 	//probe if is mach-o
 	if(!fc_ptr) {printf("no file loaded!\n"); return;}
 	mac=(struct mach_header*)fc_ptr->faddr;
@@ -54,7 +54,7 @@ void file_probe()
 	}
 	//probe if it is an ELF
 	elf=(Elf32_Ehdr*)fc_ptr->faddr;
-	if((strncmp(ELFMAG,elf->e_ident,4))==0)
+	if((strncmp(ELFMAG,(char *)elf->e_ident,4))==0)
 	{
 		fc_ptr->file_type=FT_ELF;
 		if(elf->e_ident[EI_DATA]==ELFDATA2LSB) fc_ptr->file_endian=little_endian;
@@ -75,7 +75,7 @@ void file_probe()
 	{
 		fc_ptr->file_type=FT_MZEXE;
 		fc_ptr->file_endian=little_endian;
-		count=0;
+		//count=0;
 		x=get_data32(mzexe->e_lfanew);
 		pe=(_IMAGE_NT_HEADERS*)(fc_ptr->faddr+x);
 		x=get_data32(pe->Signature);
@@ -152,10 +152,11 @@ struct _var* get_s_val(struct _structvar *ptr)
 			return NULL;
 			break;
 	}
+	return NULL;
 }
 void set_s_val(struct _structvar *ptr,struct _var *val)
 {
-	if(!fc_ptr) {printf("unknown file.\n"); return NULL;}
+	if(!fc_ptr) {printf("unknown file.\n"); return;}
 	switch(fc_ptr->file_type){
 		case FT_ELF:
 			elf_set_s_val(ptr,val);

@@ -32,14 +32,14 @@ void print_elf_hdr()
 	switch(fc_ptr->file_bit_class) {
 		case bit64:
 			elf64=(Elf64_Ehdr*) fc_ptr->faddr;
-			strncpy(str,elf64->e_ident,4);
+			strncpy(str,(char *)elf64->e_ident,4);
 			printf("e_ident: %s\n",str);
 			printf("e_type: 0x%x (%d)\n",get_data16(elf64->e_type),get_data16(elf64->e_type));
 			printf("e_machine: 0x%x (%d)\n",get_data16(elf64->e_machine),get_data16(elf64->e_machine));
 			printf("e_version: 0x%x (%d)\n",get_data16(elf64->e_version),get_data16(elf64->e_version));
-			printf("e_entry: 0x%x (%d)\n",get_data64(elf64->e_entry),get_data64(elf64->e_entry));
-			printf("e_phoff: 0x%x (%d)\n",get_data64(elf64->e_phoff),get_data64(elf64->e_phoff));
-			printf("e_shoff: 0x%x (%d)\n",get_data64(elf64->e_shoff),get_data64(elf64->e_shoff));
+			printf("e_entry: 0x%llx (%lld)\n",get_data64(elf64->e_entry),get_data64(elf64->e_entry));
+			printf("e_phoff: 0x%llx (%lld)\n",get_data64(elf64->e_phoff),get_data64(elf64->e_phoff));
+			printf("e_shoff: 0x%llx (%lld)\n",get_data64(elf64->e_shoff),get_data64(elf64->e_shoff));
 			printf("e_flags: 0x%x (%d)\n",get_data32(elf64->e_flags),get_data32(elf64->e_flags));
 			printf("e_ehsize: 0x%x (%d)\n",get_data16(elf64->e_ehsize),get_data16(elf64->e_ehsize));
 			printf("e_phentsize: 0x%x (%d)\n",get_data16(elf64->e_phentsize),get_data16(elf64->e_phentsize));
@@ -51,7 +51,7 @@ void print_elf_hdr()
 		case bit32:
 		default:
 			elf32=(Elf32_Ehdr*) fc_ptr->faddr;
-			strncpy(str,elf32->e_ident,4);
+			strncpy(str,(char *)elf32->e_ident,4);
 			printf("e_ident: %s\n",str);
 			printf("e_type: 0x%x (%d)\n",get_data16(elf32->e_type),get_data16(elf32->e_type));
 			printf("e_machine: 0x%x (%d)\n",get_data16(elf32->e_machine),get_data16(elf32->e_machine));
@@ -73,7 +73,7 @@ void print_sh(int num)
 {
 	Elf32_Shdr *elf32;
 	Elf64_Shdr *elf64;
-	char str[10];
+	//char str[10];
 	int shentsize,n;
 	off_t shoffset;
 	if(num>max_sh()) {printf("out of sh bound.\n"); return;}
@@ -88,14 +88,14 @@ void print_sh(int num)
 			elf64=(Elf64_Shdr*)(fc_ptr->faddr+shoffset);
 			printf("sh_name: 0x%x (%d) [%s]\n",get_data32(elf64->sh_name),get_data32(elf64->sh_name),print_sh_strtable((int)(get_data32(elf64->sh_name))));
 			printf("sh_type: 0x%x (%d)\n",get_data32(elf64->sh_type),get_data32(elf64->sh_type));
-			printf("sh_flags: 0x%x (%d)\n",get_data64(elf64->sh_flags),get_data64(elf64->sh_flags));
-			printf("sh_addr: 0x%x (%d)\n",get_data64(elf64->sh_addr),get_data64(elf64->sh_addr));
-			printf("sh_offset: 0x%x (%d)\n",get_data64(elf64->sh_offset),get_data64(elf64->sh_offset));
-			printf("sh_size: 0x%x (%d)\n",get_data64(elf64->sh_size),get_data64(elf64->sh_size));
+			printf("sh_flags: 0x%llx (%lld)\n",get_data64(elf64->sh_flags),get_data64(elf64->sh_flags));
+			printf("sh_addr: 0x%llx (%lld)\n",get_data64(elf64->sh_addr),get_data64(elf64->sh_addr));
+			printf("sh_offset: 0x%llx (%lld)\n",get_data64(elf64->sh_offset),get_data64(elf64->sh_offset));
+			printf("sh_size: 0x%llx (%lld)\n",get_data64(elf64->sh_size),get_data64(elf64->sh_size));
 			printf("sh_link: 0x%x (%d)\n",get_data32(elf64->sh_link),get_data32(elf64->sh_link));
 			printf("sh_info: 0x%x (%d)\n",get_data32(elf64->sh_info),get_data32(elf64->sh_info));
-			printf("sh_addralign: 0x%x (%d)\n",get_data64(elf64->sh_addralign),get_data64(elf64->sh_addralign));
-			printf("sh_entsize: 0x%x (%d)\n",get_data64(elf64->sh_entsize),get_data64(elf64->sh_entsize));
+			printf("sh_addralign: 0x%llx (%lld)\n",get_data64(elf64->sh_addralign),get_data64(elf64->sh_addralign));
+			printf("sh_entsize: 0x%llx (%lld)\n",get_data64(elf64->sh_entsize),get_data64(elf64->sh_entsize));
   			break;
 		case bit32:
 		default:
@@ -117,7 +117,7 @@ void print_ph(int num)
 {
 	Elf32_Phdr *elf32;
 	Elf64_Phdr *elf64;
-	char str[10];
+	//char str[10];
 	int phentsize,n;
 	off_t phoffset;
 	if(num>max_ph()) {printf("out of ph bound.\n"); return;}
@@ -132,12 +132,12 @@ void print_ph(int num)
 			elf64=(Elf64_Phdr*)(fc_ptr->faddr+phoffset);
 			printf("p_type: 0x%x (%d)\n",get_data32(elf64->p_type),get_data32(elf64->p_type));
 			printf("p_flags: 0x%x (%d)\n",get_data32(elf64->p_flags),get_data32(elf64->p_flags));
-			printf("p_offset: 0x%x (%d)\n",get_data64(elf64->p_offset),get_data32(elf64->p_offset));
-			printf("p_vaddr: 0x%x (%d)\n",get_data64(elf64->p_vaddr),get_data32(elf64->p_vaddr));
-			printf("p_paddr: 0x%x (%d)\n",get_data64(elf64->p_paddr),get_data32(elf64->p_paddr));
-			printf("p_filesz: 0x%x (%d)\n",get_data64(elf64->p_filesz),get_data32(elf64->p_filesz));
-			printf("p_memsz: 0x%x (%d)\n",get_data64(elf64->p_memsz),get_data32(elf64->p_memsz));
-			printf("p_align: 0x%x (%d)\n",get_data64(elf64->p_align),get_data32(elf64->p_align));
+			printf("p_offset: 0x%llx (%lld)\n",get_data64(elf64->p_offset),get_data64(elf64->p_offset));
+			printf("p_vaddr: 0x%llx (%lld)\n",get_data64(elf64->p_vaddr),get_data64(elf64->p_vaddr));
+			printf("p_paddr: 0x%llx (%lld)\n",get_data64(elf64->p_paddr),get_data64(elf64->p_paddr));
+			printf("p_filesz: 0x%llx (%lld)\n",get_data64(elf64->p_filesz),get_data64(elf64->p_filesz));
+			printf("p_memsz: 0x%llx (%d)\n",get_data64(elf64->p_memsz),get_data32(elf64->p_memsz));
+			printf("p_align: 0x%llx (%lld)\n",get_data64(elf64->p_align),get_data64(elf64->p_align));
 			break;
 		case bit32:
 		default:
@@ -157,7 +157,7 @@ void print_shlist()
 {
 	Elf32_Shdr *sh32;
 	Elf64_Shdr *sh64;
-	int shentsize,n,x;
+	int shentsize,n;
 	off_t shoffset;
 	shoffset=elf_get_sh_offs();
 	shentsize=elf_get_sh_entsize();
@@ -167,7 +167,7 @@ void print_shlist()
 		switch(fc_ptr->file_bit_class) {
 			case bit64:
 				sh64=(Elf64_Shdr*)(fc_ptr->faddr+shoffset);
-				printf("[%s] 0x%x\n",print_sh_strtable((int)(get_data32(sh64->sh_name))),get_data64(sh64->sh_offset));
+				printf("[%s] 0x%llx\n",print_sh_strtable((int)(get_data32(sh64->sh_name))),get_data64(sh64->sh_offset));
 				break;
 			case bit32:
 			default:
@@ -182,7 +182,7 @@ void print_phlist()
 {
 	Elf32_Phdr *ph32;
 	Elf64_Phdr *ph64;
-	int phentsize,n,x;
+	int phentsize,n;
 	off_t phoffset;
 	phoffset=elf_get_ph_offs();
 	phentsize=elf_get_ph_entsize();
@@ -191,12 +191,12 @@ void print_phlist()
 		printf("ph[%d] ",n);
 		switch(fc_ptr->file_bit_class) {
 			case bit64:
-				ph64=(Elf64_Shdr*)(fc_ptr->faddr+phoffset);
-				printf("[%s] 0x%x\n",print_ph_type((int)(get_data32(ph64->p_type))),get_data64(ph64->p_offset));
+				ph64=(Elf64_Phdr*)(fc_ptr->faddr+phoffset);
+				printf("[%s] 0x%llx\n",print_ph_type((int)(get_data32(ph64->p_type))),get_data64(ph64->p_offset));
 				break;
 			case bit32:
 			default:
-				ph32=(Elf32_Shdr*)(fc_ptr->faddr+phoffset);
+				ph32=(Elf32_Phdr*)(fc_ptr->faddr+phoffset);
 				printf("[%s] 0x%x\n",print_ph_type((int)(get_data32(ph32->p_type))),get_data32(ph32->p_offset));
 				break;
 		}
@@ -210,7 +210,8 @@ char* print_sh_strtable(int num)
 	Elf32_Shdr *sh32;
 	Elf64_Shdr *sh64;
 	int shentsize,n,x;
-	off_t shoffset,shstrndxoffset,strtable;
+	off_t shoffset,shstrndxoffset;
+	char *strtable;
 	shoffset=elf_get_sh_offs();
 	shentsize=elf_get_sh_entsize();
 	switch(fc_ptr->file_bit_class) {

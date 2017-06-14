@@ -106,8 +106,8 @@ struct _var* get_fatmacho_var(int sect,int num,char *varname)
 	struct _var *var;
 	struct fat_header *fat;
 	struct fat_arch *arch;
-	int fatentsize,n,archentsize;
-	off_t fatoffset,archoffset;
+	int n,archentsize;
+	off_t archoffset;
 	if(!fc_ptr) {printf("no file opened.\n"); return NULL;}
 	var=createtmpvar();
 	if(!var) return NULL;
@@ -143,7 +143,7 @@ void fatmacho_set_s_val(struct _structvar *ptr,struct _var *val)
 {
 	int sect,num;
 	char varname[VARNAME_LEN];
-	struct _var *var;
+	//struct _var *var;
 	if(!ptr) return;
 	strcpy(varname,"");
 	num=ptr->num;
@@ -156,8 +156,8 @@ void set_fatmacho_var(int sect,int num,char *varname,struct _var *val)
 {
 	struct fat_header *fat;
 	struct fat_arch *arch;
-	int fatentsize,n,archentsize;
-	off_t fatoffset,archoffset;
+	int n,archentsize;
+	off_t archoffset;
 	if(!fc_ptr) {printf("no file opened.\n"); return;}
 	if(!val) return;
 	switch(sect) {
@@ -212,8 +212,8 @@ int max_sect(int arch,int lc)
 {
 	int x,n;
 	off_t offs;
-	struct mach_header *mac32;
-	struct mach_header_64 *mac64;
+	//struct mach_header *mac32;
+	//struct mach_header_64 *mac64;
 	struct load_command *lcmd;
 	struct segment_command *seg32;
 	struct segment_command_64 *seg64;
@@ -287,14 +287,14 @@ struct _var* get_macho_var(int sect,int arch,int lc,int lc_sect,char *varname)
 	struct segment_command_64 *seg64;
 	struct section *sect32;
 	struct section_64 *sect64;
-	struct uuid_command *uuid;
-	//struct lc_str *lcstr;
-	struct twolevel_hints_command *twolevel;
-	struct dylib_command *dylib;
-	struct dylinker_command *dylinker;
-	struct symtab_command *symtab;
-	struct dysymtab_command *dysymtab;
-	struct thread_command *thread;
+	//struct uuid_command *uuid;
+	////struct lc_str *lcstr;
+	//struct twolevel_hints_command *twolevel;
+	//struct dylib_command *dylib;
+	//struct dylinker_command *dylinker;
+	//struct symtab_command *symtab;
+	//struct dysymtab_command *dysymtab;
+	//struct thread_command *thread;
 
 	if(!fc_ptr) return NULL;
 	var=createtmpvar();
@@ -507,7 +507,7 @@ void macho_set_s_val(struct _structvar *ptr,struct _var *val)
 {
 	int lc_sect,lc,arch,sect;
 	char varname[VARNAME_LEN];
-	struct _var *var;
+	//struct _var *var;
 	if(!ptr) return;
 	arch=-1;
 	strcpy(varname,"");
@@ -536,7 +536,7 @@ void set_macho_var(int sect,int arch,int lc,int lc_sect,char *varname,struct _va
 {
 	off_t offs;
 	int x,n;
-	struct _var *var;
+	//struct _var *var;
 	struct mach_header *mac32;
 	struct mach_header_64 *mac64;
 	struct load_command *lcmd;
@@ -544,14 +544,14 @@ void set_macho_var(int sect,int arch,int lc,int lc_sect,char *varname,struct _va
 	struct segment_command_64 *seg64;
 	struct section *sect32;
 	struct section_64 *sect64;
-	struct uuid_command *uuid;
-	//struct lc_str *lcstr;
-	struct twolevel_hints_command *twolevel;
-	struct dylib_command *dylib;
-	struct dylinker_command *dylinker;
-	struct symtab_command *symtab;
-	struct dysymtab_command *dysymtab;
-	struct thread_command *thread;
+	//struct uuid_command *uuid;
+	////struct lc_str *lcstr;
+	//struct twolevel_hints_command *twolevel;
+	//struct dylib_command *dylib;
+	//struct dylinker_command *dylinker;
+	//struct symtab_command *symtab;
+	//struct dysymtab_command *dysymtab;
+	//struct thread_command *thread;
 
 	if(!fc_ptr) return;
 	if(lc>max_lc(arch)) {printf("out of lc bound.\n"); return;}
@@ -780,8 +780,8 @@ off_t get_macho_offset2(int sect,int arch,int lc_num,int sec_num,int endoffset)
 {
 	off_t offs;
 	int x,n;
-	struct mach_header *mac32;
-	struct mach_header_64 *mac64;
+	//struct mach_header *mac32;
+	//struct mach_header_64 *mac64;
 	struct load_command *lcmd;
 	struct segment_command *seg32;
 	struct segment_command_64 *seg64;
@@ -924,10 +924,10 @@ off_t get_fatmacho_offset(struct _structvar *ptr,int endoffset)
 }
 off_t get_fatmacho_offset2(int sect,int num,int endoffset)
 {
-	struct fat_header *fat;
-	struct fat_arch *arch;
-	int fatentsize,n,archentsize;
-	off_t fatoffset,archoffset,offs;
+	//struct fat_header *fat;
+	//struct fat_arch *arch;
+	int n,archentsize;
+	off_t archoffset,offs;
 	if(!fc_ptr) {printf("no file opened.\n"); return 0;}
 	switch(sect) {
 		case SECT_FATMACHO:

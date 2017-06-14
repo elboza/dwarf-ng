@@ -29,7 +29,7 @@ struct comp_list
 }*first_comp,*last_comp;
 
 void initialize_readline(void);
-char ** dwarf_completion(char *text,int start,int end);
+char** dwarf_completion(char *text,int start,int end);
 char* dwarf_command_generator(char *text,int state);
 void add_completion(char *path,char *item,int type);
 void free_completion(void);
