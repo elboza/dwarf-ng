@@ -19,6 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<ctype.h>
 #include<string.h>
 #include<unistd.h>
 #include<errno.h>
@@ -85,32 +86,32 @@ uint8_t peek8(off_t offset)
 }
 uint16_t peek16(off_t offset)
 {
-	int res;
+	uint16_t res;
 	uint16_t *mem;
 	mem=(uint16_t*)fc_ptr->faddr;
 	mem=(uint16_t*)((char*)mem+offset);
-	res=(int)*mem;
+	res=*mem;
 	if(fc_ptr->cpu_endian==little_endian) endian_swap_16(&res);
 	return res;
 }
 uint32_t peek32(off_t offset)
 {
-	int res;
+	uint32_t res;
 	uint32_t *mem;
 	mem=(uint32_t*)fc_ptr->faddr;
 	mem=(uint32_t*)((char*)mem+offset);
-	res=(int)*mem;
+	res=*mem;
 	if(fc_ptr->cpu_endian==little_endian) endian_swap_32(&res);
 	//res=(int)data;
 	return res;
 }
 uint64_t peek64(off_t offset)
 {
-	int res;
+	uint64_t res;
 	uint64_t *mem;
 	mem=(uint64_t*)fc_ptr->faddr;
 	mem=(uint64_t*)((char*)mem+offset);
-	res=(int)*mem;
+	res=*mem;
 	if(fc_ptr->cpu_endian==little_endian) endian_swap_64(&res);
 	//res=(int)data;
 	return res;

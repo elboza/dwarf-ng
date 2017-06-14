@@ -82,7 +82,7 @@ int setvarval(struct _var *ptr,int type, void *val)
 			if(!ptr->val.s) {printf("error allocating new var strval!\n"); ptr->type=VART_NULL; return -1;}
 			break;
 		case VART_NUM:
-			ptr->val.num=x;
+			ptr->val.num=*x;
 			break;
 		default:
 			printf("undefined var type, aborting new var setval.\n");
@@ -112,14 +112,15 @@ int addvar(struct _var *var)
 	}
 	gv_last=ptr;
 	var->var_type=REGULAR_VAR;
+	return true;
 }
 int delvar(struct _var *var)
 {
-	
+	return true;	
 }
 int delallvar(void)
 {
-	
+	return true;
 }
 off_t getvarnum(char *name)
 {

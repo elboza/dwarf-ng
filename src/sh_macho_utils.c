@@ -250,10 +250,10 @@ void print_lc(int arch,int lcnum)
 					printf("cmd: 0x%x (%d) [%s]\n",get_data32(seg64->cmd),get_data32(seg64->cmd),get_lc_type(get_data32(seg64->cmd)));
 					printf("cmdsize: 0x%x (%d)\n",get_data32(seg64->cmdsize),get_data32(seg64->cmdsize));
 					printf("segname: %s\n",seg64->segname);
-					printf("vmaddr: 0x%llx (%lld)\n",get_data64(seg64->vmaddr),get_data64(seg64->vmaddr));
-					printf("vmsize: 0x%llx (%lld)\n",get_data64(seg64->vmsize),get_data64(seg64->vmsize));
-					printf("fileoff: 0x%llx (%lld)\n",get_data64(seg64->fileoff),get_data64(seg64->fileoff));
-					printf("filesize: 0x%llx (%lld)\n",get_data64(seg64->filesize),get_data64(seg64->filesize));
+					printf("vmaddr: 0x%"PRIx64" (%"PRId64")\n",get_data64(seg64->vmaddr),get_data64(seg64->vmaddr));
+					printf("vmsize: 0x%"PRIx64" (%"PRId64")\n",get_data64(seg64->vmsize),get_data64(seg64->vmsize));
+					printf("fileoff: 0x%"PRIx64" (%"PRId64")\n",get_data64(seg64->fileoff),get_data64(seg64->fileoff));
+					printf("filesize: 0x%"PRIx64" (%"PRId64")\n",get_data64(seg64->filesize),get_data64(seg64->filesize));
 					printf("maxprot: 0x%x (%d)\n",get_data32(seg64->maxprot),get_data32(seg64->maxprot));
 					printf("initprot: 0x%x (%d)\n",get_data32(seg64->initprot),get_data32(seg64->initprot));
 					printf("nsects: 0x%x (%d)\n",get_data32(seg64->nsects),get_data32(seg64->nsects));
@@ -366,8 +366,8 @@ void print_sect(int arch,int lc,int sect)
 			sect64=(struct section_64*)(offs+fc_ptr->faddr);
 			printf("sectname: %s\n",sect64->sectname);
 			printf("segname: %s\n",sect64->segname);
-			printf("addr: 0x%llx (%lld)\n",get_data64(sect64->addr),get_data64(sect64->addr));
-			printf("size: 0x%llx (%lld)\n",get_data64(sect64->size),get_data64(sect64->size));
+			printf("addr: 0x%"PRIx64" (%"PRId64")\n",get_data64(sect64->addr),get_data64(sect64->addr));
+			printf("size: 0x%"PRIx64" (%"PRId64")\n",get_data64(sect64->size),get_data64(sect64->size));
 			printf("offset: 0x%x (%d)\n",get_data32(sect64->offset),get_data32(sect64->offset));
 			printf("align: 0x%x (%d)\n",get_data32(sect64->align),get_data32(sect64->align));
 			printf("reloff: 0x%x (%d)\n",get_data32(sect64->reloff),get_data32(sect64->reloff));
@@ -434,7 +434,7 @@ void print_sectlist(int arch,int lc)
 			for(n=0;n<=max_sect(arch,lc);n++)
 			{
 				sect64=(struct section_64*)(offs+fc_ptr->faddr);
-				printf("sect[%d] [%s] offs:0x%x size:0x%llx\n",n,sect64->sectname,get_data32(sect64->offset),get_data64(sect64->size));
+				printf("sect[%d] [%s] offs:0x%x size:0x%"PRIx64"\n",n,sect64->sectname,get_data32(sect64->offset),get_data64(sect64->size));
 				offs=offs+sizeof(struct section_64);
 			}
 			break;

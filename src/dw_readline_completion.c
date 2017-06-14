@@ -26,7 +26,7 @@
 #include<stdio.h>
 #include<readline/readline.h>
 #include<readline/history.h>
-#include"stdint.h"
+#include<inttypes.h>
 #include"dw_readline_completion.h"
 #include"utils.h"
 

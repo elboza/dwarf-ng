@@ -106,7 +106,7 @@ void print_optionalheader_hdr()
 		printf("AddressOfEntryPoint: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.AddressOfEntryPoint),get_data32(pe64->OptionalHeader.AddressOfEntryPoint));
 		printf("BaseOfCode: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.BaseOfCode),get_data32(pe64->OptionalHeader.BaseOfCode));
 		//printf("BaseOfData: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.BaseOfData),get_data32(pe64->OptionalHeader.BaseOfData));
-		printf("ImageBase: 0x%x (%d)\n",get_data64(pe64->OptionalHeader.ImageBase),get_data64(pe64->OptionalHeader.ImageBase));
+		printf("ImageBase: 0x%"PRIx64" (%"PRId64")\n",get_data64(pe64->OptionalHeader.ImageBase),get_data64(pe64->OptionalHeader.ImageBase));
 		printf("SectionAlignment: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.SectionAlignment),get_data32(pe64->OptionalHeader.SectionAlignment));
 		printf("FileAlignment: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.FileAlignment),get_data32(pe64->OptionalHeader.FileAlignment));
 		printf("MajorOperatingSystemVersion: 0x%x (%d)\n",get_data16(pe64->OptionalHeader.MajorOperatingSystemVersion),get_data16(pe64->OptionalHeader.MajorOperatingSystemVersion));
@@ -121,10 +121,10 @@ void print_optionalheader_hdr()
 		printf("CheckSum: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.CheckSum),get_data32(pe64->OptionalHeader.CheckSum));
 		printf("Subsystem: 0x%x (%d)\n",get_data16(pe64->OptionalHeader.Subsystem),get_data16(pe64->OptionalHeader.Subsystem));
 		printf("DllCharacteristics: 0x%x (%d)\n",get_data16(pe64->OptionalHeader.DllCharacteristics),get_data16(pe64->OptionalHeader.DllCharacteristics));
-		printf("SizeOfStackReserve: 0x%x (%d)\n",get_data64(pe64->OptionalHeader.SizeOfStackReserve),get_data64(pe64->OptionalHeader.SizeOfStackReserve));
-		printf("SizeOfStackCommit: 0x%x (%d)\n",get_data64(pe64->OptionalHeader.SizeOfStackCommit),get_data64(pe64->OptionalHeader.SizeOfStackCommit));
-		printf("SizeOfHeapReserve: 0x%x (%d)\n",get_data64(pe64->OptionalHeader.SizeOfHeapReserve),get_data64(pe64->OptionalHeader.SizeOfHeapReserve));
-		printf("SizeOfHeapCommit: 0x%x (%d)\n",get_data64(pe64->OptionalHeader.SizeOfHeapCommit),get_data64(pe64->OptionalHeader.SizeOfHeapCommit));
+		printf("SizeOfStackReserve: 0x%"PRIx64" (%"PRId64")\n",get_data64(pe64->OptionalHeader.SizeOfStackReserve),get_data64(pe64->OptionalHeader.SizeOfStackReserve));
+		printf("SizeOfStackCommit: 0x%"PRIx64" (%"PRId64")\n",get_data64(pe64->OptionalHeader.SizeOfStackCommit),get_data64(pe64->OptionalHeader.SizeOfStackCommit));
+		printf("SizeOfHeapReserve: 0x%"PRIx64" (%"PRId64")\n",get_data64(pe64->OptionalHeader.SizeOfHeapReserve),get_data64(pe64->OptionalHeader.SizeOfHeapReserve));
+		printf("SizeOfHeapCommit: 0x%"PRIx64" (%"PRId64")\n",get_data64(pe64->OptionalHeader.SizeOfHeapCommit),get_data64(pe64->OptionalHeader.SizeOfHeapCommit));
 		printf("LoaderFlags: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.LoaderFlags),get_data32(pe64->OptionalHeader.LoaderFlags));
 		printf("NumberOfRvaAndSizes: 0x%x (%d)\n",get_data32(pe64->OptionalHeader.NumberOfRvaAndSizes),get_data32(pe64->OptionalHeader.NumberOfRvaAndSizes));
 			break;
@@ -225,11 +225,11 @@ void print_pe_s_var(struct _fmt *fmt,struct _structvar *ptr)
 void print_pe_sectlist()
 {
 	_IMAGE_DOS_HEADER *mz;
-	_IMAGE_NT_HEADERS *pe;
-	_IMAGE_NT_HEADERS64 *pe64;
+	//_IMAGE_NT_HEADERS *pe;
+	//_IMAGE_NT_HEADERS64 *pe64;
 	_IMAGE_SECTION_HEADER *sect;
-	int x,n,maxsect,peoff;
-	off_t offset;
+	int n,maxsect,peoff;
+	//off_t offset;
 	char ss[15];
 	if(!fc_ptr) return;
 	maxsect=get_max_pesect();
@@ -260,11 +260,11 @@ void print_pe_sectlist()
 void print_pe_sect(int num)
 {
 	_IMAGE_DOS_HEADER *mz;
-	_IMAGE_NT_HEADERS *pe;
-	_IMAGE_NT_HEADERS64 *pe64;
+	//_IMAGE_NT_HEADERS *pe;
+	//_IMAGE_NT_HEADERS64 *pe64;
 	_IMAGE_SECTION_HEADER *sect;
-	int x,n,peoff;
-	off_t offset;
+	int n,peoff;
+	//off_t offset;
 	char ss[15];
 	if(!fc_ptr) return;
 	if(num>get_max_pesect()) {printf("out of sect bounds.\n");return;}

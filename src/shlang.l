@@ -19,6 +19,7 @@
 %{
 #include <stdlib.h>
 #include "shlang.tab.h"
+#include "utils.h"
 void yyerror(char *s);
 int yywrap(void);
 unsigned int lang_mx;

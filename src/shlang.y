@@ -25,6 +25,9 @@
 #include"repl.h"
 #include"output.h"
 #include "sh_elf_utils.h"
+#include "dw_readline_completion.h"
+#include "sh_switchers.h"
+#include "utils.h"
 
 /* prototypes */
 int yylex(void);
@@ -98,9 +101,9 @@ command: /*empty*/
 		|INJECT filename expr expr STRING {do_inject_file($2,$3,$4,$5);}
 		|FILELIST						{do_filelist();}
 		|FILEUSE expr					{do_fileuse($2);}
-		|WORD '=' expr					{setvar($1,VART_NUM,$3);}
+		|WORD '=' expr					{setvar($1,VART_NUM,(void*)$3);}
 		|WORD '=' STRING				{setvar($1,VART_WORD,$3);}
-  |svar '=' expr					{var=createtmpvar();if(var){setvarval(var,VART_NUM,$3);set_s_val($1,var);}}
+  |svar '=' expr					{var=createtmpvar();if(var){setvarval(var,VART_NUM,(void*)$3);set_s_val($1,var);}}
   |svar '=' STRING				{var=createtmpvar();if(var){setvarval(var,VART_WORD,$3);set_s_val($1,var);}}
 		|INFO							{sw_do_info();}
 		|'!' STRING						{system($2);}

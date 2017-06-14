@@ -21,6 +21,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
+#include<inttypes.h>
 #include"libdwarf.h"
 #include"repl.h"
 #include"output.h"
@@ -402,7 +403,7 @@ void show_help_create()
 void show_help_dump()
 {
 	printf("dump [%%fmt] expr\n");
-	printf("dumps portion of opened file from expr offset in various formats depending on %%fmt. The %%fmt force a different output mode. fmt is in the form: nnx (<number><letter>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: x for hex output, d or ifor decimal output s for string output c for char output, b for binary output,e (default) for a nice dump output. examples: dump @< (dumps the beginning of the file), dump %3x @<+10 (displays 3 bytes in hex format from 10 positions from the beginning of the file).\n");
+	printf("dumps portion of opened file from expr offset in various formats depending on %%fmt. The %%fmt force a different output mode. fmt is in the form: nnx (<number><letter>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: x for hex output, d or ifor decimal output s for string output c for char output, b for binary output,e (default) for a nice dump output. examples: dump @< (dumps the beginning of the file), dump %%3x @<+10 (displays 3 bytes in hex format from 10 positions from the beginning of the file).\n");
 }
 void show_help_extract()
 {
@@ -448,7 +449,7 @@ void show_help_move()
 void show_help_print()
 {
 	printf("print expr | print %%fmt expr -- (alias pp)\n");
-	printf("outputs the result of the expression (numerical or string). The %%fmt force a different output mode. fmt indicates the output mode desired. Valid option for the output modes are: x for hex output, d or ifor decimal, o for octal output. examples: print %x 16 (outputs 0xa), print %d 0xa (outputs 16).\n");
+	printf("outputs the result of the expression (numerical or string). The %%fmt force a different output mode. fmt indicates the output mode desired. Valid option for the output modes are: x for hex output, d or ifor decimal, o for octal output. examples: print %%x 16 (outputs 0xa), print %%d 0xa (outputs 16).\n");
 }
 void show_help_fileuse()
 {

@@ -21,6 +21,9 @@
 #include"libdwarf.h"
 #include"dw_readline_completion.h"
 #include"output.h"
+#include "sh_elf_utils.h"
+#include "sh_macho_utils.h"
+#include "sh_pe_utils.h"
 
 void sw_do_info(void)
 {
@@ -154,5 +157,5 @@ void do_create(char *ss,off_t offs,int grow,int update)
 			printf("unknown file type, cannot create header.\n");
 			break;
 	}
-	printf("%s %lld %d %d ",ss,(long long)offs,grow,update);
+	printf("%s %lld %d %d %d",ss,(long long)offs,grow,update,sect);
 }
