@@ -36,7 +36,7 @@ struct m_action{
 };
 void usage()
 {
-  printf("dwarf-ng-%s (c) Fernando Iazeolla < fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . >\n",VERSION);
+  printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013.\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");

@@ -152,6 +152,8 @@ void deleteallfilecfg(void)
 			ptr=NULL;
 		}
 	}
+	filecfg_first=NULL;
+	filecfg_last=NULL;
 }
 void getcopyname(char *s)
 {
@@ -165,7 +167,7 @@ void file_open(char *s)
 	enum{opencpspec,opencpnorm,opennorm,noopen};
 	struct stat st;
 	int x,opentype;
-	char openstr[255],execstr[1024];
+	char openstr[1024],execstr[4096];
 	off_t filesize;
 	fc_ptr=getnewfilecfg();
 	if(!fc_ptr) {warn("error getting new file cfg");return;}
