@@ -82,11 +82,11 @@ void do_printcfg(struct _cfg *ptr,char *s)
 		printf("file_endian: %d\n",ptr->file_endian);
 		printf("file_type: %d\n",ptr->file_type);
 		printf("file_bit_class: %d\n",ptr->file_bit_class);
-		printf("faddr: 0x%x\n",(unsigned int)ptr->faddr);
+		printf("faddr: %p\n",ptr->faddr);
 		printf("copydir: %s\n",ptr->copydir);
 		printf("copyname: %s\n",ptr->copyname);
 		printf("fd: %d\n",ptr->fd);
-		printf("prev: 0x%x next: 0x%x first: 0x%x last: 0x%x\n",(unsigned int)ptr->prev,(unsigned int)ptr->next,(unsigned int)filecfg_first,(unsigned int)filecfg_last);
+		printf("prev: %p next: %p first: %p last: %p\n",ptr->prev,ptr->next,filecfg_first,filecfg_last);
 		return;
 	}
 	if((strcmp(s,"writable"))==0)
@@ -141,7 +141,7 @@ void do_printcfg(struct _cfg *ptr,char *s)
 	}
 	if((strcmp(s,"faddr"))==0)
 	{
-		printf("0x%x\n",(unsigned int)ptr->faddr);
+		printf("%p\n",ptr->faddr);
 		return;
 	}
 	if((strcmp(s,"copydir"))==0)
@@ -177,12 +177,12 @@ printf("          ||     ||   ||           ||     \n");
 	}
 	if((strcmp(s,"prev"))==0)
 	{
-		printf("0x%x\n",(unsigned int)ptr->prev);
+		printf("%p\n",ptr->prev);
 		return;
 	}
 	if((strcmp(s,"next"))==0)
 	{
-		printf("0x%x\n",(unsigned int)ptr->next);
+		printf("%p\n",ptr->next);
 		return;
 	}
 	

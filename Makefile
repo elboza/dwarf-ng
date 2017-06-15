@@ -39,7 +39,9 @@ dist:
 	cp ${SRC_DIR}/* ${DIST_DIR}/${SRC_DIR}/
 	cp Makefile ${DIST_DIR}/
 	cp VERSION ${DIST_DIR}/
-	#cp README.md ${DIST_DIR}/
+	cp README.md ${DIST_DIR}/
+	cp ChangeLog ${DIST_DIR}/
+	cp LICENCE ${DIST_DIR}/
 	mkdir -p ${DIST_DIR}/media
 	cp media/* ${DIST_DIR}/media/
 	mkdir -p ${DIST_DIR}/doc
@@ -49,9 +51,16 @@ dist:
 	rmdir ${DIST_DIR}
 
 help:
+	@ echo "dwarf-ng Makefile help:"
+	@ echo " "
+	@ echo "Build options:"
+	@ echo "=============="
+	@ echo "  FLEX=osx  - to build on macosx systems (make FLEX=osx)"
+	@ echo "Targets:"
+	@ echo "========"
 	@ echo "The following targets are available"
-	@ echo "help      - print this message"
-	@ echo "install   - install everything"
-	@ echo "uninstall - uninstall everything"
-	@ echo "clean     - remove any temporary files"
-	@ echo "dist      - make a dist .tar.gz tarball package"
+	@ echo "  help      - print this message"
+	@ echo "  install   - install everything"
+	@ echo "  uninstall - uninstall everything"
+	@ echo "  clean     - remove any temporary files"
+	@ echo "  dist      - make a dist .tar.gz tarball package"

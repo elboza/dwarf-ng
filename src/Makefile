@@ -12,9 +12,15 @@ GRAM= cfglang.tab.c shlang.tab.c lex.yy.c lex.cfgyy.c
 RMGRAM= $(GRAM) cfglang.output shlang.output cfglang.tab.h shlang.tab.h
 TARGET=dwarf
 
-all: $(TARGET)
+all: buildmsg $(TARGET) buildingdone
 
-.PHONY: clean
+.PHONY: clean buildmsg buildingdone
+
+buildmsg:
+	@echo "building dwarf-ng..."
+
+buildingdone:
+	@echo "done."
 
 $(TARGET): $(GRAM) $(OBJECTS)
 	$(CC) $(OBJECTS) $(GRAM) $(LIBS) -o $(TARGET)
@@ -35,5 +41,7 @@ lex.yy.c: shlang.l shlang.tab.h
 	flex shlang.l
 
 clean:
+	@echo "cleaning dwarf-ng..."
 	rm -f *.o $(RMGRAM)
 	rm -f $(TARGET)
+	@echo "done."
