@@ -1,7 +1,7 @@
 /*
  sh_switchers.c : dwarf's shell switchers file functions.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -158,4 +158,8 @@ void do_create(char *ss,off_t offs,int grow,int update)
 			break;
 	}
 	printf("%s %lld %d %d %d",ss,(long long)offs,grow,update,sect);
+}
+char* decode_file_type(int x){
+	char *file_type[]={"Unknown","MZ-exe","PE","ELF","Macho","FAT Macho","FAT","FAT16","FAT32","EXT","MBR"};
+	return file_type[x];
 }

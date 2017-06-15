@@ -1,7 +1,7 @@
 /*
 utils.c : utils functions implementations.
 
-(c) 2007-2011 Fernando Iazeolla
+(c) 2007-2011-2013-2017 Fernando Iazeolla
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -242,4 +242,10 @@ char* decode_file_endian(int endian)
 					return "unknown endian";
 					break;
 	}
+}
+char* decode_yes_no(int x){
+	return (x==0)? "no":"yes";
+}
+char* decode_true_false(int x){
+	return (x==0)? "false":"true";
 }

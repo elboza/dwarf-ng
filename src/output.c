@@ -1,7 +1,7 @@
 /*
  output.c : output functions.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include"sh_elf_utils.h"
 #include"sh_macho_utils.h"
 #include"sh_pe_utils.h"
+#include"utils.h"
 //#include"../../config.h"
 
 void do_filesize(struct _cfg *ptr,int human)
@@ -72,16 +73,16 @@ void do_printcfg(struct _cfg *ptr,char *s)
 	if((strcmp(s,""))==0)
 	{
 		//printf("struct:\n");
-		printf("writable: %d\n",ptr->writable);
-		printf("can_grow: %d\n",ptr->can_grow);
+		printf("writable: %d %s\n",ptr->writable,decode_yes_no(ptr->writable));
+		printf("can_grow: %d %s\n",ptr->can_grow,decode_yes_no(ptr->can_grow));
 		printf("name :%s\n",ptr->name);
-		printf("work_on_copy: %d\n",ptr->work_on_copy);
-		printf("changed_altered: %d\n",ptr->changed_altered);
-		printf("verbose: %d\n",ptr->verbose);
-		printf("cpu_endian: %d\n",ptr->cpu_endian);
-		printf("file_endian: %d\n",ptr->file_endian);
-		printf("file_type: %d\n",ptr->file_type);
-		printf("file_bit_class: %d\n",ptr->file_bit_class);
+		printf("work_on_copy: %d %s\n",ptr->work_on_copy,decode_yes_no(ptr->work_on_copy));
+		printf("changed_altered: %d %s\n",ptr->changed_altered,decode_yes_no(ptr->changed_altered));
+		printf("verbose: %d %s\n",ptr->verbose,decode_yes_no(ptr->verbose));
+		printf("cpu_endian: %d %s\n",ptr->cpu_endian,decode_file_endian(ptr->cpu_endian));
+		printf("file_endian: %d %s\n",ptr->file_endian,decode_file_endian(ptr->file_endian));
+		printf("file_type: %d %s\n",ptr->file_type,decode_file_type(ptr->file_type));
+		printf("file_bit_class: %d %dbit\n",ptr->file_bit_class,decode_file_bit(ptr->file_bit_class));
 		printf("faddr: %p\n",ptr->faddr);
 		printf("copydir: %s\n",ptr->copydir);
 		printf("copyname: %s\n",ptr->copyname);

@@ -1,7 +1,7 @@
 /*
  sh_macho_utils.c : dwarf's shell Mach-O utils functions file.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

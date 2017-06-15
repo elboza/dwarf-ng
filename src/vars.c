@@ -1,7 +1,7 @@
 /*
  vars.c : vars functions implementation.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ int setvarval(struct _var *ptr,int type, void *val)
 			if(!ptr->val.s) {printf("error allocating new var strval!\n"); ptr->type=VART_NULL; return -1;}
 			break;
 		case VART_NUM:
-			ptr->val.num=*x;
+			ptr->val.num=(off_t)x;
 			break;
 		default:
 			printf("undefined var type, aborting new var setval.\n");

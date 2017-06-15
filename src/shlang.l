@@ -1,7 +1,7 @@
 /*
  shlang.l : dwarf's shell language lexer.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,8 +75,8 @@ newline \n
 "inject"	return INJECT;
 "@<"		return FILEBEGIN;
 "@>"		return FILEEND;
-"@@cfg"		return CFG;
-"@@maincfg"	return MAINCFG;
+"$cfg"		return CFG;
+"$maincfg"	return MAINCFG;
 "::"		return VAR_IN;
 "filelist"	return FILELIST;
 "fileuse"	return FILEUSE;

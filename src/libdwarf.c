@@ -1,7 +1,7 @@
 /*
  libdwarf.c : functions implementation.
  
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
  
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@ void cfg_reset(void)
 	cfg.file_endian=little_endian;
 	cfg.file_bit_class=0;
 	cfg.file_cpu_type=0;
+	cfg.file_type=0;
 	cfg.faddr=NULL;
 	strcpy(cfg.copydir,"/tmp");
 	strcpy(cfg.copyname,"dw_temp_file");
@@ -96,6 +97,7 @@ struct _cfg* newfilecfg(void)
 	ptr->file_endian=cfg.file_endian;
 	ptr->file_bit_class=cfg.file_bit_class;
 	ptr->file_cpu_type=cfg.file_cpu_type;
+	ptr->file_type=cfg.file_type;
 	ptr->faddr=cfg.faddr;
 	strcpy(ptr->copydir,cfg.copydir);
 	strcpy(ptr->copyname,cfg.copyname);
@@ -127,6 +129,7 @@ void rmfilecfg(struct _cfg *ptr)
 	if(ptr==filecfg_first) filecfg_first=ptr->next;
 	if(ptr==filecfg_last) filecfg_last=ptr->prev;
 	free(ptr);
+	fc_ptr=filecfg_first;
 }
 struct _cfg* getnewfilecfg(void)
 {
@@ -154,13 +157,14 @@ void deleteallfilecfg(void)
 	}
 	filecfg_first=NULL;
 	filecfg_last=NULL;
+	fc_ptr=NULL;
 }
 void getcopyname(char *s)
 {
 	static int num=0;
 	char tmp[FILENAME_LEN];
 	strncpy(tmp,s,FILENAME_LEN);
-	sprintf(s,"%s/%d%s",fc_ptr->copydir,num++,tmp);
+	sprintf(s,"%s/%s_%d",fc_ptr->copydir,tmp,num++);
 }
 void file_open(char *s)
 {
@@ -224,8 +228,9 @@ void file_open(char *s)
 	strncpy(fc_ptr->name,s,FILENAME_LEN);
 	filesize=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
 	fc_ptr->faddr=(char*)mmap(NULL,(size_t)filesize,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
-	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");close(fc_ptr->fd);rmfilecfg(fc_ptr);}
+	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
 	file_probe();
+	printf("%s opened\n",s);
 }
 void file_close(void)
 {
@@ -248,6 +253,15 @@ void file_close(void)
 		fc_ptr=NULL;
 	}
 	
+}
+void file_close_all(void){
+	while(filecfg_first){
+		file_close();
+		fc_ptr=filecfg_first;
+	}
+}
+void dw_quit(void){
+	file_close_all();
 }
 void file_save(char *s)
 {

@@ -1,7 +1,7 @@
 /*
  main.c : dwarf's main file.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ struct m_action{
 };
 void usage()
 {
-  printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013.\n",VERSION);
+  printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013-2017.\n",VERSION);
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
@@ -50,7 +50,7 @@ void usage()
 void usage_b()
 {
 	//char *s="VERSION";
-	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013\n",VERSION);
+	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013-2017\n",VERSION);
 	printf("for help type: dwarf --help\n");
 }
 void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds)

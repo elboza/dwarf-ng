@@ -41,7 +41,7 @@ $ sudo make install
 
 * flex
 * bison
-* readline
+* readline (libreadline libreadline-dev)
 * gcc
 
 

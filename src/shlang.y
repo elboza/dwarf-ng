@@ -1,7 +1,7 @@
 /*
  shlang.y : dwarf's shell language parser.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,9 +73,9 @@ commands:	command
 			/*|commands comment commands*/
 
 command: /*empty*/
-		|QUIT							{quit_shell=true;YYACCEPT;}
+		|QUIT							{dw_quit();quit_shell=true;YYACCEPT;}
 		|HELP maybehelpcommand			{/*printf("help!\n");*/}
-		|LOAD filename					{file_open($2);free_completion();add_sh_completion();printf("%s opened.\n",$2);}
+		|LOAD filename					{file_open($2);free_completion();add_sh_completion();}
 		|FILESIZE						{do_filesize(fc_ptr,false);}
 		|FILESIZE HUMAN					{do_filesize(fc_ptr,true);}
 		|DUMP fmt expr					{do_dump($2,$3);}

@@ -1,7 +1,7 @@
 /*
 libdwarf.h : the main dwarf header definitions.
 
-(c) 2007-2011 Fernando Iazeolla
+(c) 2007-2011-2013-2017 Fernando Iazeolla
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -70,6 +70,8 @@ void getcopyname(char *s);
 void readcfg(char *s);
 void file_open(char *s);
 void file_close(void);
+void file_close_all(void);
+void dw_quit(void);
 void file_save(char *s);
 off_t filesize(int fd);
 void prettybyte(char *s,off_t num);

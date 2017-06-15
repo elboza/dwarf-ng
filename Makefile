@@ -56,6 +56,8 @@ help:
 	@ echo "Build options:"
 	@ echo "=============="
 	@ echo "  FLEX=osx  - to build on macosx systems (make FLEX=osx)"
+	@ echo "              uses -ll instead of -lfl flex gcc flag"
+	@ echo " "
 	@ echo "Targets:"
 	@ echo "========"
 	@ echo "The following targets are available"

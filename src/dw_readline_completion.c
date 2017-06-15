@@ -1,7 +1,7 @@
 /*
  dw_readline_completion.h : dwarf's readline completion functions.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -101,12 +101,15 @@ void free_completion()
 		{
 			if(ptr->prev)
 			{
+				if(ptr==last_comp) last_comp=ptr->prev;
 				ptr->prev->next=ptr->next;
 			}
 			if(ptr->next)
 			{
+				if(ptr==first_comp) first_comp=ptr->next;
 				ptr->next->prev=ptr->prev;
 			}
+			free(ptr);
 		}
 	}
 }
@@ -152,34 +155,34 @@ void add_cmds_completions()
 	add_completion("fu",NULL,comp_fixed);
 	add_completion("fl",NULL,comp_fixed);
 	
-	add_completion("@@cfg",NULL,comp_fixed);
-	add_completion("@@maincfg",NULL,comp_fixed);
-	add_completion("@@cfg::work_on_copy",NULL,comp_fixed);
-	add_completion("@@cfg::writable",NULL,comp_fixed);
-	add_completion("@@cfg::can_grow",NULL,comp_fixed);
-	add_completion("@@cfg::changed_altered",NULL,comp_fixed);
-	add_completion("@@cfg::verbose",NULL,comp_fixed);
-	add_completion("@@cfg::fd",NULL,comp_fixed);
-	add_completion("@@cfg::name",NULL,comp_fixed);
-	add_completion("@@cfg::cpu_endian",NULL,comp_fixed);
-	add_completion("@@cfg::file_endian",NULL,comp_fixed);
-	add_completion("@@cfg::bitclass",NULL,comp_fixed);
-	add_completion("@@cfg::faddr",NULL,comp_fixed);
-	add_completion("@@cfg::copydir",NULL,comp_fixed);
-	add_completion("@@cfg::copyname",NULL,comp_fixed);
-	add_completion("@@cfg::xxx",NULL,comp_fixed);
-	add_completion("@@maincfg::work_on_copy",NULL,comp_fixed);
-	add_completion("@@maincfg::writable",NULL,comp_fixed);
-	add_completion("@@maincfg::can_grow",NULL,comp_fixed);
-	add_completion("@@maincfg::changed_altered",NULL,comp_fixed);
-	add_completion("@@maincfg::verbose",NULL,comp_fixed);
-	add_completion("@@maincfg::fd",NULL,comp_fixed);
-	add_completion("@@maincfg::name",NULL,comp_fixed);
-	add_completion("@@maincfg::cpu_endian",NULL,comp_fixed);
-	add_completion("@@maincfg::file_endian",NULL,comp_fixed);
-	add_completion("@@maincfg::file_bit_class",NULL,comp_fixed);
-	add_completion("@@maincfg::faddr",NULL,comp_fixed);
-	add_completion("@@maincfg::copydir",NULL,comp_fixed);
-	add_completion("@@maincfg::copyname",NULL,comp_fixed);
-	add_completion("@@maincfg::xxx",NULL,comp_fixed);
+	add_completion("cfg",NULL,comp_fixed);
+	add_completion("maincfg",NULL,comp_fixed);
+	add_completion("cfg::work_on_copy",NULL,comp_fixed);
+	add_completion("cfg::writable",NULL,comp_fixed);
+	add_completion("cfg::can_grow",NULL,comp_fixed);
+	add_completion("cfg::changed_altered",NULL,comp_fixed);
+	add_completion("cfg::verbose",NULL,comp_fixed);
+	add_completion("cfg::fd",NULL,comp_fixed);
+	add_completion("cfg::name",NULL,comp_fixed);
+	add_completion("cfg::cpu_endian",NULL,comp_fixed);
+	add_completion("cfg::file_endian",NULL,comp_fixed);
+	add_completion("cfg::bitclass",NULL,comp_fixed);
+	add_completion("cfg::faddr",NULL,comp_fixed);
+	add_completion("cfg::copydir",NULL,comp_fixed);
+	add_completion("cfg::copyname",NULL,comp_fixed);
+	add_completion("cfg::xxx",NULL,comp_fixed);
+	add_completion("maincfg::work_on_copy",NULL,comp_fixed);
+	add_completion("maincfg::writable",NULL,comp_fixed);
+	add_completion("maincfg::can_grow",NULL,comp_fixed);
+	add_completion("maincfg::changed_altered",NULL,comp_fixed);
+	add_completion("maincfg::verbose",NULL,comp_fixed);
+	add_completion("maincfg::fd",NULL,comp_fixed);
+	add_completion("maincfg::name",NULL,comp_fixed);
+	add_completion("maincfg::cpu_endian",NULL,comp_fixed);
+	add_completion("maincfg::file_endian",NULL,comp_fixed);
+	add_completion("maincfg::file_bit_class",NULL,comp_fixed);
+	add_completion("maincfg::faddr",NULL,comp_fixed);
+	add_completion("maincfg::copydir",NULL,comp_fixed);
+	add_completion("maincfg::copyname",NULL,comp_fixed);
+	add_completion("maincfg::xxx",NULL,comp_fixed);
 }

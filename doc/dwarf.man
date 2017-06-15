@@ -1,4 +1,4 @@
-.TH dwarf-ng 1 "(c) 2007-2013 Fernando Iazeolla"
+.TH dwarf-ng 1 "(c) 2007-2013-2017 Fernando Iazeolla"
 .SH NAME
 dwarf-ng - a little and powerful object file manipulation tool.
 .SH SYNOPSIS
@@ -221,7 +221,7 @@ readelf(1), objdump(1), ht(1), otool(1), gdb(1), elf(5), elfsh(1), elfdump(1)
 Fernando Iazeolla < fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . > - founder & core developer.
 .SH COPYRIGHT
 .nf
-Copyright (C) 2007-2013 Fernando Iazeolla < fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . >
+Copyright (C) 2007-2013-2017 Fernando Iazeolla < fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . >
 .P
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

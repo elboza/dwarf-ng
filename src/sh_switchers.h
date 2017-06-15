@@ -1,7 +1,7 @@
 /*
  sh_switchers.h : dwarf's shell switchers header.
 
- (c) 2007-2011 Fernando Iazeolla
+ (c) 2007-2011-2013-2017 Fernando Iazeolla
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,4 +22,5 @@ void sw_do_info(void);
 off_t get_offset(struct _structvar *ptr,int endoffset);
 void add_sh_completion(void);
 void do_create(char *ss,off_t offs,int grow,int update);
+char* decode_file_type(int x);
 #endif
