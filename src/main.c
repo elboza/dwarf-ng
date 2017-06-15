@@ -33,6 +33,7 @@ struct m_action{
 	int shell;
 	int script;
 	int exec;
+	int stdin;
 };
 void usage()
 {
@@ -61,6 +62,7 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 	action->script=0;
 	action->file=0;
 	action->exec=0;
+	action->stdin=0;
 	while (1)
 	{
 		static struct option long_options[] =
@@ -71,11 +73,12 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			{"shell",no_argument,0,'i'},
 			{"help",no_argument,0,'h'},
 			{"version",no_argument,0,'v'},
+			{"stdin",no_argument,0,'s'},
 			{0,0,0,0,}
 			
 		};
 		int option_index = 0;
-		c = getopt_long (argc, argv, "vhic:x:",long_options, &option_index);
+		c = getopt_long (argc, argv, "svhic:x:",long_options, &option_index);
 		if (c == -1) break;
 		switch(c)
 		{
@@ -98,6 +101,9 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 				//printf("to execute:%s ....testing..\n",optarg);
 				action->exec=1;
 				strncpy(cmds,optarg,FILENAME_LEN);
+				break;
+			case 's':
+				action->stdin=1;
 				break;
 			case 'h':
 			case '?':
@@ -131,6 +137,11 @@ int main(int argc,char **argv)
 		file_open(filename);
 		//free_completion();
 		add_sh_completion();
+	}
+	if(action.stdin){
+		printf("from stdin...\n");
+		open_stdin();
+		//add_sh_completion();
 	}
 	if(action.script)
 	{

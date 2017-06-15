@@ -69,6 +69,7 @@ void cfg_reset(void)
 	cfg.can_grow=false;
 	cfg.work_on_copy=false;
 	cfg.changed_altered=false;
+	cfg.fd_type=FD_REGULAR_FILE;
 	cfg.verbose=0;
 	cfg.fd=0;
 	cfg.cpu_endian=probe_cpu_endian();
@@ -91,6 +92,7 @@ struct _cfg* newfilecfg(void)
 	ptr->can_grow=cfg.can_grow;
 	ptr->work_on_copy=cfg.work_on_copy;
 	ptr->changed_altered=cfg.changed_altered;
+	ptr->fd_type=cfg.fd_type;
 	ptr->verbose=cfg.verbose;
 	ptr->fd=cfg.fd;
 	ptr->cpu_endian=cfg.cpu_endian;
@@ -232,12 +234,36 @@ void file_open(char *s)
 	file_probe();
 	printf("%s opened\n",s);
 }
+void open_stdin(void){
+	size_t buffsize=sizeof(char)*4096;
+	off_t len;
+	fc_ptr=getnewfilecfg();
+	if(!fc_ptr) {warn("error getting new file cfg");return;}
+	fc_ptr->can_grow=false;
+	fc_ptr->writable=false;
+	fc_ptr->faddr=(char*)malloc(buffsize);
+	if(fc_ptr->faddr==-1){
+		warn("error allocating file buffer");
+		rmfilecfg(fc_ptr);
+		return;
+	}
+	len=read(STDIN_FILENO,fc_ptr->faddr,7);
+	printf("%d ",len);
+	fflush(stdin);
+}
+void close_stdin(void){
+	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(fc_ptr->faddr) free(fc_ptr->faddr);
+	rmfilecfg(fc_ptr);
+	fc_ptr=NULL;
+}
 void file_close(void)
 {
 	int x;
 	char cmd[4096];
 	off_t filesize;
 	if(!fc_ptr) {printf("no file opened!\n");return;}
+	if(fc_ptr->fd_type==FD_STDIN) return close_stdin();
 	if(fc_ptr->fd)
 	{
 		filesize=lseek(fc_ptr->fd,(off_t)0,SEEK_END);

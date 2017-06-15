@@ -39,6 +39,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 typedef enum {FT_NULL,FT_MZEXE,FT_PE,FT_ELF,FT_MACHO,FT_FATMACHO,FT_FAT,FT_FAT16,FT_FAT32,FT_EXT,FT_MBR} filecodetype;
 typedef enum {little_endian,big_endian} endian;
 typedef enum {false,true} TF;
+typedef enum {FD_STDIN,FD_REGULAR_FILE} fd_type;
 typedef enum {SECT_NULL,SECT_ELF,SECT_PH,SECT_SH,SECT_LC,SECT_MAC,SECT_MZ,SECT_PE,SECT_PESECT,SECT_MACSECT,SECT_FATMACHO,SECT_FATARCH,SECT_PE_FILEHEADER,SECT_PE_OPTIONALHEADER} sectionheader;
 struct _cfg {
 	int writable;
@@ -46,6 +47,7 @@ struct _cfg {
 	char name[FILENAME_LEN];
 	int work_on_copy;
 	int changed_altered;
+	int fd_type;
 	int verbose;
 	int cpu_endian;
 	int file_endian;
@@ -69,6 +71,8 @@ void deleteallfilecfg(void);
 void getcopyname(char *s);
 void readcfg(char *s);
 void file_open(char *s);
+void open_stdin(void);
+void close_stdin(void);
 void file_close(void);
 void file_close_all(void);
 void dw_quit(void);
