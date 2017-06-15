@@ -235,7 +235,7 @@ void file_open(char *s)
 void file_close(void)
 {
 	int x;
-	char cmd[1024];
+	char cmd[4096];
 	off_t filesize;
 	if(!fc_ptr) {printf("no file opened!\n");return;}
 	if(fc_ptr->fd)

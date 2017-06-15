@@ -79,7 +79,7 @@ command: /*empty*/
 		|FILESIZE						{do_filesize(fc_ptr,false);}
 		|FILESIZE HUMAN					{do_filesize(fc_ptr,true);}
 		|DUMP fmt expr					{do_dump($2,$3);}
-		|CLOSE							{file_close();}
+		|CLOSE							{file_close();free_completion();}
 		|PRINT STRING					{printf("%s\n",$2);}
 		|PRINT fmt svar					{do_print_s_var($2,$3);}
 		|PRINT fmt expr					{do_print_expr($2,$3);}
