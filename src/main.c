@@ -26,6 +26,7 @@
 #include "config.h"
 #include "dw_readline_completion.h"
 #include "sh_switchers.h"
+#include "utils.h"
 
 
 struct m_action{
@@ -41,6 +42,7 @@ void usage()
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
+	printf("-s              --stdin                      file from stdin\n");
 	printf("-i              --shell --interactive        interactive (shell mode)\n");
 	printf("-h              --help                       show this help\n");
 	printf("-c '<commands>' --command '<commands>'       command  mode (execute commands)\n");
@@ -141,7 +143,8 @@ int main(int argc,char **argv)
 	if(action.stdin){
 		printf("from stdin...\n");
 		open_stdin();
-		//add_sh_completion();
+		reset_stdin();
+		add_sh_completion();
 	}
 	if(action.script)
 	{

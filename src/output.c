@@ -83,9 +83,11 @@ void do_printcfg(struct _cfg *ptr,char *s)
 		printf("file_endian: %d %s\n",ptr->file_endian,decode_file_endian(ptr->file_endian));
 		printf("file_type: %d %s\n",ptr->file_type,decode_file_type(ptr->file_type));
 		printf("file_bit_class: %d %dbit\n",ptr->file_bit_class,decode_file_bit(ptr->file_bit_class));
+		printf("filesize: %lld\n",(long long)ptr->filesize);
 		printf("faddr: %p\n",ptr->faddr);
 		printf("copydir: %s\n",ptr->copydir);
 		printf("copyname: %s\n",ptr->copyname);
+		printf("fd_type: %d %s\n",ptr->fd_type,decode_fd_type(ptr->fd_type));
 		printf("fd: %d\n",ptr->fd);
 		printf("prev: %p next: %p first: %p last: %p\n",ptr->prev,ptr->next,filecfg_first,filecfg_last);
 		return;

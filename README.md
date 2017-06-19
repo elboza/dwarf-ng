@@ -1,7 +1,7 @@
 dwarf-ng
 ========
 
-###-- a little and powerful object file manipulation tool.
+### -- a little and powerful object file manipulation tool.
 
 
 **dwarf-ng** is a powerful object file manipulation tools in the spirit of _gdb_. with dwarf-ng you can read and edit all the file's section headers as well as the raw data. With dwarf-ng you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. dwarf-ng also permits to inject easily new headers and pieces of code/data into the file. dwarf-ng currently handles
@@ -13,7 +13,7 @@ dwarf-ng
 
 files format. In the future new files type will be added.
 
-####LICENSE
+#### LICENSE
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

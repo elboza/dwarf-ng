@@ -249,3 +249,11 @@ char* decode_yes_no(int x){
 char* decode_true_false(int x){
 	return (x==0)? "false":"true";
 }
+void reset_stdin(void){
+	freopen("/dev/tty","rb",stdin);
+}
+char* decode_fd_type(int type){
+	if(type==0) return "FD_STDIN";
+	if(type==1) return "FD_REGULAR_FILE";
+	return "Unknown";
+}

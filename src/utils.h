@@ -49,5 +49,7 @@ int decode_file_bit(int bits);
 char* decode_file_endian(int endian);
 char* decode_yes_no(int x);
 char* decode_true_false(int x);
+void reset_stdin(void);
+char* decode_fd_type(int type);
 
 #endif

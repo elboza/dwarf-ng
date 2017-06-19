@@ -9,6 +9,9 @@ is a powerful object file manipulation tools in the spirit of \fIgdb\fP. with \f
 \fIdwarf-ng\fP currently handles \fIRaw\fP, \fIelf\fP (Elf32 and Elf64), \fIPE\fP (Portable executables, PE32 and PE+) and \fIMach-O (32 and 64 bit)\fP files format. In the future new files type will be added.
 .SH OPTIONS
 .TP
+.B -s, --stdin
+file from stdin
+.TP
 .B -i, --interactive, --shell
 interactive (shell mode)
 .TP

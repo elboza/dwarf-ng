@@ -77,6 +77,7 @@ void cfg_reset(void)
 	cfg.file_bit_class=0;
 	cfg.file_cpu_type=0;
 	cfg.file_type=0;
+	cfg.filesize=0;
 	cfg.faddr=NULL;
 	strcpy(cfg.copydir,"/tmp");
 	strcpy(cfg.copyname,"dw_temp_file");
@@ -100,6 +101,7 @@ struct _cfg* newfilecfg(void)
 	ptr->file_bit_class=cfg.file_bit_class;
 	ptr->file_cpu_type=cfg.file_cpu_type;
 	ptr->file_type=cfg.file_type;
+	ptr->filesize=cfg.filesize;
 	ptr->faddr=cfg.faddr;
 	strcpy(ptr->copydir,cfg.copydir);
 	strcpy(ptr->copyname,cfg.copyname);
@@ -229,6 +231,8 @@ void file_open(char *s)
 	}
 	strncpy(fc_ptr->name,s,FILENAME_LEN);
 	filesize=lseek(fc_ptr->fd,(off_t)0,SEEK_END);
+	fc_ptr->filesize=filesize;
+	fc_ptr->fd_type=FD_REGULAR_FILE;
 	fc_ptr->faddr=(char*)mmap(NULL,(size_t)filesize,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
 	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
 	file_probe();
@@ -242,14 +246,15 @@ void open_stdin(void){
 	fc_ptr->can_grow=false;
 	fc_ptr->writable=false;
 	fc_ptr->faddr=(char*)malloc(buffsize);
-	if(fc_ptr->faddr==-1){
+	if(!fc_ptr->faddr){
 		warn("error allocating file buffer");
 		rmfilecfg(fc_ptr);
 		return;
 	}
-	len=read(STDIN_FILENO,fc_ptr->faddr,7);
-	printf("%d ",len);
-	fflush(stdin);
+	len=read(STDIN_FILENO,fc_ptr->faddr,buffsize);
+	fc_ptr->filesize=len;
+	fc_ptr->fd_type=FD_STDIN; // stdin fd file...
+	file_probe();
 }
 void close_stdin(void){
 	if(!fc_ptr) {printf("no file opened!\n");return;}
@@ -310,8 +315,12 @@ off_t filesize(int fd)
 {
 	off_t len;
 	if(!fc_ptr) {printf("no file opened!\n");return -1;}
-	if(fd<1) {printf("no file opened.\n");return -1;}
-	len=lseek(fd,(off_t)0,SEEK_END);
+	if(fc_ptr->fd==FD_STDIN){
+		len=fc_ptr->filesize;
+	}else{
+		if(fd<1) {printf("no file opened.\n");return -1;}
+		len=lseek(fd,(off_t)0,SEEK_END);
+	}
 	return len;
 }
 void prettybyte(char *s,off_t num)

@@ -54,6 +54,7 @@ struct _cfg {
 	int file_type;
 	int file_bit_class;
 	int file_cpu_type;
+	off_t filesize;
 	char *faddr;
 	char copydir[FILENAME_LEN];
 	char copyname[FILENAME_LEN];

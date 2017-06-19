@@ -32,6 +32,7 @@
 #include"dw_readline_completion.h"
 //#include"../../config.h"
 #include"repl.h"
+#include"utils.h"
 
 extern FILE *yyin;
 extern int errno;
@@ -79,6 +80,7 @@ void run_script(char *file)
 void shell(void)
 {
 	char *cmd;
+	reset_stdin();
 	quit_shell=false;
 	if(check_funny()) funny_shell_disclaimer(); else normal_shell_disclaimer();
 	printf("entering shell-interactive mode...\n");
