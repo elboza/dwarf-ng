@@ -55,8 +55,8 @@ struct _var *var;
 %token UPDATESYMBOL 
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
-%type <iValue> expr maybenum offset maybeendoffset
-%type <sWord> filename cfgparam maybesavename grow maybeupdate
+%type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
+%type <sWord> filename cfgparam maybesavename 
 %type <sFmt> fmt
 %left EQ
 %left '+' '-'
@@ -69,8 +69,7 @@ inputdata:	commands
 
 commands:	command
 			|commands ';' command
-			|/*empty*/
-			/*|commands comment commands*/
+
 
 command: /*empty*/
 		|QUIT							{dw_quit();quit_shell=true;YYACCEPT;}

@@ -54,11 +54,9 @@ cfgfile:	commands
 
 commands:	command
 		|commands NEWLINE command
-		|/*empty*/
-		/*|commands comment commands*/
+
 		
 command: /*empty*/
-		/*|comment*/
 		|assign
 assign:	CFG_WORKONTMPCOPY EQ bool		{cfg.work_on_copy=$3;}
 		|CFG_VERBOSE EQ INTEGER			{cfg.verbose=$3;}
