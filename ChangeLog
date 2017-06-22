@@ -1,33 +1,25 @@
-******    dwarf-ng, Version 0.1
 
-* added more documentation in man page
-* fixed Readline parser
-TODO implement 'help' command
+ChangeLog:
 
+******    dwarf-ng, Version 0.3.2
 
-******    dwarf-ng, Version 0.1 beta
+* fixed reduce conflicts in cfg parser. fixed type warnings in shlang parser.
+* added --stdin. from stdin file.
+*  adding read from stdin.
+* fixed buffer limits into file_close func. added free_completion on close action.
+* changed @@cfg to $cfg. fixed var num assign segfault. fixed close/reopen
+/change_file completion vars. better cfg output.
+* fixed output pointer print. better Makefiles. added licence readme changelog files.
+* fixed rmallcfg. fixed author info on show help.
+* fixed AMD x64 cpu in table.
+* fixed code warnings.
+* cleaning and fixing code...
+* fixed to work without automake/autotools...
 
-* ELF file format supported
-* MACH-O file format supported
-* PE (Portable executable) file format supported
-* GNU/Readline lib supported
-* tmp file working
-* inject function implemented
-* add/create header function implemented
+******    dwarf-ng, Version 0.3.1
 
-******    dwarf-ng, Version 0.2
+* modified compiling scripts so that now works also on gcc version => 4.6.1 (see README file for more information).
 
-* implemented a new elf sh_str_table
-* implemented comment in language
-
-******    dwarf-ng, Version 0.2.1
-
-* fixed bug on command line input string
-* fixed bug in extended_dump putput
-
-******    dwarf-ng, Version 0.2.2
-
-* 
 
 ******    dwarf-ng, Version 0.3.0
 
@@ -41,6 +33,37 @@ TODO implement 'help' command
 * multiple files open/working simultaneously.
 
 
-******    dwarf-ng, Version 0.3.1
+******    dwarf-ng, Version 0.2.2
 
-* modified compiling scripts so that now works also on gcc version => 4.6.1 (see README file for more information).
+* 
+
+
+******    dwarf-ng, Version 0.2.1
+
+* fixed bug on command line input string
+* fixed bug in extended_dump putput
+
+
+******    dwarf-ng, Version 0.2
+
+* implemented a new elf sh_str_table
+* implemented comment in language
+
+
+******    dwarf-ng, Version 0.1 beta
+
+* ELF file format supported
+* MACH-O file format supported
+* PE (Portable executable) file format supported
+* GNU/Readline lib supported
+* tmp file working
+* inject function implemented
+* add/create header function implemented
+
+
+******    dwarf-ng, Version 0.1
+
+* added more documentation in man page
+* fixed Readline parser
+TODO implement 'help' command
+
