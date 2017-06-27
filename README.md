@@ -29,6 +29,10 @@ $ sudo make install
 * readline (libreadline libreadline-dev)
 * gcc
 
+### documentation
+
+read the [dwarf man page](doc/xdwarf.man.html)
+
 ### demo
 
 ```
