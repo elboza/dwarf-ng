@@ -42,7 +42,7 @@ void cfgyyerror(char *s);
 %token <sWord>  WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token NEWLINE CFG_WORKONTMPCOPY CFG_VERBOSE CFG_TMPDIR CFG_TMPNAME
+%token NEWLINE CFG_WORKONTMPCOPY CFG_VERBOSE CFG_TMPDIR CFG_COLORS CFG_TMPNAME
 %type <iValue> bool
 
 %left EQ
@@ -62,6 +62,7 @@ assign:	CFG_WORKONTMPCOPY EQ bool		{cfg.work_on_copy=$3;}
 		|CFG_VERBOSE EQ INTEGER			{cfg.verbose=$3;}
 		|CFG_TMPDIR EQ STRING			{strncpy(cfg.copydir,$3,VARNAME_LEN);}
 		|CFG_TMPNAME EQ STRING			{strncpy(cfg.copyname,$3,VARNAME_LEN);}
+        |CFG_COLORS EQ bool             {cfg.colors=$3;}
 
 bool:	BYES							{$$=true;}
 		|BNO							{$$=false;}

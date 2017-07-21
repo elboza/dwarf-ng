@@ -61,8 +61,12 @@ struct _cfg {
 	int fd;
 	off_t seek;
 	off_t block;
+	int colors;
 	struct _cfg *prev,*next;
 }cfg,*filecfg_first,*filecfg_last,*fc_ptr;
+
+typedef enum{C_RESET,C_BYELLOW,C_BPURPLE,C_BBLUE,C_BLACK,C_BOLD,C_BRED,C_BGREEN,C_YELLOW,C_PURPLE,C_BLUE,C_RED,C_GREEN} color_scheme;
+char **ptr_colors;
 
 void dw_init(void);
 void cfg_reset(void);
@@ -91,5 +95,6 @@ int mod_len(off_t len);
 void move_r_pos(off_t from,off_t len,off_t to);
 void inject_byte(int data,off_t from,off_t len,int shift);
 void inject_file(char *file,off_t from,off_t len,int shift);
+void set_colors(int b);
 
 #endif

@@ -32,6 +32,12 @@ loads and executes file script.
 .B -v, --version
 show dwarf-ng's version number
 .TP
+.B -C, --colors
+colored output
+.TP
+.B -B, --nocolors
+non colored output
+.TP
 If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)
 .SH THE DWARF'S LANGUAGE
 .TP 
@@ -129,6 +135,7 @@ work_on_tmpcopy=yes #(yes|no)
 verbose=0 #this is a comment
 tmpdir="/tmp"
 tmpname="dw_temp_filex"
+colors=yes #(yes|no)
 
 .fi
 where a comment line begins with a \fB#\fP.

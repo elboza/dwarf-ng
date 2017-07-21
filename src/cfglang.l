@@ -58,6 +58,7 @@ newline \n
 "verbose"			return CFG_VERBOSE;
 "tmpdir"			return CFG_TMPDIR;
 "tmpname"			return CFG_TMPNAME;
+"colors"			return CFG_COLORS;
 {eq}				return EQ;
 "yes"				{cfgyylval.iValue=true; return BYES;}
 "no"				{cfgyylval.iValue=false;return BNO;}

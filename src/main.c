@@ -47,7 +47,8 @@ void usage()
 	printf("-h              --help                       show this help\n");
 	printf("-c '<commands>' --command '<commands>'       command  mode (execute commands)\n");
 	printf("-x <file>       --execute <file>             execute file script\n");
-	printf("-v		--version		     prints dwarf-ng version number\n");
+	printf("-C		--colors		     colored output\n");
+	printf("-B		--nocolors		     nocolored output\n");
 	exit(1);
 }
 void usage_b()
@@ -76,11 +77,13 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			{"help",no_argument,0,'h'},
 			{"version",no_argument,0,'v'},
 			{"stdin",no_argument,0,'s'},
+			{"colors",no_argument,0,'C'},
+			{"nocolors",no_argument,0,'B'},
 			{0,0,0,0,}
 			
 		};
 		int option_index = 0;
-		c = getopt_long (argc, argv, "svhic:x:",long_options, &option_index);
+		c = getopt_long (argc, argv, "CBsvhic:x:",long_options, &option_index);
 		if (c == -1) break;
 		switch(c)
 		{
@@ -106,6 +109,14 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 				break;
 			case 's':
 				action->stdin=1;
+				break;
+			case 'C':
+				cfg.colors=true;
+				set_colors(cfg.colors);
+				break;
+			case 'B':
+				cfg.colors=false;
+				set_colors(cfg.colors);
 				break;
 			case 'h':
 			case '?':

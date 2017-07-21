@@ -28,5 +28,6 @@ int check_funny(void);
 void execute(char *s);
 void run_script(char *file);
 void shell(void);
+void make_prompt(char *s);
 
 #endif

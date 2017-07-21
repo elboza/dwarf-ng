@@ -79,15 +79,19 @@ void run_script(char *file)
 }
 void shell(void)
 {
-	char *cmd;
+	char *cmd,*prompt;
 	reset_stdin();
 	quit_shell=false;
+	prompt=(char*)malloc(128*sizeof(char));
 	if(check_funny()) funny_shell_disclaimer(); else normal_shell_disclaimer();
 	printf("entering shell-interactive mode...\n");
 	while(!quit_shell)
 	{
 		#ifdef HAVE_LIBREADLINE
-		cmd=rl_gets("dwarf> ");
+		//cmd=rl_gets("dwarf> ");
+		//sprintf(prompt,"%sdwarf>%s ",ptr_colors[C_YELLOW],ptr_colors[C_RESET]);
+		make_prompt(prompt);
+		cmd=rl_gets(prompt);
 		#else
 		cmd=(char*)malloc(MAX_CMD);
 		fgets(cmd,MAX_CMD,stdin);
@@ -97,7 +101,7 @@ void shell(void)
 		free(cmd);
 		#endif
 	}
-	
+	free(prompt);
 }
 void funny_shell_disclaimer()
 {
@@ -132,4 +136,8 @@ int check_funny()
 	time(&now);
 	d=div(now,10);
 	if(d.rem==7) return 1; else return 0;
+}
+void make_prompt(char *s){
+	if(!fc_ptr) {sprintf(s,"%sdwarf>%s ",ptr_colors[C_YELLOW],ptr_colors[C_RESET]);return;}
+	sprintf(s,"%s[0x%.10llx]>%s ",ptr_colors[C_YELLOW],fc_ptr->seek,ptr_colors[C_RESET]);
 }

@@ -77,6 +77,7 @@ void do_printcfg(struct _cfg *ptr,char *s)
 		printf("fd: %d\n",ptr->fd);
 		printf("seek: %lld\n",(long long) ptr->seek);
 		printf("block: %lld\n",(long long) ptr->block);
+		printf("colors: %d %s\n",ptr->colors,decode_yes_no(ptr->colors));
 		printf("prev: %p next: %p first: %p last: %p\n",ptr->prev,ptr->next,filecfg_first,filecfg_last);
 		return;
 	}
@@ -188,7 +189,7 @@ void do_filelist()
 	{
 		if(fc_ptr)
 		{
-			if(fc_ptr==ptr) printf("* %d: %s\n",count,ptr->name); else printf("  %d: %s\n",count,ptr->name);
+			if(fc_ptr==ptr) printf("%s*%s %d: %s\n",ptr_colors[C_BGREEN],ptr_colors[C_RESET],count,ptr->name); else printf("  %d: %s\n",count,ptr->name);
 		}
 		else printf("  %d: %s\n",count,ptr->name);
 	}
@@ -206,7 +207,7 @@ void do_fileuse(int num)
 #ifdef HAVE_LIBREADLINE
 			free_completion();
 			add_sh_completion();
-			printf("** ");
+			printf("%s**%s ",ptr_colors[C_BOLD],ptr_colors[C_RESET]);
 #endif
 			return;
 		}

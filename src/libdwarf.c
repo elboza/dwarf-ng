@@ -51,6 +51,7 @@ void dw_init()
 		sprintf(str,"%s/.dwarfrc",envstr);
 		readcfg(str);
 	}
+	if(cfg.colors) set_colors(true);
 }
 void readcfg(char *s)
 {
@@ -81,6 +82,7 @@ void cfg_reset(void)
 	cfg.faddr=NULL;
 	cfg.seek=0;
 	cfg.block=0x100;
+	cfg.colors=false;
 	strcpy(cfg.copydir,"/tmp");
 	strcpy(cfg.copyname,"dw_temp_file");
 	cfg.next=NULL;
@@ -107,6 +109,7 @@ struct _cfg* newfilecfg(void)
 	ptr->faddr=cfg.faddr;
 	ptr->seek=cfg.seek;
 	ptr->block=cfg.block;
+	ptr->colors=cfg.colors;
 	strcpy(ptr->copydir,cfg.copydir);
 	strcpy(ptr->copyname,cfg.copyname);
 	ptr->prev=NULL;
@@ -531,4 +534,41 @@ void inject_file(char *file,off_t from,off_t len,int shift)
 	}
 	fclose(fp);
 	fc_ptr->changed_altered=true;
+}
+void set_colors(int b){
+	static char* _colors[]={
+		"\e[0m", //reset
+		"\e[1;33m", // prompt - bold yellow
+		"\e[1;35m", // bold purple
+		"\e[1;34m", // bold blue
+		"\e[40m", // black
+		"\e[1m", // bold
+		"\e[1;31m", // bold red
+		"\e[1;32m", // green
+		"\e[0;33m", //  yellow
+		"\e[0;35m", // purple
+		"\e[0;34m", // blue
+		"\e[0;31m", // red
+		"\e[0;32m", // green
+		NULL
+	};
+	static char* _nocolors[]={
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		NULL
+	};
+	
+	if (b) {ptr_colors=_colors;return;}
+	ptr_colors=_nocolors;
 }
