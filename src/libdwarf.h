@@ -59,6 +59,8 @@ struct _cfg {
 	char copydir[FILENAME_LEN];
 	char copyname[FILENAME_LEN];
 	int fd;
+	off_t seek;
+	off_t block;
 	struct _cfg *prev,*next;
 }cfg,*filecfg_first,*filecfg_last,*fc_ptr;
 

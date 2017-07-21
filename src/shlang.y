@@ -52,11 +52,11 @@ struct _var *var;
 %token QUIT HELP LOAD FILESIZE DUMP CLOSE PRINT HUMAN GROW SHRINK LEN
 %token EXTRACT MOVE INJECT FILEBEGIN FILEEND CFG VAR_IN MAINCFG
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
-%token UPDATESYMBOL 
+%token UPDATESYMBOL PRINT_CFG PRINT_MAINCFG
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
-%type <sWord> filename cfgparam maybesavename 
+%type <sWord> filename cfgparam maybesavename  cfgparam2
 %type <sFmt> fmt
 %left EQ
 %left '+' '-'
@@ -85,6 +85,8 @@ command: /*empty*/
 		|PRINT fmt WORD					{do_printvar($2,$3);}
 		|PRINT CFG cfgparam				{do_printcfg(fc_ptr,$3);}
 		|PRINT MAINCFG cfgparam			{do_printcfg(&cfg,$3);}
+		|PRINT_CFG cfgparam2				{do_printcfg(fc_ptr,$2);}
+		|PRINT_MAINCFG cfgparam2			{do_printcfg(&cfg,$2);}
 		|'{' commands '}'				{}
 		|GROW expr						{growth($2);}
 		|SHRINK expr					{shrink($2);}
@@ -95,9 +97,9 @@ command: /*empty*/
 		|MOVE expr '+' expr expr		{move_r_pos($2,$4,$5);}
 		|MOVE expr '-' expr expr		{move_r_pos($2,$4,$5);}
 		|INJECT expr expr expr			{inject_byte($2,$3,$4,false);}
-		|INJECT expr expr expr STRING	{do_inject_byte($2,$3,$4,$5);}
+		|INJECT expr expr expr grow	{inject_byte($2,$3,$4,$5);}
 		|INJECT filename expr expr		{inject_file($2,$3,$4,false);}
-		|INJECT filename expr expr STRING {do_inject_file($2,$3,$4,$5);}
+		|INJECT filename expr expr grow {inject_file($2,$3,$4,$5);}
 		|FILELIST						{do_filelist();}
 		|FILEUSE expr					{do_fileuse($2);}
 		|WORD '=' expr					{setvar($1,VART_NUM,(void*)$3);}
@@ -115,8 +117,6 @@ expr:	INTEGER							{$$=$1;}
 		|expr '*' expr					{$$=$1*$3;}
 		|expr '/' expr					{$$=$1/$3;}
 		|'(' expr ')'					{$$=$2;}
-		|FILEBEGIN						{$$=0;}
-		|FILEEND						{$$=do_getfilesize(fc_ptr);}
 		|WORD							{$$=getvarnum($1);}
 		|svar							{$$=(long long)var_tonum(get_s_val($1));}
 		|offset							{$$=$1;}
@@ -127,6 +127,9 @@ filename:	WORD						{$$=$1;}
 
 cfgparam:	/*empty*/					{$$="\0";}
 			|VAR_IN WORD				{$$=$2;}
+
+cfgparam2:	/*empty*/					{$$="\0";}
+			|WORD						{$$=$1;}
 			
 svar:	'$' WORD maybenum maybenext		{$$=makestructvar($2,$3,$4);}
 
@@ -137,6 +140,8 @@ maybenext:	/*empty*/					{$$=NULL;}
 			|VAR_IN WORD maybenum maybenext	{$$=makestructvar($2,$3,$4);}
 
 offset:		'@' WORD maybenum maybenext maybeendoffset		{$$=get_offset(makestructvar($2,$3,$4),$5);}
+			|FILEBEGIN						{$$=0;}
+			|FILEEND						{$$=do_getfilesize(fc_ptr);}
 maybeendoffset:	/*empty*/				{$$=0;}
 			|'<'						{$$=0;}
 			|'>'						{$$=1;}

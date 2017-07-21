@@ -89,6 +89,20 @@ newline \n
 "!>>"		return NOGROWSYMBOL;
 "++"		return UPDATESYMBOL;
 
+"q"			return QUIT;
+"?"			return HELP;
+"i"			return INFO;
+"o"			return LOAD;
+"oc"		return CLOSE;
+"ol"		return FILELIST;
+"os"		return FILESIZE;
+"ou"		return FILEUSE;
+"e"			return PRINT_CFG;
+"em"		return PRINT_MAINCFG;
+"oR+"		return GROW;
+"oR-"		return SHRINK;
+
+
 [-()<>%+@*/;,{}.$!"\[\]:\\=] {
 				return *yytext;
 			}

@@ -46,20 +46,6 @@ void do_filesize(struct _cfg *ptr,int human)
 	}
 	else printf("%ld\n",len);
 }
-void do_inject_byte(int data,off_t offset,off_t len,char *shift_str)
-{
-	int shift;
-	if((strcmp(shift_str,">"))!=0) {printf("syntax error\n"); return;}
-	shift=true;
-	inject_byte(data,offset,len,shift);
-}
-void do_inject_file(char *filename,off_t offset, off_t len,char *shift_str)
-{
-	int shift;
-	if((strcmp(shift_str,">"))!=0) {printf("syntax error\n"); return;}
-	shift=true;
-	inject_file(filename,offset,len,shift);
-}
 off_t do_getfilesize(struct _cfg *ptr)
 {
 	off_t len;
@@ -89,6 +75,8 @@ void do_printcfg(struct _cfg *ptr,char *s)
 		printf("copyname: %s\n",ptr->copyname);
 		printf("fd_type: %d %s\n",ptr->fd_type,decode_fd_type(ptr->fd_type));
 		printf("fd: %d\n",ptr->fd);
+		printf("seek: %lld\n",(long long) ptr->seek);
+		printf("block: %lld\n",(long long) ptr->block);
 		printf("prev: %p next: %p first: %p last: %p\n",ptr->prev,ptr->next,filecfg_first,filecfg_last);
 		return;
 	}

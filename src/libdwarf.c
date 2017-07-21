@@ -79,6 +79,8 @@ void cfg_reset(void)
 	cfg.file_type=0;
 	cfg.filesize=0;
 	cfg.faddr=NULL;
+	cfg.seek=0;
+	cfg.block=0x100;
 	strcpy(cfg.copydir,"/tmp");
 	strcpy(cfg.copyname,"dw_temp_file");
 	cfg.next=NULL;
@@ -103,6 +105,8 @@ struct _cfg* newfilecfg(void)
 	ptr->file_type=cfg.file_type;
 	ptr->filesize=cfg.filesize;
 	ptr->faddr=cfg.faddr;
+	ptr->seek=cfg.seek;
+	ptr->block=cfg.block;
 	strcpy(ptr->copydir,cfg.copydir);
 	strcpy(ptr->copyname,cfg.copyname);
 	ptr->prev=NULL;
@@ -220,6 +224,7 @@ void file_open(char *s)
 	if(opentype==opennorm)
 	{
 		fc_ptr->can_grow=true;
+		fc_ptr->writable=true;
 		fc_ptr->fd=open(s,O_RDWR);
 	}
 	if(fc_ptr->fd==-1)

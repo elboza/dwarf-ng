@@ -20,8 +20,6 @@
 #define DW_OUTPUT_H
 
 void do_filesize(struct _cfg *ptr,int human);
-void do_inject_byte(int data,off_t offset,off_t len,char *shift_str);
-void do_inject_file(char *filename,off_t offset, off_t len,char *shift_str);
 off_t do_getfilesize(struct _cfg *ptr);
 void do_printcfg(struct _cfg *ptr,char *s);
 void do_filelist(void);
