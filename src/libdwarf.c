@@ -370,7 +370,7 @@ void dottedbyte(char *s,off_t num)
 {
 	int x,y,z;
 	char aux[255];
-	sprintf(s,"%ld",num);
+	sprintf(s,"%lld",(long long)num);
 	x=strlen(s)-1;
 	y=0;
 	z=0;
@@ -571,4 +571,18 @@ void set_colors(int b){
 	
 	if (b) {ptr_colors=_colors;return;}
 	ptr_colors=_nocolors;
+}
+void block_func(int set,off_t offs){
+	if(!fc_ptr) return;
+	if(!set){
+		printf("0x%llx\n",(long long unsigned)fc_ptr->block);
+		return;
+	}
+	fc_ptr->block=offs;
+}
+void block_inc_func(off_t x){
+	fc_ptr->block+=x;
+}
+void block_dec_func(off_t x){
+	fc_ptr->block-=x;
 }

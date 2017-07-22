@@ -44,7 +44,7 @@ void do_filesize(struct _cfg *ptr,int human)
 		dottedbyte(str,len);
 		printf("%s\n",str);
 	}
-	else printf("%ld\n",len);
+	else printf("%lld\n",(long long)len);
 }
 off_t do_getfilesize(struct _cfg *ptr)
 {
@@ -75,8 +75,8 @@ void do_printcfg(struct _cfg *ptr,char *s)
 		printf("copyname: %s\n",ptr->copyname);
 		printf("fd_type: %d %s\n",ptr->fd_type,decode_fd_type(ptr->fd_type));
 		printf("fd: %d\n",ptr->fd);
-		printf("seek: %lld\n",(long long) ptr->seek);
-		printf("block: %lld\n",(long long) ptr->block);
+		printf("seek: 0x%llx\n",(long long unsigned) ptr->seek);
+		printf("block: 0x%llx\n",(long long unsigned) ptr->block);
 		printf("colors: %d %s\n",ptr->colors,decode_yes_no(ptr->colors));
 		printf("prev: %p next: %p first: %p last: %p\n",ptr->prev,ptr->next,filecfg_first,filecfg_last);
 		return;
@@ -258,7 +258,7 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 	do{
 		switch(fmt->type){
 			case 'x':
-				printf("0x%lx ",x);
+				printf("0x%llx ",(long long)x);
 				break;
 			case 'd':
 			case 'i':
@@ -268,7 +268,7 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 				printf("%c ",(int)x);
 				break;
 			case 'o':
-				printf("%lo ",x);
+				printf("%llo ",(long long)x);
 				break;
 			default:
 				printf("%lld ",(long long)x);
@@ -482,4 +482,12 @@ void show_help_filelist()
 void show_help_while()
 {
 	
+}
+void block_help_func(void){
+	printf("%sGet/Set block size%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| b             %sdisplay current block size%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| b  %s33%s         %sset block size to 33%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| b+ %s3%s          %sincrease blocksize by 3%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| b- %s16%s         %sdecrease blocksize by 16%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| b  %s0xfa+4%s     %snumeric argument can be an expression%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }

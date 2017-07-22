@@ -89,9 +89,13 @@ newline \n
 "em"		return PRINT_MAINCFG;
 "oR+"		return GROW;
 "oR-"		return SHRINK;
+"b"			return BLOCK_CMD;
+"b?"		return BLOCK_HELP;
+"b+"		return BLOCK_INC;
+"b-"		return BLOCK_DEC;
 
 
-[-()<>%+@*/;,{}.$!"\[\]:\\=] {
+[-()<>%+@*/;?,{}.$!"\[\]:\\=] {
 				return *yytext;
 			}
 

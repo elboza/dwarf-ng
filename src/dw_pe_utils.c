@@ -639,7 +639,7 @@ off_t get_pe_offset2(int sect,int num,int endoffset)
 			if(endoffset) offs=offs+sizeof(_IMAGE_SECTION_HEADER);
 			break;
 		default:
-			
+			offs=0;
 			break;
 	}
 	return offs;

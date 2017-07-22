@@ -52,5 +52,7 @@ void show_help_filesize(void);
 void show_help_shrink(void);
 void show_help_filelist(void);
 void show_help_while(void);
+void block_help_func(void);
+
 
 #endif

@@ -53,6 +53,7 @@ struct _var *var;
 %token EXTRACT MOVE INJECT FILEBEGIN FILEEND CFG VAR_IN MAINCFG
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
 %token UPDATESYMBOL PRINT_CFG PRINT_MAINCFG
+%token BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -110,6 +111,12 @@ command: /*empty*/
 		|'!' STRING						{system($2);}
 		|SAVE maybesavename				{file_save($2);}
 		|CREATE STRING expr grow maybeupdate		{do_create($2,$3,$4,$5);}
+		|BLOCK_HELP {block_help_func();}
+		|BLOCK_CMD expr {block_func(true,$2);}
+		|BLOCK_CMD {block_func(false,0);}
+		|BLOCK_INC expr {block_inc_func($2);}
+		|BLOCK_DEC expr {block_dec_func($2);}
+
 
 expr:	INTEGER							{$$=$1;}
 		|expr '+' expr					{$$=$1+$3;}

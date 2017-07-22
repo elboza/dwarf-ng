@@ -139,5 +139,5 @@ int check_funny()
 }
 void make_prompt(char *s){
 	if(!fc_ptr) {sprintf(s,"%sdwarf>%s ",ptr_colors[C_YELLOW],ptr_colors[C_RESET]);return;}
-	sprintf(s,"%s[0x%.10llx]>%s ",ptr_colors[C_YELLOW],fc_ptr->seek,ptr_colors[C_RESET]);
+	sprintf(s,"%s[0x%.10llx]>%s ",ptr_colors[C_YELLOW],(long long unsigned)fc_ptr->seek,ptr_colors[C_RESET]);
 }

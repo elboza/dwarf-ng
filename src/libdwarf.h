@@ -96,5 +96,9 @@ void move_r_pos(off_t from,off_t len,off_t to);
 void inject_byte(int data,off_t from,off_t len,int shift);
 void inject_file(char *file,off_t from,off_t len,int shift);
 void set_colors(int b);
+void block_func(int set,off_t offs);
+void block_inc_func(off_t x);
+void block_dec_func(off_t x);
+
 
 #endif

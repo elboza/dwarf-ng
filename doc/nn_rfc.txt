@@ -1,11 +1,4 @@
-o pippo
 o pippo !elf
-oR+ 3
-oR- 3  #resize
-ol #opened list
-os #opened size
-ou #opened use
-oc # close file
 
 e scr.color=true
 
@@ -22,11 +15,11 @@ s #seek
 s 0x10
 s+ 3
 s- 10
-s/ pippo #search for pippo
-s/ 0x9090
+ss/ pippo @0x100 #search for pippo
+s/ 0x9090 @0x100
 s* #list seek history
-s-
-s+
+s--
+s++
 
 w
 wo 0x909090 @33
@@ -49,9 +42,6 @@ Sc !elf @0
 Sc !ph @0x34
 Sco !elf @0
 Sco !ph @0x34
-
-b #block
-b 10
 
 ae # execute forth...
 
