@@ -4,4 +4,5 @@ work_on_tmpcopy=false
 verbose=0
 tmpdir="/tmp"
 tmpname="dw_temp_file"
+colors=yes
 
