@@ -46,7 +46,7 @@ struct _var *var;
 };
 
 %token <iValue> INTEGER
-%token <sWord>  WORD FMT
+%token <sWord>  WORD FMT HEX_WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
 %token QUIT HELP LOAD FILESIZE DUMP CLOSE PRINT HUMAN GROW SHRINK LEN
@@ -128,7 +128,7 @@ command: /*empty*/
 		|SEEK_BLOCK_FWD {seek_block_inc();}
 		|SEEK_HISTORY {show_current_seek();}
 		|SEEK_DATA WORD {seek_data($2);}
-		|SEEK_HEX WORD {seek_hex_data($2);}
+		|SEEK_HEX HEX_WORD {seek_hex_data($2);}
 		
 		
 

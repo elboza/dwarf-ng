@@ -54,6 +54,10 @@ newline \n
 	yylval.sWord=strdup(yytext+1);
 	return FMT;
 }
+({digit}|{hexletter})+ {
+	yylval.sWord=strdup(yytext);
+	return HEX_WORD;
+}
 
 "-h"		return HUMAN;
 "quit"		return QUIT;

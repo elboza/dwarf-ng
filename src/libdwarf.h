@@ -107,7 +107,8 @@ void seek_block_inc(void);
 void seek_block_dec(void);
 void seek_data(char *s);
 void seek_hex_data(char *s);
-
+int cmp_mem(char *m1,char *m2,int len);
+void seek_data_in_file(char *s,int len);
 
 
 #endif

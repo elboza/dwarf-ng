@@ -617,8 +617,48 @@ void seek_block_dec(void){
 	}
 }
 void seek_data(char *s){
-	printf("seek data...%s\n",s);
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	printf("seek (%d bytes) data...%s from address 0x%llx\n",strlen(s),s,(long long unsigned)fc_ptr->seek);
+	seek_data_in_file(s,strlen(s));
 }
 void seek_hex_data(char *s){
-	printf("seek hex data ... %s\n",s);
+	int len;
+	char *p,*buff,*pbuff;
+	len=strlen(s);
+	if(len&1) len++;
+	printf("seek (%d bytes) hex data...%s form address 0x%llx\n",len/2,s,(long long unsigned)fc_ptr->seek);
+	len=strlen(s);
+	buff=(char*)malloc(len*sizeof(char));
+	p=s;
+	pbuff=buff;
+	if(len&1){
+		// add leading zero
+		sscanf(p,"%1x",(unsigned int*)pbuff++);
+		p++;
+		len++;
+	}
+	while(*p){
+		sscanf(p,"%02x",(unsigned int*)pbuff++);
+		p+=2;
+	}
+	seek_data_in_file(buff,len/2);
+	free(buff);
+}
+int cmp_mem(char *m1,char *m2,int len){
+	int x=0;
+	while(*m1++==*m2++) {x++;}
+	//if(x>1) printf("%d %d\n",len,x);
+	if(x>=len) return true;
+	return false;
+}
+void seek_data_in_file(char *s,int len){
+	char *f;
+	f=(char*)(fc_ptr->seek+fc_ptr->faddr);
+	char *end=(char*)(f+fc_ptr->filesize);
+	while(f<end){
+		if(cmp_mem(s,f,len)){
+			printf("found at 0x%llx\n",(long long unsigned)(f-fc_ptr->faddr));
+		}
+		f++;
+	}
 }
