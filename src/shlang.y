@@ -54,6 +54,7 @@ struct _var *var;
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
 %token UPDATESYMBOL PRINT_CFG PRINT_MAINCFG
 %token BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
+%token SEEK_HELP SEEK_CMD SEEK_BACK SEEK_FWD SEEK_BLOCK_BACK SEEK_BLOCK_FWD SEEK_HISTORY SEEK_DATA SEEK_HEX
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -116,6 +117,21 @@ command: /*empty*/
 		|BLOCK_CMD {block_func(false,0);}
 		|BLOCK_INC expr {block_inc_func($2);}
 		|BLOCK_DEC expr {block_dec_func($2);}
+		|SEEK_HELP {seek_help_func();}
+		|SEEK_CMD {show_current_seek();}
+		|SEEK_CMD expr {set_current_seek($2);}
+		|SEEK_BACK {}
+		|SEEK_FWD {}
+		|SEEK_BACK expr {seek_dec($2);}
+		|SEEK_FWD expr {seek_inc($2);}
+		|SEEK_BLOCK_BACK {seek_block_dec();}
+		|SEEK_BLOCK_FWD {seek_block_inc();}
+		|SEEK_HISTORY {show_current_seek();}
+		|SEEK_DATA WORD {seek_data($2);}
+		|SEEK_HEX WORD {seek_hex_data($2);}
+		
+		
+
 
 
 expr:	INTEGER							{$$=$1;}

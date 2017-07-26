@@ -99,6 +99,15 @@ void set_colors(int b);
 void block_func(int set,off_t offs);
 void block_inc_func(off_t x);
 void block_dec_func(off_t x);
+void show_current_seek(void);
+void set_current_seek(off_t x);
+void seek_inc(off_t x);
+void seek_dec(off_t x);
+void seek_block_inc(void);
+void seek_block_dec(void);
+void seek_data(char *s);
+void seek_hex_data(char *s);
+
 
 
 #endif

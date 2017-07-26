@@ -491,3 +491,19 @@ void block_help_func(void){
 	printf("| b- %s16%s         %sdecrease blocksize by 16%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| b  %s0xfa+4%s     %snumeric argument can be an expression%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
+void seek_help_func(void){
+	printf("%sUsage: s   #Seek commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s             %sPrint current address%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s  %saddr     %sSeek to address%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s-            %sUndo seek%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s+            %sRedo seek%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s- %sn          %sSeek n bytes backward%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s+ %sn          %sSeek n bytes forward%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s--           %sSeek blocksize bytes backward%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s++           %sSeek blocksize bytes forward%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s*            %sList undo seek history%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s/ %sDATA       %sSearch for next occurrence of 'DATA'%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s/x %s9091      %sSearch for next occurrence of \\x90\\x91%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ss            %sSeek silently (without adding an entry to the seek history)%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s             %sPrint current address%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}

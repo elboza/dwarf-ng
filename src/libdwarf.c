@@ -586,3 +586,39 @@ void block_inc_func(off_t x){
 void block_dec_func(off_t x){
 	fc_ptr->block-=x;
 }
+void show_current_seek(void){
+	if(fc_ptr){
+		printf("0x%llx\n",(long long unsigned)fc_ptr->seek);
+	}
+}
+void set_current_seek(off_t x){
+	if(fc_ptr){
+		fc_ptr->seek=x;
+	}
+}
+void seek_inc(off_t x){
+	if(fc_ptr){
+		fc_ptr->seek+=x;
+	}
+}
+void seek_dec(off_t x){
+	if(fc_ptr){
+		fc_ptr->seek-=x;
+	}
+}
+void seek_block_inc(void){
+	if(fc_ptr){
+		seek_inc(fc_ptr->block);
+	}
+}
+void seek_block_dec(void){
+	if(fc_ptr){
+		seek_dec(fc_ptr->block);
+	}
+}
+void seek_data(char *s){
+	printf("seek data...%s\n",s);
+}
+void seek_hex_data(char *s){
+	printf("seek hex data ... %s\n",s);
+}

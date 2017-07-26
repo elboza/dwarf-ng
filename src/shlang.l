@@ -93,6 +93,16 @@ newline \n
 "b?"		return BLOCK_HELP;
 "b+"		return BLOCK_INC;
 "b-"		return BLOCK_DEC;
+"s?"		return SEEK_HELP;
+"s"			return SEEK_CMD;
+"s-"		return SEEK_BACK;
+"s+"		return SEEK_FWD;
+"s--"		return SEEK_BLOCK_BACK;
+"s++"		return SEEK_BLOCK_FWD;
+"s*"		return SEEK_HISTORY;
+"s/"		return SEEK_DATA;
+"s/x"		return SEEK_HEX;
+
 
 
 [-()<>%+@*/;?,{}.$!"\[\]:\\=] {
