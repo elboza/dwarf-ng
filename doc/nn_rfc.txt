@@ -11,24 +11,17 @@ q #quit
 ii #more info
 iz #list strings
 
-s #seek
-s 0x10
-s+ 3
-s- 10
-ss/ pippo @0x100 #search for pippo
-s/ 0x9090 @0x100
-s* #list seek history
-s--
-s++
-
 w
 wo 0x909090 @33
 wor 0x9090 3 @33
 wos 'pippo kk' @33
-ws 'pippo' @33!8
+ws[+] 'pippo' @33!8
+wsz[+] %10 "pippo"
+wsc %10 "pippo" @0
 
 p @0x34!10
 px @0x34!10
+px %10 @0x100
 x @0x34!10
 px8 @0x34
 px32 @0x34
@@ -44,8 +37,6 @@ Sco !elf @0
 Sco !ph @0x34
 
 ae # execute forth...
-
-M @move
 
 ~ filters (grep :row/[column])
 

@@ -85,12 +85,14 @@ newline \n
 "?"			return HELP;
 "i"			return INFO;
 "o"			return LOAD;
+"o?"		return SHOW_HELP_OPEN;
 "oc"		return CLOSE;
 "ol"		return FILELIST;
 "os"		return FILESIZE;
 "ou"		return FILEUSE;
-"e"			return PRINT_CFG;
-"em"		return PRINT_MAINCFG;
+"e"			return DWP_PRINT_CFG;
+"em"		return DW_PRINT_MAINCFG;
+"e?"		return SHOW_HELP_CONFIG;
 "oR+"		return GROW;
 "oR-"		return SHRINK;
 "b"			return BLOCK_CMD;
@@ -106,6 +108,10 @@ newline \n
 "s*"		return DW_SEEK_HISTORY;
 "s/"		return DW_SEEK_DATA;
 "s/x"		return DW_SEEK_HEX;
+"M"			return MOVE;
+"M?"		return SHOW_HELP_MOVE;
+"p?"		return SHOW_HELP_PRINT;
+"pp?"		return SHOW_HELP_PPRINT;
 
 
 

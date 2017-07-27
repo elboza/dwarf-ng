@@ -43,7 +43,7 @@ void show_help_inject(void);
 void show_help_len(void);
 void show_help_load(void);
 void show_help_move(void);
-void show_help_print(void);
+void show_help_pprint(void);
 void show_help_fileuse(void);
 void show_help_executeshell(void);
 void show_help_remove(void);
@@ -54,6 +54,8 @@ void show_help_filelist(void);
 void show_help_while(void);
 void block_help_func(void);
 void seek_help_func(void);
-
+void show_help_open(void);
+void show_help_config(void);
+void show_help_print(void);
 
 #endif

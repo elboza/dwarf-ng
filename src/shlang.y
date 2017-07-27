@@ -52,7 +52,8 @@ struct _var *var;
 %token QUIT HELP LOAD FILESIZE DUMP CLOSE PRINT HUMAN GROW SHRINK LEN
 %token EXTRACT MOVE INJECT FILEBEGIN FILEEND CFG VAR_IN MAINCFG
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
-%token UPDATESYMBOL PRINT_CFG PRINT_MAINCFG
+%token UPDATESYMBOL DWP_PRINT_CFG DW_PRINT_MAINCFG 
+%token SHOW_HELP_MOVE SHOW_HELP_OPEN SHOW_HELP_CONFIG SHOW_HELP_PRINT SHOW_HELP_PPRINT
 %token BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
 %token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
 %type <iValue> maybehelpcommand
@@ -87,8 +88,8 @@ command: /*empty*/
 		|PRINT fmt WORD					{do_printvar($2,$3);}
 		|PRINT CFG cfgparam				{do_printcfg(fc_ptr,$3);}
 		|PRINT MAINCFG cfgparam			{do_printcfg(&cfg,$3);}
-		|PRINT_CFG cfgparam2				{do_printcfg(fc_ptr,$2);}
-		|PRINT_MAINCFG cfgparam2			{do_printcfg(&cfg,$2);}
+		|DWP_PRINT_CFG cfgparam2			{do_printcfg(fc_ptr,$2);}
+		|DW_PRINT_MAINCFG cfgparam2		{do_printcfg(&cfg,$2);}
 		|'{' commands '}'				{}
 		|GROW expr						{growth($2);}
 		|SHRINK expr					{shrink($2);}
@@ -98,6 +99,7 @@ command: /*empty*/
 		|MOVE expr expr expr			{move($2,$3,$4);}
 		|MOVE expr '+' expr expr		{move_r_pos($2,$4,$5);}
 		|MOVE expr '-' expr expr		{move_r_pos($2,$4,$5);}
+		|SHOW_HELP_MOVE {show_help_move();}
 		|INJECT expr expr expr			{inject_byte($2,$3,$4,false);}
 		|INJECT expr expr expr grow	{inject_byte($2,$3,$4,$5);}
 		|INJECT filename expr expr		{inject_file($2,$3,$4,false);}
@@ -129,9 +131,10 @@ command: /*empty*/
 		|DW_SEEK_HISTORY {show_current_seek();}
 		|DW_SEEK_DATA WORD {seek_data($2);}
 		|DW_SEEK_HEX HEX_WORD {seek_hex_data($2);}
-		
-		
-
+		|SHOW_HELP_OPEN {show_help_open();}
+		|SHOW_HELP_CONFIG {show_help_config();}
+		|SHOW_HELP_PRINT {show_help_print();}
+		|SHOW_HELP_PPRINT {show_help_pprint();}
 
 
 expr:	INTEGER							{$$=$1;}

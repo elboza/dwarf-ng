@@ -344,6 +344,15 @@ void show_help_base()
 	printf("remove	.::. removes a section header.\n");
 	printf("filesize.::. shows the size of the current working file.\n");
 	printf("\ntype 'help \"command\"' for specific information or see dwarf's man page (man dwarf).\n");
+	printf("Append '?'' to any char command to get detailed help.\n");
+	printf("| ?                %sthis help%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| o%s[?]%s             %sopen/opened file commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| b%s[?]%s             %sSee / change block size.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s%s[?] [addr]%s      %sseek to address.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| e%s[?]%s             %sshow config vars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| M%s[?]%s             %smove block of file around.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| p%s[?]%s             %sprint commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| x%s[?]%s             %sjust an alias for px (print hex).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void help_cmd(char *s)
 {
@@ -365,7 +374,7 @@ void help_cmd(char *s)
 	if((strcmp(s,"move"))==0) show_help_move();
 	if((strcmp(s,"open"))==0) show_help_load();
 	if((strcmp(s,"pp"))==0) show_help_print();
-	if((strcmp(s,"print"))==0) show_help_print();
+	if((strcmp(s,"print"))==0) show_help_pprint();
 //	if((strcmp(s,"read"))==0) show_help_load();
 	if((strcmp(s,"fileuse"))==0) show_help_fileuse();
 	if((strcmp(s,"!"))==0) show_help_executeshell();
@@ -435,12 +444,13 @@ void show_help_load()
 }
 void show_help_move()
 {
-	printf("move expr1 expr2 expr3 | move expr1 +expr2 expr3 | move expr1 -expr2 expr3\n");
-	printf("move blocks of file around. (expr1=from, expr2=[len|end], expr3=to). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: move @< +10 @ph[0]>) moves 10 bytes from the beginning of the file to the end of the first(0) program's header.\n");
+	printf("%sM      #move blocks of file around.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| M %sexpr1%s [%s + - %s]%sexpr2 expr3%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_YELLOW],ptr_colors[C_RESET]);
+	printf("%smove blocks of file around. (%sexpr1=from%s, %sexpr2=[len|end]%s, %sexpr3=to%s). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: M @< +10 @ph[0]> moves 10 bytes from the beginning of the file to the end of the first(0) program's header.%s\n",ptr_colors[C_GREEN],ptr_colors[C_BBLUE],ptr_colors[C_GREEN],ptr_colors[C_BBLUE],ptr_colors[C_GREEN],ptr_colors[C_BBLUE],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
-void show_help_print()
+void show_help_pprint()
 {
-	printf("print expr | print %%fmt expr -- (alias pp)\n");
+	printf("pp expr | pp %%fmt expr\n");
 	printf("outputs the result of the expression (numerical or string). The %%fmt force a different output mode. fmt indicates the output mode desired. Valid option for the output modes are: x for hex output, d or ifor decimal, o for octal output. examples: print %%x 16 (outputs 0xa), print %%d 0xa (outputs 16).\n");
 }
 void show_help_fileuse()
@@ -494,7 +504,7 @@ void block_help_func(void){
 void seek_help_func(void){
 	printf("%sUsage: s   #Seek commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s             %sPrint current address%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| s  %saddr     %sSeek to address%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| s  %saddr       %sSeek to address%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s-            %sUndo seek%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s+            %sRedo seek%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s- %sn          %sSeek n bytes backward%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -506,4 +516,24 @@ void seek_help_func(void){
 	printf("| s/x %s9091      %sSearch for next occurrence of \\x90\\x91%s\n",ptr_colors[C_YELLOW],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ss            %sSeek silently (without adding an entry to the seek history)%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s             %sPrint current address%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void show_help_open(void){
+	printf("%sopen/opened files%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| o   %sfile%s     %sopen file.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| oc           %sclose opened file.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ol           %sshow opened files list.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| os           %sshow opened file size.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ou  %sn%s        %sswitch to opened file number n%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| oR+ %sn%s        %sincreaes size of opened file of n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| oR- %sn%s        %sdecreasesize of opened file of n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void show_help_config(void){
+	printf("%sopen/opened files%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| e        %sshow opened file config vars.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| em       %sshow main config vars.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void show_help_print(void){
+	printf("%sprint commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pp%s[?]%s       %sgeneric print function.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| px          %shex print.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
