@@ -50,7 +50,7 @@ newline \n
 				return INTEGER;
 			}
 
-{cfmt}{digit}*{letter}		{
+{cfmt}{digit}*{letter}?		{
 	yylval.sWord=strdup(yytext+1);
 	return FMT;
 }
