@@ -44,7 +44,7 @@ uint8_t get_data8(uint8_t data);
 uint16_t get_data16(uint16_t data);
 uint32_t get_data32(uint32_t data);
 uint64_t get_data64(uint64_t data);
-void extended_dump(off_t offset);
+void extended_dump(off_t offset,off_t nbytes);
 int decode_file_bit(int bits);
 char* decode_file_endian(int endian);
 char* decode_yes_no(int x);

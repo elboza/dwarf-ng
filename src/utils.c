@@ -175,29 +175,36 @@ uint64_t get_data64(uint64_t data)
 	res=(int)data;
 	return res;
 }
-void extended_dump(off_t offset)
+void extended_dump(off_t offset,off_t nbytes)
 {
-	int n,m,lines;
+	int n,m,bytes,line_offset,mx;
 	void *mem;
 	uint8_t *uc;
 	off_t temp_offset;
-	lines=DUMP_LINES;
+	//lines=DUMP_LINES;
 	if(!fc_ptr) {printf("no file opened.\n"); return;}
+	if(nbytes==0) nbytes=fc_ptr->block;
+	bytes=(int)nbytes;
 	mem=fc_ptr->faddr+offset;
 	temp_offset=offset;
 	uc=(uint8_t*)mem;
-	for(m=0;m<=lines;m++)
+	for(m=0;m<bytes;m+=16)
 	{
-		printf("%.10x  ",(unsigned int)temp_offset);
+		line_offset=0;
+		mx=m;
+		printf("0x%.10x  ",(unsigned int)temp_offset);
 		uc=(uint8_t*)(fc_ptr->faddr+temp_offset);
-		for(n=0;n<DUMP_MAX_LINE;n++)
+		for(n=0;n<DUMP_MAX_LINE && mx<bytes;n++,mx++)
 		{
 			printf("%.2x",*(uc++));
+			line_offset++;
 			if(n==(DUMP_MAX_LINE/2)-1) printf("-"); else printf(" ");
 		}
 		uc=(uint8_t*)(fc_ptr->faddr+temp_offset);
-		printf(" ");
-		for(n=0;n<DUMP_MAX_LINE;n++)
+		for(n=0;n<16-line_offset;n++) printf("   ");
+		printf(" %d ",line_offset);
+		mx=m;
+		for(n=0;n<DUMP_MAX_LINE && mx<bytes;n++,mx++)
 		{
 			if(isprint(*uc)) printf("%c",*uc); else printf(".");
 			uc++;

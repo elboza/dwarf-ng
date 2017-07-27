@@ -49,12 +49,13 @@ struct _var *var;
 %token <sWord>  WORD FMT HEX_WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token QUIT HELP LOAD FILESIZE DUMP CLOSE PRINT HUMAN GROW SHRINK LEN
+%token QUIT HELP LOAD FILESIZE CLOSE PRINT HUMAN GROW SHRINK LEN
 %token EXTRACT MOVE INJECT FILEBEGIN FILEEND CFG VAR_IN MAINCFG
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
 %token UPDATESYMBOL DWP_PRINT_CFG DW_PRINT_MAINCFG 
 %token SHOW_HELP_MOVE SHOW_HELP_OPEN SHOW_HELP_CONFIG SHOW_HELP_PRINT SHOW_HELP_PPRINT
-%token BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
+%token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES
+%token DW_BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
 %token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
@@ -80,7 +81,6 @@ command: /*empty*/
 		|LOAD filename					{file_open($2);free_completion();add_sh_completion();}
 		|FILESIZE						{do_filesize(fc_ptr,false);}
 		|FILESIZE HUMAN					{do_filesize(fc_ptr,true);}
-		|DUMP fmt expr					{do_dump($2,$3);}
 		|CLOSE							{file_close();free_completion();}
 		|PRINT STRING					{printf("%s\n",$2);}
 		|PRINT fmt svar					{do_print_s_var($2,$3);}
@@ -116,8 +116,8 @@ command: /*empty*/
 		|SAVE maybesavename				{file_save($2);}
 		|CREATE STRING expr grow maybeupdate		{do_create($2,$3,$4,$5);}
 		|BLOCK_HELP {block_help_func();}
-		|BLOCK_CMD expr {block_func(true,$2);}
-		|BLOCK_CMD {block_func(false,0);}
+		|DW_BLOCK_CMD expr {block_func(true,$2);}
+		|DW_BLOCK_CMD {block_func(false,0);}
 		|BLOCK_INC expr {block_inc_func($2);}
 		|BLOCK_DEC expr {block_dec_func($2);}
 		|DW_SEEK_HELP {seek_help_func();}
@@ -131,11 +131,17 @@ command: /*empty*/
 		|DW_SEEK_BLOCK_FWD {seek_block_inc();}
 		|DW_SEEK_HISTORY {printf("still to code...\n");}
 		|DW_SEEK_DATA WORD {seek_data($2);}
-		|DW_SEEK_HEX HEX_WORD {seek_hex_data($2);}
+		|DW_SEEK_HEX STRING {seek_hex_data($2);}
 		|SHOW_HELP_OPEN {show_help_open();}
 		|SHOW_HELP_CONFIG {show_help_config();}
 		|SHOW_HELP_PRINT {show_help_print();}
 		|SHOW_HELP_PPRINT {show_help_pprint();}
+		|DW_DUMP_HEX fmt {do_dump_hex($2,0,false,false);}
+		|DW_DUMP_HEX fmt expr {do_dump_hex($2,$3,true,false);}
+		|DW_DUMP_HEXX fmt {do_dump_hex($2,0,false,true);}
+		|DW_DUMP_HEXX fmt expr {do_dump_hex($2,$3,true,true);}
+		|DW_DUMP_HEX_LINES expr {do_dump_hex_lines($2,0,false);}
+		|DW_DUMP_HEX_LINES expr '@' expr {do_dump_hex_lines($2,$4,true);}
 
 
 expr:	INTEGER							{$$=$1;}

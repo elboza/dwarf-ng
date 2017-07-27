@@ -62,5 +62,6 @@ char* var_tostring(struct _var *ptr);
 struct _var* createtmpvar(void);
 void destroytmpvar(struct _var *var);
 struct _fmt* makefmt(char *s);
+struct _fmt* makefmt2(int n,char c);
 
 #endif

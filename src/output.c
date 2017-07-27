@@ -321,7 +321,7 @@ void do_dump(struct _fmt *fmt,off_t offset)
 	void *mem;
 	if(!fc_ptr) return;
 	if(fmt->rep==0) fmt->rep++;
-	if(fmt->null) {extended_dump(offset); return;}
+	if(fmt->null) {extended_dump(offset,0); return;}
 	do{
 		mem=fc_ptr->faddr+offset;
 		switch(fmt->type){
@@ -338,13 +338,13 @@ void do_dump(struct _fmt *fmt,off_t offset)
 				if(isprint(*uc)) printf("%c",*uc); else printf(".");
 				break;
 			case 'e':
-				fmt->rep=-1;
-				extended_dump(offset);
+				fmt->rep=0;
+				extended_dump(offset,(off_t)fmt->rep);
 				return;
 				break;
 			default:
-				fmt->rep=-1;
-				extended_dump(offset);
+				fmt->rep=0;
+				extended_dump(offset,(off_t)fmt->rep);
 				return;
 				break;
 		};
@@ -573,11 +573,24 @@ void show_help_print(void){
 	printf("| pp%s[?] [%%nx] [@]expr%s     %sgeneric print function.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| px [%%n][x]              %shex print of n bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| pxl n                   %shex print n lines.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| pxc [%%n][x]             %sprint n hex bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| pdc [%%n][x]             %sprint n decimal bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| pcc [%%n][x]             %sprint n char bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| puc [%%n][x]             %sprint n unsigned decimal bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pxx [%%n][x]             %shex pretty print of n bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ps [%%n][x]              %sprint a string at offset x of n len.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| x  [%%n][x]              %ssame as px.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| xl  n                   %ssame as pxl.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx){
+	if(!fmt){fprintf(stderr,"error, no fmt!\n");return;}
+	if(!fc_ptr) return;
+	if(!b) x=fc_ptr->seek;
+	if(xx){extended_dump(x,fmt->rep);return;}
+	do_dump(fmt,x);
+}
+void do_dump_hex_lines(off_t l,off_t x,int b){
+	if(!fc_ptr) return;
+	if(!b){
+		extended_dump(fc_ptr->seek,l*16);
+		return;
+	}
+	extended_dump(x,l*16);
 }

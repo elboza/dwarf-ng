@@ -228,3 +228,12 @@ struct _fmt* makefmt(char *s)
 	}
 	return(fmt);
 }
+struct _fmt* makefmt2(int n,char c){
+	struct _fmt *fmt;
+	fmt=malloc(sizeof(struct _fmt));
+	if(!fmt) return NULL;
+	fmt->rep=n;
+	fmt->type=c;
+	fmt->null=0;
+	return fmt;
+}

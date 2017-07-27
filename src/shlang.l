@@ -54,16 +54,11 @@ newline \n
 	yylval.sWord=strdup(yytext+1);
 	return FMT;
 }
-({digit}|{hexletter})+ {
-	yylval.sWord=strdup(yytext);
-	return HEX_WORD;
-}
+
 
 "-h"		return HUMAN;
 "quit"		return QUIT;
 "help"		return HELP;
-"du"		return DUMP;
-"dump"		return DUMP;
 "close"		return CLOSE;
 "pp"		return PRINT;
 "len"		return LEN;
@@ -95,7 +90,7 @@ newline \n
 "e?"		return SHOW_HELP_CONFIG;
 "oR+"		return GROW;
 "oR-"		return SHRINK;
-"b"			return BLOCK_CMD;
+"b"			return DW_BLOCK_CMD;
 "b?"		return BLOCK_HELP;
 "b+"		return BLOCK_INC;
 "b-"		return BLOCK_DEC;
@@ -113,6 +108,11 @@ newline \n
 "p?"		return SHOW_HELP_PRINT;
 "pp?"		return SHOW_HELP_PPRINT;
 "x?"		return SHOW_HELP_PRINT;
+"px"		return DW_DUMP_HEX;
+"x"			return DW_DUMP_HEX;
+"xx"		return DW_DUMP_HEXX;
+"pxx"		return DW_DUMP_HEXX;
+"xl"		return DW_DUMP_HEX_LINES;
 
 
 
