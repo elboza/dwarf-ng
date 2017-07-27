@@ -54,7 +54,7 @@ struct _var *var;
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
 %token UPDATESYMBOL PRINT_CFG PRINT_MAINCFG
 %token BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
-%token SEEK_HELP SEEK_CMD SEEK_BACK SEEK_FWD SEEK_BLOCK_BACK SEEK_BLOCK_FWD SEEK_HISTORY SEEK_DATA SEEK_HEX
+%token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -117,18 +117,18 @@ command: /*empty*/
 		|BLOCK_CMD {block_func(false,0);}
 		|BLOCK_INC expr {block_inc_func($2);}
 		|BLOCK_DEC expr {block_dec_func($2);}
-		|SEEK_HELP {seek_help_func();}
-		|SEEK_CMD {show_current_seek();}
-		|SEEK_CMD expr {set_current_seek($2);}
-		|SEEK_BACK {}
-		|SEEK_FWD {}
-		|SEEK_BACK expr {seek_dec($2);}
-		|SEEK_FWD expr {seek_inc($2);}
-		|SEEK_BLOCK_BACK {seek_block_dec();}
-		|SEEK_BLOCK_FWD {seek_block_inc();}
-		|SEEK_HISTORY {show_current_seek();}
-		|SEEK_DATA WORD {seek_data($2);}
-		|SEEK_HEX HEX_WORD {seek_hex_data($2);}
+		|DW_SEEK_HELP {seek_help_func();}
+		|DW_SEEK_CMD {show_current_seek();}
+		|DW_SEEK_CMD expr {set_current_seek($2);}
+		|DW_SEEK_BACK {}
+		|DW_SEEK_FWD {}
+		|DW_SEEK_BACK expr {seek_dec($2);}
+		|DW_SEEK_FWD expr {seek_inc($2);}
+		|DW_SEEK_BLOCK_BACK {seek_block_dec();}
+		|DW_SEEK_BLOCK_FWD {seek_block_inc();}
+		|DW_SEEK_HISTORY {show_current_seek();}
+		|DW_SEEK_DATA WORD {seek_data($2);}
+		|DW_SEEK_HEX HEX_WORD {seek_hex_data($2);}
 		
 		
 

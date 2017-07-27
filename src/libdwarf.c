@@ -618,7 +618,7 @@ void seek_block_dec(void){
 }
 void seek_data(char *s){
 	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
-	printf("seek (%d bytes) data...%s from address 0x%llx\n",strlen(s),s,(long long unsigned)fc_ptr->seek);
+	printf("seek (%lu bytes) data...%s from address 0x%llx\n",strlen(s),s,(long long unsigned)fc_ptr->seek);
 	seek_data_in_file(s,strlen(s));
 }
 void seek_hex_data(char *s){
