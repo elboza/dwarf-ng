@@ -196,35 +196,35 @@ struct _fmt* makefmt(char *s)
 	}
 	else
 	{
-		//fmt=malloc(sizeof(struct _fmt));
-		//if(!fmt) return NULL;
-		//fmt->rep=0;
-		//fmt->type='x';
-		//fmt->null=0;
-		//s1=++s;
-		//while(*s1>='0'&&*s1<='9') fmt->rep=fmt->rep*10+*s1-'0';
-		//x=0;
-		//while(*s1>='a'&&*s1<='z' && x<18){
-		//	cc[x++]=*s1++;
-		//}
-		//cc[x]='\0';
-		////strncpy(fmt->type,&cc[0],20);
-		//if(x>0) fmt->type=(int)cc[0];
-
-		s1=strdup(s);
-		if(!s1) return NULL;
-		x=strlen(s1);
-		if(!x) return NULL;
 		fmt=malloc(sizeof(struct _fmt));
 		if(!fmt) return NULL;
+		fmt->rep=0;
 		fmt->type='x';
-		if(s1[x-1]>='a'&& s1[x-1]<='z'){
-			fmt->type=s1[x-1];
-			s1[x-1]='\0';
-		}
-		if(x>1) fmt->rep=atoi(s1); else fmt->rep=1;
 		fmt->null=0;
-		if(s1) free(s1);
+		s1=s;
+		while(*s1>='0'&&*s1<='9') fmt->rep=fmt->rep*10+(*s1++)-'0';
+		x=0;
+		while(*s1>='a'&&*s1<='z' && x<18){
+			cc[x++]=*s1++;
+		}
+		cc[x]='\0';
+		//strncpy(fmt->type,&cc[0],20);
+		if(x>0) fmt->type=(int)cc[0];
+
+		//s1=strdup(s);
+		//if(!s1) return NULL;
+		//x=strlen(s1);
+		//if(!x) return NULL;
+		//fmt=malloc(sizeof(struct _fmt));
+		//if(!fmt) return NULL;
+		//fmt->type='x';
+		//if(s1[x-1]>='a'&& s1[x-1]<='z'){
+		//	fmt->type=s1[x-1];
+		//	s1[x-1]='\0';
+		//}
+		//if(x>1) fmt->rep=atoi(s1); else fmt->rep=1;
+		//fmt->null=0;
+		//if(s1) free(s1);
 	}
 	return(fmt);
 }

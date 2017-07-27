@@ -86,6 +86,7 @@ command: /*empty*/
 		|PRINT fmt svar					{do_print_s_var($2,$3);}
 		|PRINT fmt expr					{do_print_expr($2,$3);}
 		|PRINT fmt WORD					{do_printvar($2,$3);}
+		|PRINT fmt '@' expr {do_print_offset($2,$4);}
 		|PRINT CFG cfgparam				{do_printcfg(fc_ptr,$3);}
 		|PRINT MAINCFG cfgparam			{do_printcfg(&cfg,$3);}
 		|DWP_PRINT_CFG cfgparam2			{do_printcfg(fc_ptr,$2);}
@@ -122,13 +123,13 @@ command: /*empty*/
 		|DW_SEEK_HELP {seek_help_func();}
 		|DW_SEEK_CMD {show_current_seek();}
 		|DW_SEEK_CMD expr {set_current_seek($2);}
-		|DW_SEEK_BACK {}
-		|DW_SEEK_FWD {}
+		|DW_SEEK_BACK {printf("still to code...\n");}
+		|DW_SEEK_FWD {printf("still to code...\n");}
 		|DW_SEEK_BACK expr {seek_dec($2);}
 		|DW_SEEK_FWD expr {seek_inc($2);}
 		|DW_SEEK_BLOCK_BACK {seek_block_dec();}
 		|DW_SEEK_BLOCK_FWD {seek_block_inc();}
-		|DW_SEEK_HISTORY {show_current_seek();}
+		|DW_SEEK_HISTORY {printf("still to code...\n");}
 		|DW_SEEK_DATA WORD {seek_data($2);}
 		|DW_SEEK_HEX HEX_WORD {seek_hex_data($2);}
 		|SHOW_HELP_OPEN {show_help_open();}

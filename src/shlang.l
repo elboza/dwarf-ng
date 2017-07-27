@@ -112,6 +112,7 @@ newline \n
 "M?"		return SHOW_HELP_MOVE;
 "p?"		return SHOW_HELP_PRINT;
 "pp?"		return SHOW_HELP_PPRINT;
+"x?"		return SHOW_HELP_PRINT;
 
 
 

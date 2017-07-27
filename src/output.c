@@ -264,6 +264,9 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 			case 'i':
 				printf("%lld ",(long long)x);
 				break;
+			case 'u':
+				printf("%llu",(long long unsigned)x);
+				break;
 			case 'c':
 				printf("%c ",(int)x);
 				break;
@@ -275,6 +278,38 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 				break;
 		}
 		fmt->rep--;
+	}while(fmt->rep>0);
+	printf("\n");
+}
+void do_print_offset(struct _fmt *fmt,off_t x){
+	char *c;
+	if(!fmt) {fprintf(stderr,"error no fmt.\n"); return;}
+	if(!fc_ptr){fprintf(stderr,"no file is open.\n"); return;}
+	do{
+		c=fc_ptr->faddr+x;
+		switch(fmt->type){
+			case 'x':
+				printf("0x%x ",(unsigned int)*c);
+				break;
+			case 'd':
+			case 'i':
+				printf("%d ",(int)*c);
+				break;
+			case 'u':
+				printf("%u",(unsigned int)*c);
+				break;
+			case 'c':
+				printf("%c ",*c);
+				break;
+			case 'o':
+				printf("%o ",*c);
+				break;
+			default:
+				printf("%d ",(int)*c);
+				break;
+		}
+		fmt->rep--;
+		x++;
 	}while(fmt->rep>0);
 	printf("\n");
 }
@@ -450,8 +485,9 @@ void show_help_move()
 }
 void show_help_pprint()
 {
-	printf("pp expr | pp %%fmt expr\n");
-	printf("outputs the result of the expression (numerical or string). The %%fmt force a different output mode. fmt indicates the output mode desired. Valid option for the output modes are: x for hex output, d or ifor decimal, o for octal output. examples: print %%x 16 (outputs 0xa), print %%d 0xa (outputs 16).\n");
+	printf("%sgeneric print function.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pp %s[%%nx] [@]expr%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET]);
+	printf("%soutputs the result of the expression (numerical or string or @offset). The %%nx force a different output mode. x indicates the output mode desired n times. Valid option for the output modes are: x for hex output, d or ifor decimal, o for octal output, u for unsigned int. examples: pp %%x 16 (outputs 0xa), pp %%d 0xa (outputs 16), pp %%3x 23 (output 0x17 0x17 0x17), pp %%3x @0x100 (output 3 hex bytes at offset 0x100).%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void show_help_fileuse()
 {
@@ -534,6 +570,14 @@ void show_help_config(void){
 }
 void show_help_print(void){
 	printf("%sprint commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| pp%s[?]%s       %sgeneric print function.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| px          %shex print.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pp%s[?] [%%nx] [@]expr%s     %sgeneric print function.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| px [%%n][x]              %shex print of n bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pxl n                   %shex print n lines.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pxc [%%n][x]             %sprint n hex bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pdc [%%n][x]             %sprint n decimal bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pcc [%%n][x]             %sprint n char bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| puc [%%n][x]             %sprint n unsigned decimal bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ps [%%n][x]              %sprint a string at offset x of n len.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| x  [%%n][x]              %ssame as px.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xl  n                   %ssame as pxl.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }

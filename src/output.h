@@ -27,6 +27,7 @@ void do_fileuse(int num);
 void do_printvar(struct _fmt *fmt,char *name);
 void do_print_s_var(struct _fmt *fmt,struct _structvar *ptr);
 void do_print_expr(struct _fmt *fmt,off_t x);
+void do_print_offset(struct _fmt *fmt,off_t x);
 void do_dump(struct _fmt *fmt,off_t offset);
 void show_help_base(void);
 void help_cmd(char *s);
