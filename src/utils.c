@@ -188,6 +188,7 @@ void extended_dump(off_t offset,off_t nbytes)
 	mem=fc_ptr->faddr+offset;
 	temp_offset=offset;
 	uc=(uint8_t*)mem;
+	printf("-- Offset --   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF\n");
 	for(m=0;m<bytes;m+=16)
 	{
 		line_offset=0;
@@ -198,11 +199,12 @@ void extended_dump(off_t offset,off_t nbytes)
 		{
 			printf("%.2x",*(uc++));
 			line_offset++;
-			if(n==(DUMP_MAX_LINE/2)-1) printf("-"); else printf(" ");
+			//if(n==(DUMP_MAX_LINE/2)-1) printf("-"); else printf(" ");
+			if(n&1) printf(" ");
 		}
 		uc=(uint8_t*)(fc_ptr->faddr+temp_offset);
 		for(n=0;n<16-line_offset;n++) printf("   ");
-		printf(" %d ",line_offset);
+		printf(" ");
 		mx=m;
 		for(n=0;n<DUMP_MAX_LINE && mx<bytes;n++,mx++)
 		{
