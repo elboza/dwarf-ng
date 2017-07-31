@@ -54,7 +54,7 @@ struct _var *var;
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
 %token UPDATESYMBOL DWP_PRINT_CFG DW_PRINT_MAINCFG 
 %token SHOW_HELP_MOVE SHOW_HELP_OPEN SHOW_HELP_CONFIG SHOW_HELP_PRINT SHOW_HELP_PPRINT
-%token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES
+%token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES DW_DUMP_STRING
 %token DW_BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
 %token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
 %type <iValue> maybehelpcommand
@@ -142,6 +142,8 @@ command: /*empty*/
 		|DW_DUMP_HEXX fmt expr {do_dump_hex($2,$3,true,true);}
 		|DW_DUMP_HEX_LINES expr {do_dump_hex_lines($2,0,false);}
 		|DW_DUMP_HEX_LINES expr '@' expr {do_dump_hex_lines($2,$4,true);}
+		|DW_DUMP_STRING fmt {do_dump_string($2,0,false);}
+		|DW_DUMP_STRING fmt expr {do_dump_string($2,$3,true);}
 
 
 expr:	INTEGER							{$$=$1;}

@@ -594,3 +594,20 @@ void do_dump_hex_lines(off_t l,off_t x,int b){
 	}
 	extended_dump(x,l*16);
 }
+void do_dump_string(struct _fmt *fmt,off_t x,int b){
+	if(!fmt){fprintf(stderr,"error, no fmt!\n");return;}
+	if(!fc_ptr) return;
+	if(!b) x=fc_ptr->seek;
+	if(fmt->rep==1 && fmt->type=='d') fmt->rep=50;
+	int m_count=0;
+	//char *buff;
+	uint8_t *uc;
+	void *mem;
+	do{
+		uc=(uint8_t*)fc_ptr->faddr+x;
+		if(isprint(*uc)) printf("%c",*uc); else break;	
+		x++;
+		m_count++;
+	}while(m_count<fmt->rep);
+	printf("\n");
+}

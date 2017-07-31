@@ -19,17 +19,6 @@ ws[+] 'pippo' @33!8
 wsz[+] %10 "pippo"
 wsc %10 "pippo" @0
 
-p @0x34!10
-px @0x34!10
-px %10 @0x100
-x @0x34!10
-px8 @0x34
-px32 @0x34
-psz @0x34
-ps @0x34!5
-pxw
-pp %10c
-
 Sc # section create
 Sc !elf @0
 Sc !ph @0x34

@@ -113,6 +113,7 @@ newline \n
 "xx"		return DW_DUMP_HEXX;
 "pxx"		return DW_DUMP_HEXX;
 "xl"		return DW_DUMP_HEX_LINES;
+"ps"		return DW_DUMP_STRING;
 
 
 
