@@ -32,7 +32,8 @@ comment #
 cfmt %
 identifier {letter}({letter}|{digit})*
 filename [0-9a-zA-Z_./]+
-qstring \"[^"\n]*["\n]
+qstring \'[^'\n]*['\n]
+qqstring \"[^"\n]*["\n]
 ws [ \t\r]+
 newline \n
 
@@ -61,7 +62,6 @@ newline \n
 "help"		return HELP;
 "close"		return CLOSE;
 "pp"		return PRINT;
-"len"		return LEN;
 "move"		return MOVE;
 "inject"	return INJECT;
 "@<"		return FILEBEGIN;
@@ -88,8 +88,9 @@ newline \n
 "e"			return DWP_PRINT_CFG;
 "em"		return DW_PRINT_MAINCFG;
 "e?"		return SHOW_HELP_CONFIG;
-"oR+"		return GROW;
-"oR-"		return SHRINK;
+"oR+"		return DW_GROW;
+"oR-"		return DW_SHRINK;
+"oR"		return DW_RESIZE;
 "b"			return DW_BLOCK_CMD;
 "b?"		return BLOCK_HELP;
 "b+"		return BLOCK_INC;
@@ -135,6 +136,14 @@ newline \n
                 return FILENAME;
 			}
 {qstring}	{ 
+				yylval.sWord = strdup(yytext+1); 
+				if (yylval.sWord[yyleng-2] != '\'') 
+				die("improperly terminated string"); 
+				else 
+				yylval.sWord[yyleng-2] = 0;
+				return STRING;
+			}
+{qqstring}	{ 
 				yylval.sWord = strdup(yytext+1); 
 				if (yylval.sWord[yyleng-2] != '"') 
 				die("improperly terminated string"); 

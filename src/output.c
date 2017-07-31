@@ -560,6 +560,7 @@ void show_help_open(void){
 	printf("| ol           %sshow opened files list.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| os           %sshow opened file size.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ou  %sn%s        %sswitch to opened file number n%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| oR  %s[+ -]n%s   %sresize opened file of [+ -]n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oR+ %sn%s        %sincreaes size of opened file of n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oR- %sn%s        %sdecreasesize of opened file of n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
@@ -602,7 +603,6 @@ void do_dump_string(struct _fmt *fmt,off_t x,int b){
 	int m_count=0;
 	//char *buff;
 	uint8_t *uc;
-	void *mem;
 	do{
 		uc=(uint8_t*)fc_ptr->faddr+x;
 		if(isprint(*uc)) printf("%c",*uc); else break;	

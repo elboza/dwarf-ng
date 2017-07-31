@@ -49,7 +49,7 @@ struct _var *var;
 %token <sWord>  WORD FMT HEX_WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token QUIT HELP LOAD FILESIZE CLOSE PRINT HUMAN GROW SHRINK LEN
+%token QUIT HELP LOAD FILESIZE CLOSE PRINT HUMAN DW_GROW DW_SHRINK DW_RESIZE
 %token EXTRACT MOVE INJECT FILEBEGIN FILEEND CFG VAR_IN MAINCFG
 %token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
 %token UPDATESYMBOL DWP_PRINT_CFG DW_PRINT_MAINCFG 
@@ -92,10 +92,10 @@ command: /*empty*/
 		|DWP_PRINT_CFG cfgparam2			{do_printcfg(fc_ptr,$2);}
 		|DW_PRINT_MAINCFG cfgparam2		{do_printcfg(&cfg,$2);}
 		|'{' commands '}'				{}
-		|GROW expr						{growth($2);}
-		|SHRINK expr					{shrink($2);}
-		|LEN '+' expr					{mod_len($3);}
-		|LEN '-' expr					{mod_len(-$3);}
+		|DW_GROW expr						{growth($2);}
+		|DW_SHRINK expr					{shrink($2);}
+		|DW_RESIZE '+' expr					{mod_len($3);}
+		|DW_RESIZE '-' expr					{mod_len(-$3);}
 		|EXTRACT expr expr filename		{extract($2,$3,$4);}
 		|MOVE expr expr expr			{move($2,$3,$4);}
 		|MOVE expr '+' expr expr		{move_r_pos($2,$4,$5);}

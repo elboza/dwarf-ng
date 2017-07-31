@@ -12,12 +12,23 @@ ii #more info
 iz #list strings
 
 w
-wo 0x909090 @33
 wor 0x9090 3 @33
 wos 'pippo kk' @33
-ws[+] 'pippo' @33!8
-wsz[+] %10 "pippo"
-wsc %10 "pippo" @0
+woe2 [offset] #swap 2 bytes endian
+woe4 [offset] #swap 4 bytes endian
+wx %10 '9091' offs
+ws %10 pippo
+wz pippo offs
+wp[+] %10p|b '9091' [offset] #write pattern
+wf %10 ./pippo
+wr[+] %10 [offset] #write random
+wx+
+ws+
+wf+
+wz+
+wle %[1|2|4|8] number [offset] #write little endian
+wbe %[1|2|4|8] number [offset] #write big endian
+wn %[cCsSwWqQ] number [offset] #write number
 
 Sc # section create
 Sc !elf @0
