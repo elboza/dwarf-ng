@@ -175,12 +175,37 @@ uint64_t get_data64(uint64_t data)
 	res=(int)data;
 	return res;
 }
+void get_color_str(char *s,uint8_t *c){
+	if(isalpha(*c)){
+		strcpy(s,ptr_colors[C_YELLOW]);
+		return;
+	}
+	if(isalnum(*c)){
+		strcpy(s,ptr_colors[C_YELLOW]);
+		return;
+	}
+	if(isprint(*c)){
+		strcpy(s,ptr_colors[C_YELLOW]);
+		return;
+	}
+	if(*c==0xff){
+		strcpy(s,ptr_colors[C_RED]);
+		return;
+	}
+	if(*c==0){
+		strcpy(s,ptr_colors[C_GREEN]);
+		return;
+	}
+	strcpy(s,ptr_colors[C_RESET]);
+}
 void extended_dump(off_t offset,off_t nbytes)
 {
 	int n,m,bytes,line_offset,mx;
 	void *mem;
 	uint8_t *uc;
 	off_t temp_offset;
+	char *scolor,colorstr[30];
+	scolor=&colorstr[0];
 	//lines=DUMP_LINES;
 	if(!fc_ptr) {printf("no file opened.\n"); return;}
 	if(nbytes==0) nbytes=fc_ptr->block;
@@ -188,16 +213,17 @@ void extended_dump(off_t offset,off_t nbytes)
 	mem=fc_ptr->faddr+offset;
 	temp_offset=offset;
 	uc=(uint8_t*)mem;
-	printf("-- Offset --   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF\n");
+	printf("-- offset --   0 1  2 3  4 5  6 7  8 9  A B  C D  E F  0123456789ABCDEF\n");
 	for(m=0;m<bytes;m+=16)
 	{
 		line_offset=0;
 		mx=m;
-		printf("0x%.10x  ",(unsigned int)temp_offset);
+		printf("%s0x%.10x%s  ",ptr_colors[C_GREEN],(unsigned int)temp_offset,ptr_colors[C_RESET]);
 		uc=(uint8_t*)(fc_ptr->faddr+temp_offset);
 		for(n=0;n<DUMP_MAX_LINE && mx<bytes;n++,mx++)
 		{
-			printf("%.2x",*(uc++));
+			get_color_str(scolor,uc);
+			printf("%s%.2x%s",scolor,*(uc++),ptr_colors[C_RESET]);
 			line_offset++;
 			//if(n==(DUMP_MAX_LINE/2)-1) printf("-"); else printf(" ");
 			if(n&1) printf(" ");
@@ -208,7 +234,8 @@ void extended_dump(off_t offset,off_t nbytes)
 		mx=m;
 		for(n=0;n<DUMP_MAX_LINE && mx<bytes;n++,mx++)
 		{
-			if(isprint(*uc)) printf("%c",*uc); else printf(".");
+			get_color_str(scolor,uc);
+			if(isprint(*uc)) printf("%s%c%s",scolor,*uc,ptr_colors[C_RESET]); else printf("%s.%s",scolor,ptr_colors[C_RESET]);
 			uc++;
 		}
 		printf("\n");
