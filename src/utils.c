@@ -293,3 +293,23 @@ char* decode_fd_type(int type){
 	if(type==1) return "FD_REGULAR_FILE";
 	return "Unknown";
 }
+void convert_string_hex(char *s){
+	int len;
+	char *p,*buff,*pbuff;
+	len=strlen(s);
+	buff=(char*)malloc(len*sizeof(char));
+	p=s;
+	pbuff=buff;
+	if(len&1){
+		// add leading zero
+		sscanf(p,"%1x",(unsigned int*)pbuff++);
+		p++;
+		len++;
+	}
+	while(*p){
+		sscanf(p,"%02x",(unsigned int*)pbuff++);
+		p+=2;
+	}
+	strncpy(s,buff,len);
+	free(buff);
+}

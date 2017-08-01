@@ -568,9 +568,9 @@ void show_help_print(void){
 }
 void show_help_write(void){
 	printf("%swrite operations commands.\nappend '+' to the commands to perform the operation increasing the file size (not overwriting operations).%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| wx%s[+] [%%n] '9190' [offset]%s          %swrite hex 0x91 0x90 at offset n times.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| ws%s[+] [%%n] foo [offset]%s             %swrite string foo at offset max n chars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| wz%s[+] [%%n]foo [offset]%s              %swrite string zero terminated at offset max n chars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wx%s[+] [%%n] '9190' [offset]%s          %swrite hex 0x91 0x90 at offset max n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ws%s[+] [%%n] 'foo' [offset]%s           %swrite string foo at offset max n chars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wz%s[+] [%%n] 'foo' [offset]%s           %swrite string zero terminated at offset max n chars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| wp%s[+] [%%np|b] 'pattern' [offset]%s    %swrite pattern n times at offset (p repeats n times the string, b repeats n times the bytes[can trunc string]).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| wf%s[+] [%%n] ./myfile [offset]%s        %swrite myfile at offset max n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| wr%s[+] [%%n][offset]%s                  %swrite random bytes at offset max n times.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);

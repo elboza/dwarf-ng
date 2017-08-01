@@ -471,7 +471,7 @@ void move(off_t from,off_t end,off_t to)
 	mem=(char*)fc_ptr->faddr;
 	if(direction==reversed)
 	{
-		printf("reversed\n");
+		//printf("reversed\n");
 		for(i=end;i>=from;i--)
 		{
 			mem[to_end]=mem[i];
@@ -480,7 +480,7 @@ void move(off_t from,off_t end,off_t to)
 	}
 	else
 	{
-		printf("normal\n");
+		//printf("normal\n");
 		for(i=from;i<=end;i++)
 		{
 			mem[to]=mem[i];
@@ -623,26 +623,12 @@ void seek_data(char *s){
 }
 void seek_hex_data(char *s){
 	int len;
-	char *p,*buff,*pbuff;
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
 	len=strlen(s);
 	if(len&1) len++;
 	printf("seek (%d bytes) hex data...%s form address 0x%llx\n",len/2,s,(long long unsigned)fc_ptr->seek);
-	len=strlen(s);
-	buff=(char*)malloc(len*sizeof(char));
-	p=s;
-	pbuff=buff;
-	if(len&1){
-		// add leading zero
-		sscanf(p,"%1x",(unsigned int*)pbuff++);
-		p++;
-		len++;
-	}
-	while(*p){
-		sscanf(p,"%02x",(unsigned int*)pbuff++);
-		p+=2;
-	}
-	seek_data_in_file(buff,len/2);
-	free(buff);
+	convert_string_hex(s);
+	seek_data_in_file(s,len/2);
 }
 int cmp_mem(char *m1,char *m2,int len){
 	int x=0;
@@ -661,4 +647,53 @@ void seek_data_in_file(char *s,int len){
 		}
 		f++;
 	}
+}
+void inject(off_t x,off_t size){
+	//inject zero at offset x growing file...
+	off_t e1,e2;
+	char *c;
+	e1=filesize(fc_ptr->fd);
+	if(growth(size)){
+		e2=filesize(fc_ptr->fd);
+		move(x,x+e1,x+size);
+		c=fc_ptr->faddr+x;
+		while(size-->0){
+			*c++='\0';
+		}
+	}
+}
+void dw_write_hex(struct _fmt *fmt,char *s,off_t x,int xb,int gb){
+	int len,count=1;
+	char *c,*ps;
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	len=strlen(s);
+	convert_string_hex(s);
+	len=strlen(s);
+	ps=&s[0];
+	if(!xb) x=fc_ptr->seek;
+	if(gb) inject(x,(off_t)len);
+	c=fc_ptr->faddr+x;
+	if(fmt->rep==1 && fmt->type=='d') fmt->rep=1024;
+	while(len-->0){
+		*c++=*ps++;
+		if(count>=fmt->rep) break;
+		count++;
+	}
+}
+void dw_write_string(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int zb){
+	int len,count=1;
+	char *c,*ps;
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	len=strlen(s);
+	ps=&s[0];
+	if(!xb) x=fc_ptr->seek;
+	if(gb) inject(x,(off_t)len);
+	c=fc_ptr->faddr+x;
+	if(fmt->rep==1 && fmt->type=='d') fmt->rep=1024;
+	while(len-->0){
+		*c++=*ps++;
+		if(count>=fmt->rep-zb) break;
+		count++;
+	}
+	if(zb) *c='\0';
 }

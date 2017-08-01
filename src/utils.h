@@ -52,5 +52,6 @@ char* decode_yes_no(int x);
 char* decode_true_false(int x);
 void reset_stdin(void);
 char* decode_fd_type(int type);
+void convert_string_hex(char *s);
 
 #endif

@@ -57,6 +57,7 @@ struct _var *var;
 %token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES DW_DUMP_STRING
 %token DW_BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
 %token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
+%token DW_WRITE_HEX DW_WRITE_HEX_INC DW_WRITE_STRING DW_WRITE_STRING_INC DW_WRITE_STRINGZ DW_WRITE_STRINGZ_INC
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -146,6 +147,18 @@ command: /*empty*/
 		|DW_DUMP_STRING fmt expr {do_dump_string($2,$3,true);}
 		|DW_SHOW_HELP_WRITE {show_help_write();}
 		|DW_SHOW_HELP_WRITEOVER {show_help_writeover();}
+		|DW_WRITE_HEX fmt STRING {dw_write_hex($2,$3,0,false,false);}
+		|DW_WRITE_HEX fmt STRING expr {dw_write_hex($2,$3,$4,true,false);}
+		|DW_WRITE_HEX_INC fmt STRING {dw_write_hex($2,$3,0,false,true);}
+		|DW_WRITE_HEX_INC fmt STRING expr {dw_write_hex($2,$3,$4,true,true);}
+		|DW_WRITE_STRING fmt STRING {dw_write_string($2,$3,0,false,false,false);}
+		|DW_WRITE_STRING fmt STRING expr {dw_write_string($2,$3,$4,true,false,false);}
+		|DW_WRITE_STRING_INC fmt STRING {dw_write_string($2,$3,0,false,true,false);}
+		|DW_WRITE_STRING_INC fmt STRING expr {dw_write_string($2,$3,$4,true,true,false);}
+		|DW_WRITE_STRINGZ fmt STRING {dw_write_string($2,$3,0,false,false,true);}
+		|DW_WRITE_STRINGZ fmt STRING expr {dw_write_string($2,$3,$4,true,false,true);}
+		|DW_WRITE_STRINGZ_INC fmt STRING {dw_write_string($2,$3,0,false,true,true);}
+		|DW_WRITE_STRINGZ_INC fmt STRING expr {dw_write_string($2,$3,$4,true,true,true);}
 
 
 expr:	INTEGER							{$$=$1;}

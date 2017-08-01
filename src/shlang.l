@@ -117,6 +117,12 @@ newline \n
 "ps"		return DW_DUMP_STRING;
 "w?"		return DW_SHOW_HELP_WRITE;
 "wo?"		return DW_SHOW_HELP_WRITEOVER;
+"wx"		return DW_WRITE_HEX;
+"wx+"		return DW_WRITE_HEX_INC;
+"ws"		return DW_WRITE_STRING;
+"ws+"		return DW_WRITE_STRING_INC;
+"wz"		return DW_WRITE_STRINGZ;
+"wz+"		return DW_WRITE_STRINGZ_INC;
 
 
 
