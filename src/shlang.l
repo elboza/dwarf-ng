@@ -115,6 +115,8 @@ newline \n
 "pxx"		return DW_DUMP_HEXX;
 "xl"		return DW_DUMP_HEX_LINES;
 "ps"		return DW_DUMP_STRING;
+"w?"		return DW_SHOW_HELP_WRITE;
+"wo?"		return DW_SHOW_HELP_WRITEOVER;
 
 
 

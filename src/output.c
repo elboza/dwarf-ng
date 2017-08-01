@@ -388,6 +388,7 @@ void show_help_base()
 	printf("| M%s[?]%s             %smove block of file around.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| p%s[?]%s             %sprint commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| x%s[?]%s             %sjust an alias for px (print hex).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| w%s[?]%s             %swrite operations.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void help_cmd(char *s)
 {
@@ -578,6 +579,14 @@ void show_help_print(void){
 	printf("| ps [%%n][x]              %sprint a string at offset x of n len.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| x  [%%n][x]              %ssame as px.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| xl  n                   %ssame as pxl.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void show_help_write(void){
+	printf("%swrite operations commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void show_help_writeover(void){
+	printf("%swrite over operations commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx){
