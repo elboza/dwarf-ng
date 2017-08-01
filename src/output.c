@@ -355,31 +355,16 @@ void do_dump(struct _fmt *fmt,off_t offset)
 }
 void show_help_base()
 {
-	printf("inline help\n");
-	printf("commands:\n");
 	printf("help 	.::. show this help\n");
 	printf("quit 	.::. exit dwarf-ng interpreter\n");
-	printf("filelist.::. display the list of all opened file.\n");
 	printf("create 	.::. creates a new section header.\n");
-	printf("dump 	.::. show raw file data\n");
-	printf("extract .::. exports portion of opened file into a new raw file\n");
-//	printf("flush 	.::. syncronize to disc the file structured variables\n");
-	printf("grow 	.::. increase the size of the opened file.\n");
-// 	printf("if-then-else .::. a tipical if-then-else construct.\n");
-	printf("info 	.::. shows the main structures of the opened file.\n");
 	printf("inject 	.::. inject code into the opened file.\n");
-	printf("len 	.::. increase or decrease the sze of the opened file.\n");
-	printf("load 	.::. open a new file.\n");
-	printf("move 	.::. moves code around the opened file.\n");
-	printf("print 	.::. prints variables, strings and expressions.\n");
 	printf("save 	.::. save and close the file.\n");
-	printf("fileuse .::. set current working file.\n");
 	printf("!		.::. executes shell commands.\n");
-	printf("shrink 	.::. decrease the size of the opened file.\n");
-	printf("remove	.::. removes a section header.\n");
-	printf("filesize.::. shows the size of the current working file.\n");
 	printf("\ntype 'help \"command\"' for specific information or see dwarf's man page (man dwarf).\n");
 	printf("Append '?'' to any char command to get detailed help.\n");
+	printf("%sgeneral command syntax:%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("command%s[?][+] [%%nx] [data] [offset]%s    %sn=times,x=format%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ?                %sthis help%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| o%s[?]%s             %sopen/opened file commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| b%s[?]%s             %sSee / change block size.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -573,21 +558,30 @@ void show_help_config(void){
 void show_help_print(void){
 	printf("%sprint commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| pp%s[?] [%%nx] [@]expr%s     %sgeneric print function.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| px [%%n][x]              %shex print of n bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| pxl n                   %shex print n lines.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| pxx [%%n][x]             %shex pretty print of n bytes from offset x.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| ps [%%n][x]              %sprint a string at offset x of n len.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| x  [%%n][x]              %ssame as px.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| xl  n                   %ssame as pxl.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| px %s[%%n][x]%s              %shex print of n bytes from offset x.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pxl %sn%s                   %shex print n lines.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pxx %s[%%n][x]%s             %shex pretty print of n bytes from offset x.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ps %s[%%n][x]%s              %sprint a string at offset x of n len.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| x  %s[%%n][x]%s              %ssame as px.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xl  %sn%s                   %ssame as pxl.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xx %s[%%n][x]%s              %ssame as pxx.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void show_help_write(void){
-	printf("%swrite operations commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("%swrite operations commands.\nappend '+' to the commands to perform the operation increasing the file size (not overwriting operations).%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wx%s[+] [%%n] '9190' [offset]%s          %swrite hex 0x91 0x90 at offset n times.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| ws%s[+] [%%n] foo [offset]%s             %swrite string foo at offset max n chars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wz%s[+] [%%n]foo [offset]%s              %swrite string zero terminated at offset max n chars.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wp%s[+] [%%np|b] 'pattern' [offset]%s    %swrite pattern n times at offset (p repeats n times the string, b repeats n times the bytes[can trunc string]).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wf%s[+] [%%n] ./myfile [offset]%s        %swrite myfile at offset max n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wr%s[+] [%%n][offset]%s                  %swrite random bytes at offset max n times.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wle%s[+] [%%1|2|4|8] number [offset]%s   %swrite little endian number of 1,2,4,8 bytes at offset.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wbe%s[+] [%%1|2|4|8] number [offset]%s   %swrite big endian number of 1,2,4,8 bytes at offset.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wn%s[+] [%%cCsSwWqQ] number [offset]%s   %swrite number at offset (c C=1byte, s=le short(little endian 2 bytes), S=be short, w=le word, W=be word(big endian 4 bytes), q=le quad(little endian 8 bytes), Q=be quad).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wo%s[?]%s                               %swrite over operations commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void show_help_writeover(void){
 	printf("%swrite over operations commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| xx [%%n][x]              %ssame as pxx.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| xx %s[%%n][x]%s              %ssame as pxx.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx){
 	if(!fmt){fprintf(stderr,"error, no fmt!\n");return;}
