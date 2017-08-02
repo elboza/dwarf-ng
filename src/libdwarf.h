@@ -40,6 +40,7 @@ typedef enum {FT_NULL,FT_MZEXE,FT_PE,FT_ELF,FT_MACHO,FT_FATMACHO,FT_FAT,FT_FAT16
 typedef enum {little_endian,big_endian} endian;
 typedef enum {false,true} TF;
 typedef enum {FD_STDIN,FD_REGULAR_FILE} fd_type;
+typedef enum {DW_PATTERN_STRING,DW_PATTERN_HEX} dw_pattern_type;
 typedef enum {SECT_NULL,SECT_ELF,SECT_PH,SECT_SH,SECT_LC,SECT_MAC,SECT_MZ,SECT_PE,SECT_PESECT,SECT_MACSECT,SECT_FATMACHO,SECT_FATARCH,SECT_PE_FILEHEADER,SECT_PE_OPTIONALHEADER} sectionheader;
 struct _cfg {
 	int writable;
@@ -112,5 +113,6 @@ void seek_data_in_file(char *s,int len);
 void inject(off_t x,off_t size);
 void dw_write_hex(struct _fmt *fmt,char *s,off_t x,int xb,int gb);
 void dw_write_string(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int zb);
+void dw_write_pattern(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int pattern_type);
 
 #endif

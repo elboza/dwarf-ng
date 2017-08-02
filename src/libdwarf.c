@@ -697,3 +697,38 @@ void dw_write_string(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int zb){
 	}
 	if(zb) *c='\0';
 }
+void dw_write_pattern(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int pattern_type){
+	int len,count=0,strcount=0,inject_len;
+	char *c,*ps;
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	len=strlen(s);
+	if(pattern_type==DW_PATTERN_HEX){
+		convert_string_hex(s);
+		len=strlen(s);
+	}
+	ps=&s[0];
+	if(fmt->rep==1 && fmt->type=='d') {fmt->rep=1;fmt->type='p';}
+	if(fmt->type!='b') fmt->type='p';
+	if(!xb) x=fc_ptr->seek;
+	if(gb){
+		if(fmt->type=='p'){
+			inject_len=len*fmt->rep;
+		}
+		else{
+			inject_len=fmt->rep;
+		}
+		inject(x,(off_t)inject_len);
+	}
+	c=fc_ptr->faddr+x;
+	while(count<fmt->rep){
+		*c++=*ps++;
+		if(--len==0) {len=strlen(s);ps=&s[0];strcount++;}
+		if(fmt->type=='p'){
+			count=strcount;
+		}
+		else{
+			count++;
+		}
+	}
+	
+}

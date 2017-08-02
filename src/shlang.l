@@ -123,6 +123,10 @@ newline \n
 "ws+"		return DW_WRITE_STRING_INC;
 "wz"		return DW_WRITE_STRINGZ;
 "wz+"		return DW_WRITE_STRINGZ_INC;
+"wps"		return DW_WRITE_PATTERN_STRING;
+"wps+"		return DW_WRITE_PATTERN_STRING_INC;
+"wpx"		return DW_WRITE_PATTERN_HEX;
+"wpx+"		return DW_WRITE_PATTERN_HEX_INC;
 
 
 
