@@ -116,6 +116,9 @@ void dw_write_string(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int zb);
 void dw_write_pattern(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int pattern_type);
 void dw_write_file(struct _fmt *fmt,char *s,off_t x,int xb,int gb);
 void dw_write_random(struct _fmt *fmt,off_t x,int xb,int gb);
+void dw_write_le(struct _fmt *fmt,off_t num,off_t x,int xb,int gb);
+void dw_write_be(struct _fmt *fmt,off_t num,off_t x,int xb,int gb);
+void dw_write_number(struct _fmt *fmt,off_t num,off_t x,int xb,int gb);
 
 
 #endif

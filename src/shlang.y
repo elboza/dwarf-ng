@@ -57,7 +57,7 @@ struct _var *var;
 %token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES DW_DUMP_STRING
 %token DW_BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
 %token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
-%token DW_WRITE_HEX DW_WRITE_HEX_INC DW_WRITE_STRING DW_WRITE_STRING_INC DW_WRITE_STRINGZ DW_WRITE_STRINGZ_INC DW_WRITE_PATTERN_STRING DW_WRITE_PATTERN_STRING_INC DW_WRITE_PATTERN_HEX DW_WRITE_PATTERN_HEX_INC DW_WRITE_FILE DW_WRITE_FILE_INC DW_WRITE_RANDOM DW_WRITE_RANDOM_INC
+%token DW_WRITE_HEX DW_WRITE_HEX_INC DW_WRITE_STRING DW_WRITE_STRING_INC DW_WRITE_STRINGZ DW_WRITE_STRINGZ_INC DW_WRITE_PATTERN_STRING DW_WRITE_PATTERN_STRING_INC DW_WRITE_PATTERN_HEX DW_WRITE_PATTERN_HEX_INC DW_WRITE_FILE DW_WRITE_FILE_INC DW_WRITE_RANDOM DW_WRITE_RANDOM_INC DW_WRITE_LE DW_WRITE_LE_INC DW_WRITE_BE DW_WRITE_BE_INC DW_WRITE_NUMBER DW_WRITE_NUMBER_INC
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -175,6 +175,18 @@ command: /*empty*/
 		|DW_WRITE_RANDOM fmt expr {dw_write_random($2,$3,true,false);}
 		|DW_WRITE_RANDOM_INC fmt {dw_write_random($2,0,false,true);}
 		|DW_WRITE_RANDOM_INC fmt expr {dw_write_random($2,$3,true,true);}
+		|DW_WRITE_LE fmt expr {dw_write_le($2,$3,0,false,false);}
+		|DW_WRITE_LE fmt expr expr {dw_write_le($2,$3,$4,true,false);}
+		|DW_WRITE_LE_INC fmt expr {dw_write_le($2,$3,0,false,true);}
+		|DW_WRITE_LE_INC fmt expr expr {dw_write_le($2,$3,$4,true,true);}
+		|DW_WRITE_BE fmt expr {dw_write_be($2,$3,0,false,false);}
+		|DW_WRITE_BE fmt expr expr {dw_write_be($2,$3,$4,true,false);}
+		|DW_WRITE_BE_INC fmt expr {dw_write_be($2,$3,0,false,true);}
+		|DW_WRITE_BE_INC fmt expr expr {dw_write_be($2,$3,$4,true,true);}
+		|DW_WRITE_NUMBER fmt expr {dw_write_number($2,$3,0,false,false);}
+		|DW_WRITE_NUMBER fmt expr expr {dw_write_number($2,$3,$4,true,false);}
+		|DW_WRITE_NUMBER_INC fmt expr {dw_write_number($2,$3,0,false,true);}
+		|DW_WRITE_NUMBER_INC fmt expr expr {dw_write_number($2,$3,$4,true,true);}
 
 
 expr:	INTEGER							{$$=$1;}

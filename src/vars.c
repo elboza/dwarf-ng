@@ -204,7 +204,7 @@ struct _fmt* makefmt(char *s)
 		s1=s;
 		while(*s1>='0'&&*s1<='9') fmt->rep=fmt->rep*10+(*s1++)-'0';
 		x=0;
-		while(*s1>='a'&&*s1<='z' && x<18){
+		while(((*s1>='a'&&*s1<='z') ||(*s1>='A'&&*s1<='Z')) && x<18){
 			cc[x++]=*s1++;
 		}
 		cc[x]='\0';

@@ -131,6 +131,12 @@ newline \n
 "wf+"		return DW_WRITE_FILE_INC;
 "wr"		return DW_WRITE_RANDOM;
 "wr+"		return DW_WRITE_RANDOM_INC;
+"wle"		return DW_WRITE_LE;
+"wle+"		return DW_WRITE_LE_INC;
+"wbe"		return DW_WRITE_BE;
+"wbe+"		return DW_WRITE_BE_INC;
+"wn"		return DW_WRITE_NUMBER;
+"wn+"		return DW_WRITE_NUMBER_INC;
 
 
 

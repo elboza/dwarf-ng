@@ -762,3 +762,115 @@ void dw_write_random(struct _fmt *fmt,off_t x,int xb,int gb){
 		*c++=(char)arc4random();
 	}
 }
+void dw_write_le(struct _fmt *fmt,off_t num,off_t x,int xb,int gb){
+	switch(fmt->rep){
+		case 1:
+			fmt->type='c';
+			break;
+		case 2:
+			fmt->type='s';
+			break;
+		case 4:
+			fmt->type='w';
+			break;
+		case 8:
+			fmt->type='q';
+			break;
+		default:
+			fprintf(stderr,"invalid number type.\n");
+			return;
+			break;
+	}
+	dw_write_number(fmt,num,x,xb,gb);
+}
+void dw_write_be(struct _fmt *fmt,off_t num,off_t x,int xb,int gb){
+	switch(fmt->rep){
+		case 1:
+			fmt->type='C';
+			break;
+		case 2:
+			fmt->type='S';
+			break;
+		case 4:
+			fmt->type='W';
+			break;
+		case 8:
+			fmt->type='Q';
+			break;
+		default:
+			fprintf(stderr,"invalid number type.\n");
+			return;
+			break;
+	}
+	dw_write_number(fmt,num,x,xb,gb);
+}
+void dw_write_number(struct _fmt *fmt,off_t num,off_t x,int xb,int gb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	char *c;
+	off_t len;
+	uint16_t *mem16;
+	uint32_t *mem32;
+	uint64_t *mem64;
+	switch(fmt->type){
+		case 'c':
+		case 'C':
+			fmt->rep=1;
+			break;
+		case 's':
+		case 'S':
+			fmt->rep=2;
+			break;
+		case 'w':
+		case 'W':
+			fmt->rep=4;
+			break;
+		case 'q':
+		case 'Q':
+			fmt->rep=8;
+			break;
+		default:
+			fprintf(stderr,"invalid number type.\n");
+			return;
+			break;
+	}
+	if(!xb) x=fc_ptr->seek;
+	c=fc_ptr->faddr+x;
+	len=(off_t)fmt->rep;
+	if(gb) inject(x,len);
+	if(fmt->type=='c' || fmt->type=='C'){
+		*c=(char)num;
+	}
+	if(fmt->type=='s' || fmt->type=='S'){
+		uint16_t num16;
+		num16=(uint16_t)num;
+		if(fmt->type=='s'){
+			if(fc_ptr->cpu_endian==big_endian) endian_swap_16(&num16);
+		}else{
+			if(fc_ptr->cpu_endian==little_endian) endian_swap_16(&num16);
+		}
+		mem16=(uint16_t*)c;
+		*mem16=num16;
+	}
+	if(fmt->type=='w' || fmt->type=='W'){
+		uint32_t num32;
+		num32=(uint32_t)num;
+		if(fmt->type=='w'){
+			if(fc_ptr->cpu_endian==big_endian) endian_swap_32(&num32);
+		}else{
+			if(fc_ptr->cpu_endian==little_endian) endian_swap_32(&num32);
+		}
+		mem32=(uint32_t*)c;
+		*mem32=num32;
+	}
+	if(fmt->type=='q' || fmt->type=='Q'){
+		uint64_t num64;
+		num64=(uint64_t)num;
+		if(fmt->type=='q'){
+			if(fc_ptr->cpu_endian==big_endian) endian_swap_64(&num64);
+		}else{
+			if(fc_ptr->cpu_endian==little_endian) endian_swap_64(&num64);
+		}
+		mem64=(uint64_t*)c;
+		*mem64=num64;
+	}
+}
