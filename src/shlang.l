@@ -127,6 +127,10 @@ newline \n
 "wps+"		return DW_WRITE_PATTERN_STRING_INC;
 "wpx"		return DW_WRITE_PATTERN_HEX;
 "wpx+"		return DW_WRITE_PATTERN_HEX_INC;
+"wf"		return DW_WRITE_FILE;
+"wf+"		return DW_WRITE_FILE_INC;
+"wr"		return DW_WRITE_RANDOM;
+"wr+"		return DW_WRITE_RANDOM_INC;
 
 
 

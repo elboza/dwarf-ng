@@ -732,3 +732,33 @@ void dw_write_pattern(struct _fmt *fmt,char *s,off_t x,int xb,int gb,int pattern
 	}
 	
 }
+void dw_write_file(struct _fmt *fmt,char *s,off_t x,int xb,int gb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	FILE *fp;
+	off_t len;
+	char *c;
+	fp=fopen(s,"r");
+	if(!fp){fprintf(stderr,"error opening %s file.\n",s); return;}
+	fseek(fp,0L,SEEK_END);
+	len=ftello(fp);
+	rewind(fp);
+	if(fmt->rep!=1 && fmt->type!='d') len=(off_t)fmt->rep;
+	if(!xb) x=fc_ptr->seek;
+	c=fc_ptr->faddr+x;
+	if(gb) inject(x,len);
+	while(len-->0){
+		*c++=(char)fgetc(fp);
+	}
+}
+void dw_write_random(struct _fmt *fmt,off_t x,int xb,int gb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	off_t len;
+	char *c;
+	len=(off_t)fmt->rep;
+	if(!xb) x=fc_ptr->seek;
+	c=fc_ptr->faddr+x;
+	if(gb) inject(x,len);
+	while(len-->0){
+		*c++=(char)arc4random();
+	}
+}
