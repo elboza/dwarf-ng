@@ -11,12 +11,6 @@ q #quit
 ii #more info
 iz #list strings
 
-w
-wor 0x9090 3 @33
-wos 'pippo kk' @33
-woe2 [offset] #swap 2 bytes endian
-woe4 [offset] #swap 4 bytes endian
-
 Sc # section create
 Sc !elf @0
 Sc !ph @0x34

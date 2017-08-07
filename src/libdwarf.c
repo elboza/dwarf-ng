@@ -874,3 +874,69 @@ void dw_write_number(struct _fmt *fmt,off_t num,off_t x,int xb,int gb){
 		*mem64=num64;
 	}
 }
+void dw_write_over(struct _fmt *fmt,off_t num,off_t x,int xb,int wo_op){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	off_t len;
+	char *c,n;
+	len=(off_t)fmt->rep;
+	if(!xb) x=fc_ptr->seek;
+	c=fc_ptr->faddr+x;
+	n=(char)num;
+	while(len-->0){
+		switch(wo_op){
+			case E_WO_ADD:
+			*c++ += n;
+			break;
+			case E_WO_AND:
+			*c++ &= n;
+			break;
+			case E_WO_SUB:
+			*c++ -= n;
+			break;
+			case E_WO_MUL:
+			*c++ *= n;
+			break;
+			case E_WO_OR:
+			*c++ |= n;
+			break;
+			case E_WO_XOR:
+			*c++ ^= n;
+			break;
+			case E_WO_RSHIFT:
+			*c++ >>= n;
+			break;
+			case E_WO_LSHIFT:
+			*c++ <<= n;
+			break;
+			default:
+			break;
+		}
+	}
+}
+void dw_write_over_2swap(off_t x,int xb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	uint16_t *c,n;
+	if(!xb) x=fc_ptr->seek;
+	c=(uint16_t*)(fc_ptr->faddr+x);
+	n=*c;
+	endian_swap_16(&n);
+	*c=n;
+}
+void dw_write_over_4swap(off_t x,int xb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	uint32_t *c,n;
+	if(!xb) x=fc_ptr->seek;
+	c=(uint32_t*)(fc_ptr->faddr+x);
+	n=*c;
+	endian_swap_32(&n);
+	*c=n;
+}
+void dw_write_over_8swap(off_t x,int xb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	uint64_t *c,n;
+	if(!xb) x=fc_ptr->seek;
+	c=(uint64_t*)(fc_ptr->faddr+x);
+	n=*c;
+	endian_swap_64(&n);
+	*c=n;
+}

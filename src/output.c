@@ -358,8 +358,6 @@ void show_help_base()
 	printf("help 	.::. show this help\n");
 	printf("quit 	.::. exit dwarf-ng interpreter\n");
 	printf("create 	.::. creates a new section header.\n");
-	printf("inject 	.::. inject code into the opened file.\n");
-	printf("save 	.::. save and close the file.\n");
 	printf("!		.::. executes shell commands.\n");
 	printf("\ntype 'help \"command\"' for specific information or see dwarf's man page (man dwarf).\n");
 	printf("Append '?'' to any char command to get detailed help.\n");
@@ -374,6 +372,8 @@ void show_help_base()
 	printf("| p%s[?]%s             %sprint commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| x%s[?]%s             %sjust an alias for px (print hex).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| w%s[?]%s             %swrite operations.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| S%s[?]%s             %ssection headers operations.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| !%s'commands'%s      %sexecute commands into shell (bash).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void help_cmd(char *s)
 {
@@ -549,6 +549,7 @@ void show_help_open(void){
 	printf("| oR  %s[+ -]n%s   %sresize opened file of [+ -]n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oR+ %sn%s        %sincreaes size of opened file of n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oR- %sn%s        %sdecreasesize of opened file of n bytes.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| oS %s[filename]%s %ssave file (to filename).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void show_help_config(void){
 	printf("%sopen/opened files%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -581,8 +582,18 @@ void show_help_write(void){
 	printf("| wo%s[?]%s                               %swrite over operations commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void show_help_writeover(void){
-	printf("%swrite over operations commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| xx %s[%%n][x]%s              %ssame as pxx.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("%swrite over operations commands (n=times [bytes repeated], offs=offset)%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| woa %s[%%n] expr [offs]%s        %s+=  addition (f.ex: woa 0x0102)%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| woA %s[%%n] expr [offs]%s        %s&=  and%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wos %s[%%n] expr [offs]%s        %s-=  substraction%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wol %s[%%n] expr [offs]%s        %s<<= shift left%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wom %s[%%n] expr [offs]%s        %s*=  multiply%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wor %s[%%n] expr [offs]%s        %s>>= shift right%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| woo %s[%%n] expr [offs]%s        %s|=  or%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wox %s[%%n] expr [offs]%s        %s^=  xor  (f.ex: wox %%4 0x90 0x100)%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wo2 %s[offs]%s                  %s2=  2 byte endian swap%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wo4 %s[offs]%s                  %s4=  4 byte endian swap%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| wo8 %s[offs]%s                  %s8=  8 byte endian swap%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx){
 	if(!fmt){fprintf(stderr,"error, no fmt!\n");return;}

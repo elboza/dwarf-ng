@@ -91,6 +91,7 @@ newline \n
 "oR+"		return DW_GROW;
 "oR-"		return DW_SHRINK;
 "oR"		return DW_RESIZE;
+"oS"		return SAVE;
 "b"			return DW_BLOCK_CMD;
 "b?"		return BLOCK_HELP;
 "b+"		return BLOCK_INC;
@@ -137,6 +138,17 @@ newline \n
 "wbe+"		return DW_WRITE_BE_INC;
 "wn"		return DW_WRITE_NUMBER;
 "wn+"		return DW_WRITE_NUMBER_INC;
+"woa"		return DW_WO_ADD;
+"woA"		return DW_WO_AND;
+"wos"		return DW_WO_SUB;
+"wol"		return DW_WO_LSHIFT;
+"wom"		return DW_WO_MUL;
+"wor"		return DW_WO_RSHIFT;
+"woo"		return DW_WO_OR;
+"wox"		return DW_WO_XOR;
+"wo2"		return DW_WO_2SWAP;
+"wo4"		return DW_WO_4SWAP;
+"wo8"		return DW_WO_8SWAP;
 
 
 
