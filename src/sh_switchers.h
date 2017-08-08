@@ -23,4 +23,5 @@ off_t get_offset(struct _structvar *ptr,int endoffset);
 void add_sh_completion(void);
 void do_create(char *ss,off_t offs,int grow,int update);
 char* decode_file_type(int x);
+void dw_create_section(char *s,off_t x,int xb);
 #endif

@@ -1,5 +1,3 @@
-o pippo !elf
-
 e scr.color=true
 
 f #flags

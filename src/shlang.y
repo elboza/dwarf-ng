@@ -60,6 +60,7 @@ struct _var *var;
 %token DW_WRITE_HEX DW_WRITE_HEX_INC DW_WRITE_STRING DW_WRITE_STRING_INC DW_WRITE_STRINGZ DW_WRITE_STRINGZ_INC DW_WRITE_PATTERN_STRING DW_WRITE_PATTERN_STRING_INC DW_WRITE_PATTERN_HEX DW_WRITE_PATTERN_HEX_INC DW_WRITE_FILE DW_WRITE_FILE_INC DW_WRITE_RANDOM DW_WRITE_RANDOM_INC DW_WRITE_LE DW_WRITE_LE_INC DW_WRITE_BE DW_WRITE_BE_INC DW_WRITE_NUMBER DW_WRITE_NUMBER_INC
 %token DW_WO_ADD DW_WO_AND DW_WO_SUB DW_WO_RSHIFT DW_WO_MUL DW_WO_LSHIFT DW_WO_OR DW_WO_XOR DW_WO_2SWAP DW_WO_4SWAP DW_WO_8SWAP
 %token DW_SECT_HELP DW_SECT_CREATE_INC 
+%token DW_OPEN_NEW DW_OPEN_TYPE DW_OPEN_LIGHT DW_OPEN_PROBE 
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -81,7 +82,7 @@ commands:	command
 command: /*empty*/
 		|QUIT							{dw_quit();quit_shell=true;YYACCEPT;}
 		|HELP maybehelpcommand			{/*printf("help!\n");*/}
-		|LOAD filename					{file_open($2);free_completion();add_sh_completion();}
+		|LOAD filename					{file_open($2,true);free_completion();add_sh_completion();}
 		|FILESIZE						{do_filesize(fc_ptr,false);}
 		|FILESIZE HUMAN					{do_filesize(fc_ptr,true);}
 		|CLOSE							{file_close();free_completion();}
@@ -214,6 +215,13 @@ command: /*empty*/
 		|DW_SECT_HELP {show_help_section();}
 		|DW_SECT_CREATE_INC filename {dw_create_section($2,0,false);}
 		|DW_SECT_CREATE_INC filename expr {dw_create_section($2,$3,true);}
+		|DW_OPEN_NEW fmt {dw_open_create($2,NULL,NULL);}
+		|DW_OPEN_NEW fmt filename {dw_open_create($2,$3,NULL);}
+		|DW_OPEN_NEW fmt filename '!' WORD {dw_open_create($2,$3,$5);}
+		|DW_OPEN_NEW fmt '!' WORD {dw_open_create($2,NULL,$4);}
+		|DW_OPEN_TYPE filename {dw_open_type($2);}
+		|DW_OPEN_LIGHT filename {file_open($2,false);}
+		|DW_OPEN_PROBE {free_completion();file_probe();add_sh_completion();}
 
 
 expr:	INTEGER							{$$=$1;}

@@ -151,6 +151,11 @@ newline \n
 "wo8"		return DW_WO_8SWAP;
 "S?"		return DW_SECT_HELP;
 "Sc+"		return DW_SECT_CREATE_INC;
+"oN"		return DW_OPEN_NEW;
+"oT"		return DW_OPEN_TYPE;
+"oO"		return DW_OPEN_LIGHT;
+"oP"		return DW_OPEN_PROBE;
+"oL"		return DW_OPEN_PROBE;
 
 
 

@@ -179,17 +179,17 @@ void getcopyname(char *s)
 	strncpy(tmp,s,FILENAME_LEN);
 	sprintf(s,"%s/%s_%d",fc_ptr->copydir,tmp,num++);
 }
-void file_open(char *s)
+void file_open(char *s,int probeb)
 {
 	enum{opencpspec,opencpnorm,opennorm,noopen};
 	struct stat st;
 	int x,opentype;
 	char openstr[1024],execstr[4096];
 	off_t filesize;
-	fc_ptr=getnewfilecfg();
-	if(!fc_ptr) {warn("error getting new file cfg");return;}
 	x=stat(s,&st);
 	if(x==-1) {warn("error obtaining stat info");return;}
+	fc_ptr=getnewfilecfg();
+	if(!fc_ptr) {warn("error getting new file cfg");return;}
 	switch (st.st_mode & S_IFMT) {
 		case S_IFBLK:
 		case S_IFCHR:
@@ -245,7 +245,7 @@ void file_open(char *s)
 	fc_ptr->fd_type=FD_REGULAR_FILE;
 	fc_ptr->faddr=(char*)mmap(NULL,(size_t)filesize,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
 	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
-	file_probe();
+	if(probeb) file_probe();
 	printf("%s opened\n",s);
 }
 void open_stdin(void){
@@ -961,7 +961,51 @@ void dw_write_over_8swap(off_t x,int xb){
 	endian_swap_64(&n);
 	*c=n;
 }
-void dw_create_section(char *s,off_t x,int xb){
+void dw_open_create(struct _fmt *fmt,char *filename,char *type){
+	fc_ptr=getnewfilecfg();
+	if(!fc_ptr) {warn("error getting new file cfg");return;}
+	if(filename) strncpy(fc_ptr->name,filename,FILENAME_LEN);
+	if(type) fc_ptr->file_type=decode_file_type2(type);
+	fc_ptr->filesize=0;
+	if(fmt->type=='w') fc_ptr->work_on_copy=true;
+	if(fmt->type=='f') fc_ptr->work_on_copy=false;
+	getcopyname(fc_ptr->copyname);
+	if(!filename) filename=fc_ptr->copyname;
+	if(fc_ptr->work_on_copy) filename=fc_ptr->copyname;
+	fc_ptr->can_grow=true;
+	fc_ptr->writable=true;
+	//do_printcfg(fc_ptr,"");
+	fc_ptr->fd=open(filename,O_CREAT|O_RDWR,0644);
+	if(fc_ptr->fd==-1)
+	{
+		fprintf(stderr,"error opening file.\n");
+		if(errno==EACCES) fprintf(stderr,"file access not allowed, check permissions.\n");
+		rmfilecfg(fc_ptr);
+		return;
+	}
+	write(fc_ptr->fd,"  ",2);
+	fc_ptr->filesize=2;
+	fc_ptr->fd_type=FD_REGULAR_FILE;
+	fc_ptr->faddr=(char*)mmap(NULL,(size_t)2,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
+	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");fprintf(stderr," : %d\n",errno);close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
+	printf("new created\n");
+}
+int decode_file_type2(char *s){
+	if(strcmp(s,"elf")==0) return 3;
+	if(strcmp(s,"macho")==0) return 4;
+	if(strcmp(s,"pe")==0) return 2;
+	if(strcmp(s,"mz")==0) return 1;
+	if(strcmp(s,"fatmacho")==0) return 5;
+	if(strcmp(s,"fat")==0) return 6;
+	if(strcmp(s,"fat16")==0) return 7;
+	if(strcmp(s,"fat32")==0) return 8;
+	if(strcmp(s,"ext")==0) return 9;
+	if(strcmp(s,"mbr")==0) return 10;
+	if(strcmp(s,"gpt")==0) return 11;
+	return 0;
+}
+void dw_open_type(char *s){
+	if(!s) return;
 	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
-	printf("create sect....\n");
+	fc_ptr->file_type=decode_file_type2(s);
 }

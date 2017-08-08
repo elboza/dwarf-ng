@@ -206,7 +206,7 @@ int main(int argc,char **argv)
 	{
 		//sprintf(fileopen,"open %s",filename);
 		//execute(fileopen);
-		file_open(filename);
+		file_open(filename,true);
 		//free_completion();
 		add_sh_completion();
 	}

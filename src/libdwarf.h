@@ -36,7 +36,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 #define FILENAME_LEN 1024
-typedef enum {FT_NULL,FT_MZEXE,FT_PE,FT_ELF,FT_MACHO,FT_FATMACHO,FT_FAT,FT_FAT16,FT_FAT32,FT_EXT,FT_MBR} filecodetype;
+typedef enum {FT_NULL,FT_MZEXE,FT_PE,FT_ELF,FT_MACHO,FT_FATMACHO,FT_FAT,FT_FAT16,FT_FAT32,FT_EXT,FT_MBR,FT_GPT} filecodetype;
 typedef enum {little_endian,big_endian} endian;
 typedef enum {false,true} TF;
 typedef enum {FD_STDIN,FD_REGULAR_FILE} fd_type;
@@ -81,7 +81,7 @@ struct _cfg* getnewfilecfg(void);
 void deleteallfilecfg(void);
 void getcopyname(char *s);
 void readcfg(char *s);
-void file_open(char *s);
+void file_open(char *s,int probeb);
 void open_stdin(void);
 void close_stdin(void);
 void file_close(void);
@@ -126,7 +126,10 @@ void dw_write_over(struct _fmt *fmt,off_t num,off_t x,int xb,int wo_op);
 void dw_write_over_2swap(off_t x,int xb);
 void dw_write_over_4swap(off_t x,int xb);
 void dw_write_over_8swap(off_t x,int xb);
-void dw_create_section(char *s,off_t x,int xb);
+void dw_open_create(struct _fmt *fmt,char *filename,char *type);
+int decode_file_type2(char *s);
+void dw_open_type(char *s);
+
 
 
 #endif
