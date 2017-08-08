@@ -179,7 +179,7 @@ void getcopyname(char *s)
 	strncpy(tmp,s,FILENAME_LEN);
 	sprintf(s,"%s/%s_%d",fc_ptr->copydir,tmp,num++);
 }
-void file_open(char *s,int probeb)
+void file_open(struct _fmt *fmt,char *s,int probeb)
 {
 	enum{opencpspec,opencpnorm,opennorm,noopen};
 	struct stat st;
@@ -190,6 +190,10 @@ void file_open(char *s,int probeb)
 	if(x==-1) {warn("error obtaining stat info");return;}
 	fc_ptr=getnewfilecfg();
 	if(!fc_ptr) {warn("error getting new file cfg");return;}
+	if(fmt){
+		if(fmt->type=='w') fc_ptr->work_on_copy=true;
+		if(fmt->type=='f') fc_ptr->work_on_copy=false;
+	}
 	switch (st.st_mode & S_IFMT) {
 		case S_IFBLK:
 		case S_IFCHR:
@@ -312,12 +316,21 @@ void file_save(char *s)
 	if(!fc_ptr) {printf("no file opened.\n"); return;}
 	if(!s) s=strdup(fc_ptr->name);
 	if(!s) {printf("error saving file.\n"); return;}
+	if((strcmp(s,""))==0) {fprintf(stderr,"error, no filename given.\n"); return;}
 	if(!fc_ptr->writable) {warn("file not writable"); return;}
 	if(fc_ptr->work_on_copy)
 	{
 		sprintf(cmd,"cp %s %s",fc_ptr->copyname,s);
 		x=system(cmd);
-		if(x==-1) warn("error saving file!");
+		if(x==-1) {warn("error saving file!");return;}
+		strncpy(fc_ptr->name,s,FILENAME_LEN);
+	}else{
+		if(strcmp(s,fc_ptr->name)!=0){
+			sprintf(cmd,"cp %s %s",fc_ptr->name,s);
+			x=system(cmd);
+			if(x==-1) {warn("error saving file!");return;}
+			strncpy(fc_ptr->name,s,FILENAME_LEN);
+		}
 	}
 	if(x!=-1) printf("file saved.\n");
 }
@@ -570,6 +583,22 @@ void set_colors(int b){
 		"\e[1;32m", // bold green
 		NULL
 	};
+	static char* _bmcolors[]={
+		"\e[0m", //reset
+		"\e[1;33m", // prompt - bold yellow
+		"\e[1;35m", // bold purple
+		"\e[1;34m", // bold blue
+		"\e[40m", // black
+		"\e[1m", // bold
+		"\e[1;31m", // bold red
+		"\e[1;32m", // green
+		"\e[1;33m", // bold yellow
+		"\e[0;35m", // purple
+		"\e[1;34m", // bold blue
+		"\e[1;31m", // bold red
+		"\e[0;32m", // green
+		NULL
+	};
 	static char* _nocolors[]={
 		"",
 		"",
@@ -589,6 +618,7 @@ void set_colors(int b){
 	
 	if (b==E_THEME_COLOR) {ptr_colors=_colors;return;}
 	if (b==E_THEME_BCOLOR) {ptr_colors=_bcolors;return;}
+	if (b==E_THEME_BMIXED) {ptr_colors=_bmcolors;return;}
 	ptr_colors=_nocolors;
 }
 void block_func(int set,off_t offs){
@@ -983,10 +1013,10 @@ void dw_open_create(struct _fmt *fmt,char *filename,char *type){
 		rmfilecfg(fc_ptr);
 		return;
 	}
-	write(fc_ptr->fd,"  ",2);
-	fc_ptr->filesize=2;
+	//write(fc_ptr->fd,"  ",2);
+	//fc_ptr->filesize=2;
 	fc_ptr->fd_type=FD_REGULAR_FILE;
-	fc_ptr->faddr=(char*)mmap(NULL,(size_t)2,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
+	fc_ptr->faddr=(char*)mmap(NULL,(size_t)2,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED|MAP_ANONYMOUS,fc_ptr->fd,(off_t)0);
 	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");fprintf(stderr," : %d\n",errno);close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
 	printf("new created\n");
 }

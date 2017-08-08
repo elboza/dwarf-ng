@@ -43,7 +43,7 @@ typedef enum {FD_STDIN,FD_REGULAR_FILE} fd_type;
 typedef enum {DW_PATTERN_STRING,DW_PATTERN_HEX} dw_pattern_type;
 typedef enum {SECT_NULL,SECT_ELF,SECT_PH,SECT_SH,SECT_LC,SECT_MAC,SECT_MZ,SECT_PE,SECT_PESECT,SECT_MACSECT,SECT_FATMACHO,SECT_FATARCH,SECT_PE_FILEHEADER,SECT_PE_OPTIONALHEADER} sectionheader;
 typedef enum {E_WO_ADD,E_WO_AND,E_WO_SUB,E_WO_MUL,E_WO_RSHIFT,E_WO_LSHIFT,E_WO_XOR,E_WO_OR} e_wo_ops;
-typedef enum {E_THEME_NONE,E_THEME_COLOR,E_THEME_BCOLOR} e_cfg_theme;
+typedef enum {E_THEME_NONE,E_THEME_COLOR,E_THEME_BCOLOR,E_THEME_BMIXED} e_cfg_theme;
 struct _cfg {
 	int writable;
 	int can_grow;
@@ -81,7 +81,7 @@ struct _cfg* getnewfilecfg(void);
 void deleteallfilecfg(void);
 void getcopyname(char *s);
 void readcfg(char *s);
-void file_open(char *s,int probeb);
+void file_open(struct _fmt *fmt,char *s,int probeb);
 void open_stdin(void);
 void close_stdin(void);
 void file_close(void);

@@ -82,7 +82,7 @@ commands:	command
 command: /*empty*/
 		|QUIT							{dw_quit();quit_shell=true;YYACCEPT;}
 		|HELP maybehelpcommand			{/*printf("help!\n");*/}
-		|LOAD filename					{file_open($2,true);free_completion();add_sh_completion();}
+		|LOAD fmt filename					{file_open($2,$3,true);free_completion();add_sh_completion();}
 		|FILESIZE						{do_filesize(fc_ptr,false);}
 		|FILESIZE HUMAN					{do_filesize(fc_ptr,true);}
 		|CLOSE							{file_close();free_completion();}
@@ -220,7 +220,7 @@ command: /*empty*/
 		|DW_OPEN_NEW fmt filename '!' WORD {dw_open_create($2,$3,$5);}
 		|DW_OPEN_NEW fmt '!' WORD {dw_open_create($2,NULL,$4);}
 		|DW_OPEN_TYPE filename {dw_open_type($2);}
-		|DW_OPEN_LIGHT filename {file_open($2,false);}
+		|DW_OPEN_LIGHT fmt filename {file_open($2,$3,false);}
 		|DW_OPEN_PROBE {free_completion();file_probe();add_sh_completion();}
 
 

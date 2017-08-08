@@ -538,7 +538,7 @@ void seek_help_func(void){
 }
 void show_help_open(void){
 	printf("%sopen/opened files commands:%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| o %sfile [!type]%s            %sopen file (o foo !elf ;open foo as elf file)(o foo !! ;open foo as generic no type).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| o %s[%%x] file [!type]%s       %sopen file (o foo !elf ;open foo as elf file)(o foo !! ;open foo as generic no type)(x=w write-on-copy, x=f no write-on-copy).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oc                        %sclose opened file.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ol                        %sshow opened files list.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| os                        %sshow opened file size.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -551,7 +551,7 @@ void show_help_open(void){
 	printf("| oN %s[%%x] [filename] [!type]%s %sopen new empty file [named filename] x=w (work-on-copy) x=f (no-work-on-copy).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oP %s%s                       %sprobe opened file type and load data struct.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| oL %s%s                       %s(probe (oP) alias).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-	printf("| oO  %sfilename%s              %sopen filename without probing filetype and without loading data structures.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| oO  %s[%%x] filename%s         %sopen filename without probing filetype and without loading data structures (x=w write-on-copy, x=f no-write-on-copy).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void show_help_config(void){
 	printf("%sopen/opened files%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
