@@ -83,6 +83,7 @@ void cfg_reset(void)
 	cfg.seek=0;
 	cfg.block=0x100;
 	cfg.colors=false;
+	cfg.theme=E_THEME_NONE;
 	strcpy(cfg.copydir,"/tmp");
 	strcpy(cfg.copyname,"dw_temp_file");
 	cfg.next=NULL;
@@ -110,6 +111,7 @@ struct _cfg* newfilecfg(void)
 	ptr->seek=cfg.seek;
 	ptr->block=cfg.block;
 	ptr->colors=cfg.colors;
+	ptr->theme=cfg.theme;
 	strcpy(ptr->copydir,cfg.copydir);
 	strcpy(ptr->copyname,cfg.copyname);
 	ptr->prev=NULL;
@@ -552,6 +554,22 @@ void set_colors(int b){
 		"\e[0;32m", // green
 		NULL
 	};
+	static char* _bcolors[]={
+		"\e[0m", //reset
+		"\e[1;33m", // prompt - bold yellow
+		"\e[1;35m", // bold purple
+		"\e[1;34m", // bold blue
+		"\e[40m", // black
+		"\e[1m", // bold
+		"\e[1;31m", // bold red
+		"\e[1;32m", // bold green
+		"\e[1;33m", //  bold yellow
+		"\e[1;35m", // bold purple
+		"\e[1;34m", // bold blue
+		"\e[1;31m", // bold red
+		"\e[1;32m", // bold green
+		NULL
+	};
 	static char* _nocolors[]={
 		"",
 		"",
@@ -569,7 +587,8 @@ void set_colors(int b){
 		NULL
 	};
 	
-	if (b) {ptr_colors=_colors;return;}
+	if (b==E_THEME_COLOR) {ptr_colors=_colors;return;}
+	if (b==E_THEME_BCOLOR) {ptr_colors=_bcolors;return;}
 	ptr_colors=_nocolors;
 }
 void block_func(int set,off_t offs){
@@ -759,7 +778,8 @@ void dw_write_random(struct _fmt *fmt,off_t x,int xb,int gb){
 	c=fc_ptr->faddr+x;
 	if(gb) inject(x,len);
 	while(len-->0){
-		*c++=(char)arc4random();
+		//*c++=(char)arc4random();
+		*c++=(char)random();
 	}
 }
 void dw_write_le(struct _fmt *fmt,off_t num,off_t x,int xb,int gb){
@@ -939,4 +959,8 @@ void dw_write_over_8swap(off_t x,int xb){
 	n=*c;
 	endian_swap_64(&n);
 	*c=n;
+}
+void dw_create_section(char *s,off_t x,int xb){
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	printf("create sect....\n");
 }

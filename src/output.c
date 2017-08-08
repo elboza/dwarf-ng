@@ -78,6 +78,7 @@ void do_printcfg(struct _cfg *ptr,char *s)
 		printf("seek: 0x%llx\n",(long long unsigned) ptr->seek);
 		printf("block: 0x%llx\n",(long long unsigned) ptr->block);
 		printf("colors: %d %s\n",ptr->colors,decode_yes_no(ptr->colors));
+		printf("theme: %d %s\n",ptr->theme,decode_yes_no(ptr->theme));
 		printf("prev: %p next: %p first: %p last: %p\n",ptr->prev,ptr->next,filecfg_first,filecfg_last);
 		return;
 	}
@@ -355,15 +356,11 @@ void do_dump(struct _fmt *fmt,off_t offset)
 }
 void show_help_base()
 {
-	printf("help 	.::. show this help\n");
-	printf("quit 	.::. exit dwarf-ng interpreter\n");
-	printf("create 	.::. creates a new section header.\n");
-	printf("!		.::. executes shell commands.\n");
-	printf("\ntype 'help \"command\"' for specific information or see dwarf's man page (man dwarf).\n");
-	printf("Append '?'' to any char command to get detailed help.\n");
+	printf("Append '?' to any char command to get detailed help.\n");
 	printf("%sgeneral command syntax:%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("command%s[?][+] [%%nx] [data] [offset]%s    %sn=times,x=format%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ?                %sthis help%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| q                %sexit dwarf-ng interpreter%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| o%s[?]%s             %sopen/opened file commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| b%s[?]%s             %sSee / change block size.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s%s[?] [addr]%s      %sseek to address.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -594,6 +591,10 @@ void show_help_writeover(void){
 	printf("| wo2 %s[offs]%s                  %s2=  2 byte endian swap%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| wo4 %s[offs]%s                  %s4=  4 byte endian swap%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| wo8 %s[offs]%s                  %s8=  8 byte endian swap%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+}
+void show_help_section(void){
+	printf("%ssection commands%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| Sc+ %ssectname [offs]%s        %screate section 'sectname' at [offset] and resize file%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 }
 void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx){
 	if(!fmt){fprintf(stderr,"error, no fmt!\n");return;}

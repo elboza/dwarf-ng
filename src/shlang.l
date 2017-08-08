@@ -149,6 +149,8 @@ newline \n
 "wo2"		return DW_WO_2SWAP;
 "wo4"		return DW_WO_4SWAP;
 "wo8"		return DW_WO_8SWAP;
+"S?"		return DW_SECT_HELP;
+"Sc+"		return DW_SECT_CREATE_INC;
 
 
 

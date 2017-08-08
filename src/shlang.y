@@ -59,6 +59,7 @@ struct _var *var;
 %token DW_SEEK_HELP DW_SEEK_CMD DW_SEEK_BACK DW_SEEK_FWD DW_SEEK_BLOCK_BACK DW_SEEK_BLOCK_FWD DW_SEEK_HISTORY DW_SEEK_DATA DW_SEEK_HEX
 %token DW_WRITE_HEX DW_WRITE_HEX_INC DW_WRITE_STRING DW_WRITE_STRING_INC DW_WRITE_STRINGZ DW_WRITE_STRINGZ_INC DW_WRITE_PATTERN_STRING DW_WRITE_PATTERN_STRING_INC DW_WRITE_PATTERN_HEX DW_WRITE_PATTERN_HEX_INC DW_WRITE_FILE DW_WRITE_FILE_INC DW_WRITE_RANDOM DW_WRITE_RANDOM_INC DW_WRITE_LE DW_WRITE_LE_INC DW_WRITE_BE DW_WRITE_BE_INC DW_WRITE_NUMBER DW_WRITE_NUMBER_INC
 %token DW_WO_ADD DW_WO_AND DW_WO_SUB DW_WO_RSHIFT DW_WO_MUL DW_WO_LSHIFT DW_WO_OR DW_WO_XOR DW_WO_2SWAP DW_WO_4SWAP DW_WO_8SWAP
+%token DW_SECT_HELP DW_SECT_CREATE_INC 
 %type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
 %type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
@@ -210,6 +211,9 @@ command: /*empty*/
 		|DW_WO_4SWAP expr {dw_write_over_4swap($2,true);}
 		|DW_WO_8SWAP {dw_write_over_8swap(0,false);}
 		|DW_WO_8SWAP expr {dw_write_over_8swap($2,true);}
+		|DW_SECT_HELP {show_help_section();}
+		|DW_SECT_CREATE_INC filename {dw_create_section($2,0,false);}
+		|DW_SECT_CREATE_INC filename expr {dw_create_section($2,$3,true);}
 
 
 expr:	INTEGER							{$$=$1;}

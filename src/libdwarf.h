@@ -43,6 +43,7 @@ typedef enum {FD_STDIN,FD_REGULAR_FILE} fd_type;
 typedef enum {DW_PATTERN_STRING,DW_PATTERN_HEX} dw_pattern_type;
 typedef enum {SECT_NULL,SECT_ELF,SECT_PH,SECT_SH,SECT_LC,SECT_MAC,SECT_MZ,SECT_PE,SECT_PESECT,SECT_MACSECT,SECT_FATMACHO,SECT_FATARCH,SECT_PE_FILEHEADER,SECT_PE_OPTIONALHEADER} sectionheader;
 typedef enum {E_WO_ADD,E_WO_AND,E_WO_SUB,E_WO_MUL,E_WO_RSHIFT,E_WO_LSHIFT,E_WO_XOR,E_WO_OR} e_wo_ops;
+typedef enum {E_THEME_NONE,E_THEME_COLOR,E_THEME_BCOLOR} e_cfg_theme;
 struct _cfg {
 	int writable;
 	int can_grow;
@@ -64,6 +65,7 @@ struct _cfg {
 	off_t seek;
 	off_t block;
 	int colors;
+	int theme;
 	struct _cfg *prev,*next;
 }cfg,*filecfg_first,*filecfg_last,*fc_ptr;
 
@@ -124,6 +126,7 @@ void dw_write_over(struct _fmt *fmt,off_t num,off_t x,int xb,int wo_op);
 void dw_write_over_2swap(off_t x,int xb);
 void dw_write_over_4swap(off_t x,int xb);
 void dw_write_over_8swap(off_t x,int xb);
+void dw_create_section(char *s,off_t x,int xb);
 
 
 #endif

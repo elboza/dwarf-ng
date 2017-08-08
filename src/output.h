@@ -60,6 +60,7 @@ void show_help_config(void);
 void show_help_print(void);
 void show_help_write(void);
 void show_help_writeover(void);
+void show_help_section(void);
 void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx);
 void do_dump_hex_lines(off_t l,off_t x,int b);
 void do_dump_string(struct _fmt *fmt,off_t x,int b);

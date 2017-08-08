@@ -42,13 +42,21 @@ void usage()
 	printf("\nUSAGE: ");
 	printf("dwarf [options] [file]\n");
 	printf("valid options:\n");
-	printf("-s              --stdin                      file from stdin\n");
-	printf("-i              --shell --interactive        interactive (shell mode)\n");
-	printf("-h              --help                       show this help\n");
-	printf("-c '<commands>' --command '<commands>'       command  mode (execute commands)\n");
-	printf("-x <file>       --execute <file>             execute file script\n");
-	printf("-C		--colors		     colored output\n");
-	printf("-B		--nocolors		     nocolored output\n");
+	printf("-s              --stdin                 file from stdin\n");
+	printf("-i              --shell --interactive   interactive (shell mode)\n");
+	printf("-h              --help                  show this help\n");
+	printf("-c '<commands>' --command '<commands>'  command  mode (execute commands)\n");
+	printf("-e '<commands>' --command '<commands>'  command  mode alias (execute commands)\n");
+	printf("-x <file>       --execute <file>        execute file script\n");
+	printf("-C [n]          --colors [n]            colored output (n=theme num)\n");
+	printf("-B              --nocolors              nocolored output\n");
+	printf("-T [n]          --theme [n]             theme 2 colored output (n=theme num)\n");
+	printf("-W              --work-on-copy          work on copy file\n");
+	printf("-P              --no-work-on-copy       no work on copy file\n");
+	printf("-D <name>       --tmpdir <name>         set tmp dir path\n");
+	printf("-N <name>       --tmpname <name>        set tmp filename\n");
+	printf("-s <offs>       --seek <offs>           set seek offset\n");
+	printf("-b <size>       --block <size>          set block size\n");
 	exit(1);
 }
 void usage_b()
@@ -56,6 +64,14 @@ void usage_b()
 	//char *s="VERSION";
 	printf("dwarf-ng-%s (c) Fernando Iazeolla 2007-2013-2017\n",VERSION);
 	printf("for help type: dwarf --help\n");
+}
+off_t parse_num_arg(char *s){
+	int x;
+	if(*s=='0' && *(s+1)=='x'){
+		sscanf(s+2,"%X",&x);
+		return (off_t)x;
+	}
+	return (off_t) atoi(s);
 }
 void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds)
 {
@@ -72,18 +88,26 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 		{
 			{"execute",required_argument,0,'x'},
 			{"command",required_argument,0,'c'},
+			{"command",required_argument,0,'e'},
 			{"interactive",no_argument,0,'i'},
 			{"shell",no_argument,0,'i'},
 			{"help",no_argument,0,'h'},
 			{"version",no_argument,0,'v'},
 			{"stdin",no_argument,0,'s'},
-			{"colors",no_argument,0,'C'},
+			{"colors",optional_argument,0,'C'},
 			{"nocolors",no_argument,0,'B'},
+			{"theme",optional_argument,0,'T'},
+			{"work-on-copy",no_argument,0,'W'},
+			{"no-work-on-copy",no_argument,0,'P'},
+			{"tmpdir",required_argument,0,'D'},
+			{"tmpname",required_argument,0,'N'},
+			{"seek",required_argument,0,'S'},
+			{"block",required_argument,0,'b'},
 			{0,0,0,0,}
 			
 		};
 		int option_index = 0;
-		c = getopt_long (argc, argv, "CBsvhic:x:",long_options, &option_index);
+		c = getopt_long (argc, argv, "PC::Bsvhie:c:x:WD:N:S:b:",long_options, &option_index);
 		if (c == -1) break;
 		switch(c)
 		{
@@ -103,6 +127,7 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 				usage_b();
 				break;
 			case 'c':
+			case 'e':
 				//printf("to execute:%s ....testing..\n",optarg);
 				action->exec=1;
 				strncpy(cmds,optarg,FILENAME_LEN);
@@ -110,9 +135,35 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			case 's':
 				action->stdin=1;
 				break;
+			case 'T':
+				cfg.colors=true;
+				cfg.theme=E_THEME_BCOLOR;
+				set_colors(E_THEME_BCOLOR);
+				if(optarg) set_colors(atoi(optarg));
+				break;
+			case 'W':
+				cfg.work_on_copy=true;
+				break;
+			case 'P':
+				cfg.work_on_copy=false;
+				break;
+			case 'S':
+				cfg.seek=parse_num_arg(optarg);
+				break;
+			case 'b':
+				cfg.block=parse_num_arg(optarg);
+				break;
+			case 'D':
+				strncpy(cfg.copydir,optarg,FILENAME_LEN);
+				break;
+			case 'N':
+				strncpy(cfg.copyname,optarg,FILENAME_LEN);
+				break;
 			case 'C':
 				cfg.colors=true;
-				set_colors(cfg.colors);
+				cfg.theme=E_THEME_COLOR;
+				set_colors(E_THEME_COLOR);
+				if(optarg) set_colors(atoi(optarg));
 				break;
 			case 'B':
 				cfg.colors=false;

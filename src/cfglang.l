@@ -59,6 +59,7 @@ newline \n
 "tmpdir"			return CFG_TMPDIR;
 "tmpname"			return CFG_TMPNAME;
 "colors"			return CFG_COLORS;
+"theme"				return CFG_THEME;
 {eq}				return EQ;
 "yes"				{cfgyylval.iValue=true; return BYES;}
 "no"				{cfgyylval.iValue=false;return BNO;}
