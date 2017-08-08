@@ -669,11 +669,12 @@ void seek_data_in_file(char *s,int len){
 }
 void inject(off_t x,off_t size){
 	//inject zero at offset x growing file...
-	off_t e1,e2;
+	off_t e1;
+	//off_t e2;
 	char *c;
 	e1=filesize(fc_ptr->fd);
 	if(growth(size)){
-		e2=filesize(fc_ptr->fd);
+		//e2=filesize(fc_ptr->fd);
 		move(x,x+e1,x+size);
 		c=fc_ptr->faddr+x;
 		while(size-->0){
