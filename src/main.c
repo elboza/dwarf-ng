@@ -48,6 +48,7 @@ void usage()
 	printf("-c '<commands>' --command '<commands>'  command  mode (execute commands)\n");
 	printf("-e '<commands>' --command '<commands>'  command  mode alias (execute commands)\n");
 	printf("-x <file>       --execute <file>        execute file script\n");
+	printf("-f <file>       --file <file>           open file\n");
 	printf("-C [n]          --colors [n]            colored output (n=theme num)\n");
 	printf("-B              --nocolors              nocolored output\n");
 	printf("-T [n]          --theme [n]             theme 2 colored output (n=theme num)\n");
@@ -73,7 +74,7 @@ off_t parse_num_arg(char *s){
 	}
 	return (off_t) atoi(s);
 }
-void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds)
+void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds,char *filename)
 {
 	//char *s1;
 	int c;
@@ -103,11 +104,12 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			{"tmpname",required_argument,0,'N'},
 			{"seek",required_argument,0,'S'},
 			{"block",required_argument,0,'b'},
+			{"file",required_argument,0,'f'},
 			{0,0,0,0,}
 			
 		};
 		int option_index = 0;
-		c = getopt_long (argc, argv, "PC::Bsvhie:c:x:WD:N:S:b:",long_options, &option_index);
+		c = getopt_long (argc, argv, "PC::Bsvhie:c:x:WD:N:S:b:f:",long_options, &option_index);
 		if (c == -1) break;
 		switch(c)
 		{
@@ -134,6 +136,10 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 				break;
 			case 's':
 				action->stdin=1;
+				break;
+			case 'f':
+				strncpy(filename,optarg,FILENAME_LEN);
+				action->file=1;
 				break;
 			case 'T':
 				cfg.colors=true;
@@ -187,11 +193,13 @@ int main(int argc,char **argv)
 	dw_init();
 	initialize_readline();
 	add_cmds_completions();
-	parse_args(argc,argv,&action,&filescript[0],&cmd[0]);
+	strncpy(filename,"<NULL>",FILENAME_LEN);
+	action.file=0;
+	parse_args(argc,argv,&action,&filescript[0],&cmd[0],&filename[0]);
 	
 	if(argc<2) usage_b();
 	if(optind<argc) {strncpy(filename,argv[optind],FILENAME_LEN);action.file=1;}
-	else{strncpy(filename,"<NULL>",FILENAME_LEN);action.file=0;}
+	//else{strncpy(filename,"<NULL>",FILENAME_LEN);action.file=0;}
 	//if(ilook_debug) look_debug();
 	//execute(cmd);
 	if(action.file)
@@ -203,7 +211,7 @@ int main(int argc,char **argv)
 		add_sh_completion();
 	}
 	if(action.stdin){
-		printf("from stdin...\n");
+		//printf("from stdin...\n");
 		open_stdin();
 		reset_stdin();
 		add_sh_completion();
