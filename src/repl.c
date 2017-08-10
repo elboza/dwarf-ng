@@ -85,6 +85,7 @@ void shell(void)
 	prompt=(char*)malloc(128*sizeof(char));
 	if(check_funny()) funny_shell_disclaimer(); else normal_shell_disclaimer();
 	printf("entering shell-interactive mode...\n");
+	printf("type '?' for help.\n");
 	while(!quit_shell)
 	{
 		#ifdef HAVE_LIBREADLINE

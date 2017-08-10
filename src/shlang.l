@@ -57,24 +57,16 @@ newline \n
 }
 
 
-"-h"		return HUMAN;
 "quit"		return QUIT;
 "help"		return HELP;
 "close"		return CLOSE;
 "pp"		return PRINT;
-"move"		return MOVE;
-"inject"	return INJECT;
 "@<"		return FILEBEGIN;
 "@>"		return FILEEND;
 "$cfg"		return CFG;
 "$maincfg"	return MAINCFG;
 "::"		return VAR_IN;
 "info"		return INFO;
-"save"		return SAVE;
-"create"	return CREATE;
-">>"		return GROWSYMBOL;
-"!>>"		return NOGROWSYMBOL;
-"++"		return UPDATESYMBOL;
 
 "q"			return QUIT;
 "?"			return HELP;

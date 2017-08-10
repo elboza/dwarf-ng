@@ -49,10 +49,10 @@ struct _var *var;
 %token <sWord>  WORD FMT HEX_WORD
 %token <sWord>	FILENAME
 %token <sWord>	STRING
-%token QUIT HELP LOAD FILESIZE CLOSE PRINT HUMAN DW_GROW DW_SHRINK DW_RESIZE
-%token EXTRACT MOVE INJECT FILEBEGIN FILEEND CFG VAR_IN MAINCFG
-%token FILELIST FILEUSE INFO SAVE CREATE GROWSYMBOL NOGROWSYMBOL
-%token UPDATESYMBOL DWP_PRINT_CFG DW_PRINT_MAINCFG 
+%token QUIT HELP LOAD FILESIZE CLOSE PRINT DW_GROW DW_SHRINK DW_RESIZE
+%token MOVE FILEBEGIN FILEEND CFG VAR_IN MAINCFG
+%token FILELIST FILEUSE INFO SAVE  
+%token DWP_PRINT_CFG DW_PRINT_MAINCFG 
 %token SHOW_HELP_MOVE SHOW_HELP_OPEN SHOW_HELP_CONFIG SHOW_HELP_PRINT SHOW_HELP_PPRINT DW_SHOW_HELP_WRITE DW_SHOW_HELP_WRITEOVER
 %token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES DW_DUMP_STRING
 %token DW_BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
@@ -61,9 +61,8 @@ struct _var *var;
 %token DW_WO_ADD DW_WO_AND DW_WO_SUB DW_WO_RSHIFT DW_WO_MUL DW_WO_LSHIFT DW_WO_OR DW_WO_XOR DW_WO_2SWAP DW_WO_4SWAP DW_WO_8SWAP
 %token DW_SECT_HELP DW_SECT_CREATE_INC 
 %token DW_OPEN_NEW DW_OPEN_TYPE DW_OPEN_LIGHT DW_OPEN_PROBE 
-%type <iValue> maybehelpcommand
 %type <sVar>	svar maybenext
-%type <iValue> expr maybenum offset maybeendoffset grow maybeupdate
+%type <iValue> expr maybenum offset maybeendoffset 
 %type <sWord> filename cfgparam maybesavename  cfgparam2
 %type <sFmt> fmt
 %left EQ
@@ -81,10 +80,9 @@ commands:	command
 
 command: /*empty*/
 		|QUIT							{dw_quit();quit_shell=true;YYACCEPT;}
-		|HELP maybehelpcommand			{/*printf("help!\n");*/}
+		|HELP			{show_help_base();}
 		|LOAD fmt filename					{file_open($2,$3,true);free_completion();add_sh_completion();}
 		|FILESIZE						{do_filesize(fc_ptr,false);}
-		|FILESIZE HUMAN					{do_filesize(fc_ptr,true);}
 		|CLOSE							{file_close();free_completion();}
 		|PRINT STRING					{printf("%s\n",$2);}
 		|PRINT fmt svar					{do_print_s_var($2,$3);}
@@ -100,15 +98,10 @@ command: /*empty*/
 		|DW_SHRINK expr					{shrink($2);}
 		|DW_RESIZE '+' expr					{mod_len($3);}
 		|DW_RESIZE '-' expr					{mod_len(-$3);}
-		|EXTRACT expr expr filename		{extract($2,$3,$4);}
 		|MOVE expr expr expr			{move($2,$3,$4);}
 		|MOVE expr '+' expr expr		{move_r_pos($2,$4,$5);}
 		|MOVE expr '-' expr expr		{move_r_pos($2,$4,$5);}
 		|SHOW_HELP_MOVE {show_help_move();}
-		|INJECT expr expr expr			{inject_byte($2,$3,$4,false);}
-		|INJECT expr expr expr grow	{inject_byte($2,$3,$4,$5);}
-		|INJECT filename expr expr		{inject_file($2,$3,$4,false);}
-		|INJECT filename expr expr grow {inject_file($2,$3,$4,$5);}
 		|FILELIST						{do_filelist();}
 		|FILEUSE expr					{do_fileuse($2);}
 		|WORD '=' expr					{setvar($1,VART_NUM,(void*)$3);}
@@ -118,7 +111,6 @@ command: /*empty*/
 		|INFO							{sw_do_info();}
 		|'!' STRING						{system($2);}
 		|SAVE maybesavename				{file_save($2);}
-		|CREATE STRING expr grow maybeupdate		{do_create($2,$3,$4,$5);}
 		|BLOCK_HELP {block_help_func();}
 		|DW_BLOCK_CMD expr {block_func(true,$2);}
 		|DW_BLOCK_CMD {block_func(false,0);}
@@ -262,17 +254,10 @@ maybeendoffset:	/*empty*/				{$$=0;}
 fmt:	FMT								{$$=makefmt($1);}
 			|/*empty*/					{$$=makefmt(NULL);}
 
-maybehelpcommand: /*empty*/				{show_help_base();}
-			|STRING						{help_cmd($1);}
-
 maybesavename:	/*empty*/				{$$=NULL;}
 			|filename					{$$=$1;}
 
-grow:		GROWSYMBOL						{$$=1;}
-			|NOGROWSYMBOL					{$$=0;}
 
-maybeupdate:	/*empty*/				{$$=0;}
-			|UPDATESYMBOL				{$$=1;}
 
 %%
 

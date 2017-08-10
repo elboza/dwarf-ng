@@ -361,6 +361,7 @@ void show_help_base()
 	printf("command%s[?][+] [%%nx] [data] [offset]%s    %sn=times,x=format%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ?                %sthis help%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| q                %sexit dwarf-ng interpreter%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| i                %sshow file info and headers info.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| o%s[?]%s             %sopen/opened file commands.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| b%s[?]%s             %sSee / change block size.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| s%s[?] [addr]%s      %sseek to address.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -371,94 +372,6 @@ void show_help_base()
 	printf("| w%s[?]%s             %swrite operations.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| S%s[?]%s             %ssection headers operations.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| !%s'commands'%s      %sexecute commands into shell (bash).%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-}
-void help_cmd(char *s)
-{
-	printf("help command:%s\n",s);
-	if((strcmp(s,"help"))==0) show_help_base();
-	if((strcmp(s,"quit"))==0) show_help_quit();
-	if((strcmp(s,"create"))==0) show_help_create();
-	if((strcmp(s,"dump"))==0) show_help_dump();
-//	if((strcmp(s,"else"))==0) show_help_ifthenelse();
-	if((strcmp(s,"extract"))==0) show_help_extract();
-//	if((strcmp(s,"flush"))==0) show_help_flush();
-//	if((strcmp(s,"force"))==0) show_help_force();
-	if((strcmp(s,"growth"))==0) show_help_growth();
-//	if((strcmp(s,"if"))==0) show_help_ifthenelse();
-	if((strcmp(s,"info"))==0) show_help_info();
-	if((strcmp(s,"inject"))==0) show_help_inject();
-	if((strcmp(s,"len"))==0) show_help_len();
-	if((strcmp(s,"load"))==0) show_help_load();
-	if((strcmp(s,"move"))==0) show_help_move();
-	if((strcmp(s,"open"))==0) show_help_load();
-	if((strcmp(s,"pp"))==0) show_help_print();
-	if((strcmp(s,"print"))==0) show_help_pprint();
-//	if((strcmp(s,"read"))==0) show_help_load();
-	if((strcmp(s,"fileuse"))==0) show_help_fileuse();
-	if((strcmp(s,"!"))==0) show_help_executeshell();
-	if((strcmp(s,"remove"))==0) show_help_remove();
-	if((strcmp(s,"save"))==0) show_help_save();
-	if((strcmp(s,"filesize"))==0) show_help_filesize();
-	if((strcmp(s,"shrink"))==0) show_help_shrink();
-	if((strcmp(s,"filelist"))==0) show_help_filelist();
-//	if((strcmp(s,"while"))==0) show_help_while();
-//	if((strcmp(s,"write"))==0) show_help_save();
-// 	if((strcmp(s,""))==0) show_help_ ;
-	
-}
-void show_help_quit()
-{
-  printf("quit	-- exit dwarf interpreter\n");
-}
-void show_help_info()
-{
-	printf("info -- shows the main structures of the opened file.\n");
-}
-void show_help_create()
-{
-	printf("create \"type\" offs grow [update]\n");
-	printf("creates a new header. type is the header type (\"pe\",\"ph\",\"elf\",\"sect\"...), offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers), the default value is not-update. grow (>> grow, !>> don't grow) tells dwarf to eventually shift/grow the opened file so that the new header does not overwrite portions of the file.\n");
-}
-void show_help_dump()
-{
-	printf("dump [%%fmt] expr\n");
-	printf("dumps portion of opened file from expr offset in various formats depending on %%fmt. The %%fmt force a different output mode. fmt is in the form: nnx (<number><letter>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: x for hex output, d or ifor decimal output s for string output c for char output, b for binary output,e (default) for a nice dump output. examples: dump @< (dumps the beginning of the file), dump %%3x @<+10 (displays 3 bytes in hex format from 10 positions from the beginning of the file).\n");
-}
-void show_help_extract()
-{
-	printf("extract from len \"file\" \n");
-	printf("extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.\n");
-}
-void show_help_flush()
-{
-	printf("flush -- writes data structured on disc.\n");
-}
-void show_help_force()
-{
-	
-}
-void show_help_growth()
-{
-	printf("grow expr\n");
-	printf("increase the size of the opened file.\n");
-}
-void show_help_ifthenelse()
-{
-	
-}
-void show_help_inject()
-{
-	printf("inject expr1 expr2 [expr3] [expr4])\n");
-	printf("injects data inside the opened file. ( expr1=file|byte, expr2=offs-from, expr3=len, expr4=\">>\"(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \">>\" or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (\">>\") or to the len-offset...dwarf is able to disambiguate. examples: inject 0 $ph[3]::offset 12 , writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset without growing file.\n");
-}
-void show_help_len()
-{
-	printf("len expr -- increase or decrease the sze of the opened file.\n");
-}
-void show_help_load()
-{
-	printf("open filename\n");
-	printf("(...guess?!?!) open a new file.\n");
 }
 void show_help_move()
 {
@@ -471,46 +384,6 @@ void show_help_pprint()
 	printf("%sgeneric print function.%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| pp %s[%%nx] [@]expr%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET]);
 	printf("%soutputs the result of the expression (numerical or string or @offset). The %%nx force a different output mode. x indicates the output mode desired n times. Valid option for the output modes are: x for hex output, d or ifor decimal, o for octal output, u for unsigned int. examples: pp %%x 16 (outputs 0xa), pp %%d 0xa (outputs 16), pp %%3x 23 (output 0x17 0x17 0x17), pp %%3x @0x100 (output 3 hex bytes at offset 0x100).%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);
-}
-void show_help_fileuse()
-{
-	printf("fileuse expr -- (alias fu)\n");
-	printf("set expr number (taken from filelist command) file as current working file.\n");
-}
-void show_help_executeshell()
-{
-	printf("!\"commands\"\n");
-	printf("executes (bash) shell commands.\n");
-}
-void show_help_remove()
-{
-	printf("remove ..........(still coding)........\n");
-//	printf("remove(type,offs[,update[,shift]])\n");
-	printf("removes a section header. see create for parameters explanation.\n");
-}
-void show_help_save()
-{
-	printf("save | save \"filename\" \n");
-	printf("saves all the changes into the opened file. This action once performed is unreversible: changes will be permanently written on the disk.\n");
-}
-void show_help_filesize()
-{
-	printf("filesize [-h] -- (alias fs)\n");
-	printf("shows the size in bytes of the current working file. The -h option gives the result in human readable format.\n");
-}
-void show_help_shrink()
-{
-	printf("shrink expr\n");
-	printf("decrease the size of the opened file.\n");
-}
-void show_help_filelist()
-{
-	printf("filelist -- (alias fl)\n");
-	printf("display a list of all current opened files.\n");
-}
-void show_help_while()
-{
-	
 }
 void block_help_func(void){
 	printf("%sGet/Set block size%s\n",ptr_colors[C_GREEN],ptr_colors[C_RESET]);

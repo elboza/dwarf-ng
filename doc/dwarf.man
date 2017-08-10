@@ -1,42 +1,69 @@
 .TH dwarf-ng 1 "(c) 2007-2013-2017 Fernando Iazeolla"
 .SH NAME
-dwarf-ng - a little and powerful object file manipulation tool.
+dwarf-ng - a little and powerful object file manipulation tool and hex editor.
 .SH SYNOPSIS
 .B dwarf [ options ] [ file ]
 .SH DESCRIPTION
 .B dwarf-ng
-is a powerful object file manipulation tools in the spirit of \fIgdb\fP. with \fIdwarf-ng\fP you can read and edit all the file's section headers as well as the raw data. With \fIdwarf-ng\fP you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. \fIdwarf-ng\fP also permits to inject easily new headers and pieces of code/data into the file.
+is a powerful object file manipulation tool and hex editor in the spirit of \fIgdb\fP. with \fIdwarf-ng\fP you can read and edit all the file's section headers as well as the raw data. With \fIdwarf-ng\fP you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. \fIdwarf-ng\fP also permits to inject easily new headers and pieces of code/data into the file.
 \fIdwarf-ng\fP currently handles \fIRaw\fP, \fIelf\fP (Elf32 and Elf64), \fIPE\fP (Portable executables, PE32 and PE+) and \fIMach-O (32 and 64 bit)\fP files format. In the future new files type will be added.
 .SH OPTIONS
 .TP
 .B -s, --stdin
 file from stdin
 .TP
-.B -i, --interactive, --shell
+.B -i, --shell --interactive
 interactive (shell mode)
 .TP
-.B -c '{commands}', --command '{commands}'
-command mode (executes commands)
+.B -h, --help
+show this help
+.TP
+.B -c '<commands>', --command '<commands>'
+command  mode (execute commands)
 .P
 For example,
 .B dwarf -c 'print 2+2'
 will output:
 4
 .TP
-.B -h, --help
-print usage info
+.B -e '<commands>', --command '<commands>'
+command  mode alias (execute commands)
 .TP
-.B -x < file >, --execute < file >
-loads and executes file script.
+.B -x <file>, --execute <file>
+execute file script
 .TP
 .B -v, --version
 show dwarf-ng's version number
 .TP
-.B -C, --colors
-colored output
+.B -f <file>, --file <file>
+open file
+.TP
+.B -C [n], --colors [n]
+colored output (n=theme num)
 .TP
 .B -B, --nocolors
-non colored output
+nocolored output
+.TP
+.B -T [n], --theme [n]
+theme 2 colored output (n=theme num)
+.TP
+.B -W, --work-on-copy
+work on copy file
+.TP
+.B -P, --no-work-on-copy
+no work on copy file
+.TP
+.B -D <name>, --tmpdir <name>
+set tmp dir path
+.TP
+.B -N <name>, --tmpname <name>
+set tmp filename
+.TP
+.B -s <offs>, --seek <offs>
+set seek offset
+.TP
+.B -b <size>, --block <size>
+set block size
 .TP
 If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)
 .SH THE DWARF'S LANGUAGE
@@ -61,70 +88,104 @@ Expressions \fBEXPR\fP are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * 
 .TP
 .B OFFSETS
 offsets syntax is \fI @foo< \fP or \fI @foo> \fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (>) or minor (<) symbol indicate if the offset point to the end (>) or the beginning (<) of the specified data structure. whith \fB@<\fP we indicate the beginning of the file. Whith \fB@>\fP wh indicate the end of the file. For example \fIprint @>\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. a=@>+3 will assign to the variable a the length of the file plus 3).
-.SH COMMANDS
+.SH GENERAL COMMANDS
 .TP
-.B SAVE [ save | save filename ]
-saves all the changes into the opened file. This action once performed is unreversible: changes will be permanently written on the disk.
+.B MAIN COMMANDS SECTION
+ Append '?' to any char command to get detailed help.
+ general command syntax:
+ command[?][+] [%nx] [data] [offset]    n=times,x=format
+ | ?                this help
+ | q                exit dwarf-ng interpreter
+ | i                show file info and headers info.
+ | o[?]             open/opened file commands.
+ | b[?]             See / change block size.
+ | s[?] [addr]      seek to address.
+ | e[?]             show config vars.
+ | M[?]             move block of file around.
+ | p[?]             print commands.
+ | x[?]             just an alias for px (print hex).
+ | w[?]             write operations.
+ | S[?]             section headers operations.
+ | !'commands'      execute commands into shell (bash).
 .TP
-.B OPEN [ open filename ]
-Loads the specified file and creates all related data structures associated to the file.
+.B open/opened file commands
+ open/opened files commands:
+ | o [%x] file [!type]       open file (o foo !elf ;open foo as elf file)(o foo !! ;open foo as generic no type)(x=w write-on-copy, x=f no write-on-copy).
+ | oc                        close opened file.
+ | ol                        show opened files list.
+ | os                        show opened file size.
+ | ou  n                     switch to opened file number n
+ | oR  [+ -]n                resize opened file of [+ -]n bytes.
+ | oR+ n                     increaes size of opened file of n bytes.
+ | oR- n                     decreasesize of opened file of n bytes.
+ | oS [filename]             save file (to filename).
+ | oT type                   change file type to 'type' (oT elf).
+ | oN [%x] [filename] [!type] open new empty file [named filename] x=w (work-on-copy) x=f (no-work-on-copy).
+ | oP                        probe opened file type and load data struct.
+ | oL                        (probe (oP) alias).
+ | oO  [%x] filename         open filename without probing filetype and without loading data structures (x=w write-on-copy, x=f no-write-on-copy).
 .TP
-.B WHILE [ while(expr) command(s) ]
-a typical while construct. example: a=5;while(a>0){print a;a=a-1} (deprecated in version 0.3.x)
+.B block size commands
+ Get/Set block size
+ | b             display current block size
+ | b  33         set block size to 33
+ | b+ 3          increase blocksize by 3
+ | b- 16         decrease blocksize by 16
+ | b  0xfa+4     numeric argument can be an expression
 .TP
-.B IF-ELSE [ if(expr) command(s) | if(expr) command(s) else command(s) ]
-a typical if-else costruct. example: a=5;if(a>1) {print "ok"} else {print "no"} (deprecated in version 0.3.x)
+.B seek commands
+ | s             Print current address
+ | s  addr       Seek to address
+ | s-            Undo seek
+ | s+            Redo seek
+ | s- n          Seek n bytes backward
+ | s+ n          Seek n bytes forward
+ | s--           Seek blocksize bytes backward
+ | s++           Seek blocksize bytes forward
+ | s*            List undo seek history
+ | s/ DATA       Search for next occurrence of 'DATA'
+ | s/x 9091      Search for next occurrence of \x90\x91
+ | ss            Seek silently (without adding an entry to the seek history)
+ | s             Print current address
 .TP
-.B PRINT [print expr | print %fmt expr ] -- alias pp
-outputs the result of the expression (numerical or string). The \fB%fmt\fP force a different output mode. \fBfmt\fP indicates the output mode desired. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP or \fBi\fP for decimal, \fBo\fP for octal output. examples: \fIprint %x 16\fP (outputs 0xa), \fIprint %d 0xa\fP (outputs 16).
+.B print commands
+ | pp[?] [%nx] [@]expr     generic print function.
+ | px [%n][x]              hex print of n bytes from offset x.
+ | pxl n                   hex print n lines.
+ | pxx [%n][x]             hex pretty print of n bytes from offset x.
+ | ps [%n][x]              print a string at offset x of n len.
+ | x  [%n][x]              same as px.
+ | xl  n                   same as pxl.
+ | xx [%n][x]              same as pxx.
 .TP
-.B QUIT [ quit ]
-exit dwarf-ng interpreter.
+.B write commands
+write operations commands.
+append '+' to the commands to perform the operation increasing the file size (not overwriting operations).
+ | wx[+] [%n] '9190' [offset]          write hex 0x91 0x90 at offset max n bytes.
+ | ws[+] [%n] 'foo' [offset]           write string foo at offset max n chars.
+ | wz[+] [%n] 'foo' [offset]           write string zero terminated at offset max n chars.
+ | wps[+] [%np|b] 'pattern' [offset]   write string pattern n times at offset (p repeats n times the string, b repeats n times the bytes[can trunc string]).
+ | wpx[+] [%np|b] 'pattern' [offset]   write hex pattern n times at offset (p repeats n times the string, b repeats n times the bytes[can trunc string]).
+ | wf[+] [%n] ./myfile [offset]        write myfile at offset max n bytes.
+ | wr[+] [%n][offset]                  write random bytes at offset max n times.
+ | wle[+] [%1|2|4|8] number [offset]   write little endian number of 1,2,4,8 bytes at offset.
+ | wbe[+] [%1|2|4|8] number [offset]   write big endian number of 1,2,4,8 bytes at offset.
+ | wn[+] [%cCsSwWqQ] number [offset]   write number at offset (c C=1byte, s=le short(little endian 2 bytes), S=be short, w=le word, W=be word(big endian 4 bytes), q=le quad(little endian 8 bytes), Q=be quad).
+ | wo[?]                               write over operations commands.
 .TP
-.B INFO [ info ]
-display info and main structures of the current working file.
-.TP
-.B GROW [ growth expr ]
-increase the size of the opened file.
-.TP
-.B SHRINK [ shrink expr ]
-decrease the size of the opened file.
-.TP
-.B MOVE [ move expr1 expr2 expr3 | move expr1 +expr2 expr3 | move expr1 -expr2 expr3 ]
-move blocks of file around. (\fBexpr1=from, expr2=[len|end], expr3=to\fP). moves from expr1 to expr3. expr2 can be a len if precede by plus(+) or minus(-), otherwise it refers to an absolute address indicating the end of the from-end block to move. examples: \flmove @< +10 @ph[0]>)\fP moves 10 bytes from the beginning of the file to the end of the first(0) program's header.
-.TP
-.B HELP [ help ]
-display the inline shell help menu.
-.TP
-.B INJECT [ inject expr1 expr2 expr3 expr4 | inject expr1 expr2 expr3 | inject expr1 expr2 ]
-injects data inside the opened file. ( \fBexpr1=file|byte, expr2=offs-from, expr3=len, expr4=">>"\fP(shift) )if expr1 is a string it refers to a file to be injected into the opened file. if expr1 is a numerical value it represent the byte to inject (eventually repeated) inside the opened file. expr2 indicates the offset from where to begin to inject. expr4 can be \fB">>"\fP or omitted. if omitted the file is not growth by injecting data. expr3 can be a numerical value representing the len or the end-offset of the injecting data or cen be omitted. if expr3 is omitted dwarf uses a default len thas is 1 for the byte-injection or the file length for the file-injection.if expr4 is omitted expr3 can refer to the shift value (">>") or to the len-offset...dwarf is able to disambiguate. examples: \flinject 0 $ph[3]::offset 12\fP , writes 12 bytes of zeros at the absolute addres pointed from the variable $ph[3]::offset.
-.TP
-.B CREATE [ create type offs shift [update]) ]
-creates a new header. type is the header type, offs tells the offset where to create the header. offs is an integer an it refers to the position where to create the new header.  update tells dwarf to update the other data structures of the new header presence (relocates offsets and section numbers).shift (\fB">>"\fP) tells dwarf to eventually shift the opened file so that the new header does not overwrite portions of the file (!>> indicates to not groe the file).
-.TP
-.B REMOVE [ remove type offs shift [update] ]
-removes a header. see CREATE for parameters explanation.
-.TP
-.B LEN [ len expr ]
-grows or shrinks the opened file depending if expr is >0 or <0. LEN will call GROW or SHRINK depending on expr sign.
-.TP
-.B CLOSE [ close ]
-closes the opened file.
-.TP
-.B DUMP [ dump [%fmt] expr ]
-dumps portion of opened file from expr offset in various formats depending on %fmt. The \fB%fmt\fP force a different output mode. \fBfmt\fP is in the form: nnx (<number><letter>) where the letter x indicates the output mode desired, and the number nn indicates the number of bytes to output. Valid option for the output modes are: \fBx\fP for hex output, \fBd\fP or \fIi\fP for decimal putput \fBs\fP for string output \fBc\fP for char output, \fBo\fP for octal output,\fBe\fP (default) for a nice dump output. examples: \fIdump @<\fP (dumps the beginning of the file), \fIdump %x3 @<+10\fP (displays 3 bytes in hex format from 10 positions from the beginning of the file).
-.TP
-.B EXTRACT [ extract from len file ]
-extract 'len' bytes from opened file from 'from' position and save it into a new file called 'file'.
-.TP
-.B FILESIZE [ filesize [-h] ] -- alias fs
-shows the size in bytes of the current working file. The -h option gives the result in human readable format.
-.TP
-.B FILELIST [ filelist ] -- alias fl
-display a list of all current opened files.
-.TP
-.B FILEUSE [ fileuse expr ] -- alias fu
-set expr number (taken from filelist command) file as current working file.
+.B write over commands
+write over operations commands (n=times [bytes repeated], offs=offset)
+ | woa [%n] expr [offs]        +=  addition (f.ex: woa 0x0102)
+ | woA [%n] expr [offs]        &=  and
+ | wos [%n] expr [offs]        -=  substraction
+ | wol [%n] expr [offs]        <<= shift left
+ | wom [%n] expr [offs]        *=  multiply
+ | wor [%n] expr [offs]        >>= shift right
+ | woo [%n] expr [offs]        |=  or
+ | wox [%n] expr [offs]        ^=  xor  (f.ex: wox %4 0x90 0x100)
+ | wo2 [offs]                  2=  2 byte endian swap
+ | wo4 [offs]                  4=  4 byte endian swap
+ | wo8 [offs]                  8=  8 byte endian swap
 .SH CONFIG FILE
 .TP
 .B dwarfrc
@@ -136,6 +197,7 @@ verbose=0 #this is a comment
 tmpdir="/tmp"
 tmpname="dw_temp_filex"
 colors=yes #(yes|no)
+#theme=2 #(0=nocolors, 1=normalcolors, 2=boldcolors)
 
 .fi
 where a comment line begins with a \fB#\fP.

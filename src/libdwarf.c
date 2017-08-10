@@ -1017,7 +1017,7 @@ void dw_open_create(struct _fmt *fmt,char *filename,char *type){
 	//fc_ptr->filesize=2;
 	fc_ptr->fd_type=FD_REGULAR_FILE;
 	fc_ptr->faddr=(char*)mmap(NULL,(size_t)2,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED|MAP_ANONYMOUS,fc_ptr->fd,(off_t)0);
-	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");fprintf(stderr," : %d\n",errno);close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
+	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");fprintf(stderr,"cannot create new file. err : %d\n",errno);close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
 	printf("new created\n");
 }
 int decode_file_type2(char *s){

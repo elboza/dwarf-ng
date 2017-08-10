@@ -48,6 +48,7 @@ void usage()
 	printf("-c '<commands>' --command '<commands>'  command  mode (execute commands)\n");
 	printf("-e '<commands>' --command '<commands>'  command  mode alias (execute commands)\n");
 	printf("-x <file>       --execute <file>        execute file script\n");
+	printf("-v              --version               show dwarf-ng's version number\n");
 	printf("-f <file>       --file <file>           open file\n");
 	printf("-C [n]          --colors [n]            colored output (n=theme num)\n");
 	printf("-B              --nocolors              nocolored output\n");
@@ -109,7 +110,7 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			
 		};
 		int option_index = 0;
-		c = getopt_long (argc, argv, "PC::Bsvhie:c:x:WD:N:S:b:f:",long_options, &option_index);
+		c = getopt_long (argc, argv, "PT::C::Bsvhie:c:x:WD:N:S:b:f:",long_options, &option_index);
 		if (c == -1) break;
 		switch(c)
 		{
