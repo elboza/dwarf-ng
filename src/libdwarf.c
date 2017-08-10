@@ -51,7 +51,7 @@ void dw_init()
 		sprintf(str,"%s/.dwarfrc",envstr);
 		readcfg(str);
 	}
-	if(cfg.colors) set_colors(true); else set_colors(false);
+	if(cfg.colors) {set_colors(true);set_colors(cfg.theme);} else set_colors(false);
 }
 void readcfg(char *s)
 {
