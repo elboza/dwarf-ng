@@ -43,5 +43,7 @@ void show_help_section(void);
 void do_dump_hex(struct _fmt *fmt,off_t x,int b,int xx);
 void do_dump_hex_lines(off_t l,off_t x,int b);
 void do_dump_string(struct _fmt *fmt,off_t x,int b);
+void dw_print_number(struct _fmt *fmt1,off_t x,int xb,struct _fmt *fmt2,int fmtb);
+
 
 #endif

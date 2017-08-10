@@ -52,7 +52,7 @@ struct _var *var;
 %token QUIT HELP LOAD FILESIZE CLOSE PRINT DW_GROW DW_SHRINK DW_RESIZE
 %token MOVE FILEBEGIN FILEEND CFG VAR_IN MAINCFG
 %token FILELIST FILEUSE INFO SAVE  
-%token DWP_PRINT_CFG DW_PRINT_MAINCFG 
+%token DWP_PRINT_CFG DW_PRINT_MAINCFG DW_PRINT_NUMBER 
 %token SHOW_HELP_MOVE SHOW_HELP_OPEN SHOW_HELP_CONFIG SHOW_HELP_PRINT SHOW_HELP_PPRINT DW_SHOW_HELP_WRITE DW_SHOW_HELP_WRITEOVER
 %token DW_DUMP_HEX DW_DUMP_HEXX DW_DUMP_HEX_LINES DW_DUMP_STRING
 %token DW_BLOCK_CMD BLOCK_HELP BLOCK_INC BLOCK_DEC
@@ -214,6 +214,10 @@ command: /*empty*/
 		|DW_OPEN_TYPE filename {dw_open_type($2);}
 		|DW_OPEN_LIGHT fmt filename {file_open($2,$3,false);}
 		|DW_OPEN_PROBE {free_completion();file_probe();add_sh_completion();}
+		|DW_PRINT_NUMBER fmt fmt {dw_print_number($2,0,false,$3,false);}
+		|DW_PRINT_NUMBER fmt '!' fmt {dw_print_number($2,0,false,$4,true);}
+		|DW_PRINT_NUMBER fmt expr fmt {dw_print_number($2,$3,true,$4,false);}
+		|DW_PRINT_NUMBER fmt expr '!' fmt {dw_print_number($2,$3,true,$5,true);}
 
 
 expr:	INTEGER							{$$=$1;}

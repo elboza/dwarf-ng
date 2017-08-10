@@ -156,6 +156,7 @@ print commands
 | pxl n                   hex print n lines.
 | pxx [%n][x]             hex pretty print of n bytes from offset x.
 | ps [%n][x]              print a string at offset x of n len.
+| pn [%x] [offs] [!%z]    print number (cC=char, sS=short(little, big endian), wW=word(little,big endian), qQ=quad) from offset in z format (d=decimal,x=hex) .
 | x  [%n][x]              same as px.
 | xl  n                   same as pxl.
 | xx [%n][x]              same as pxx.

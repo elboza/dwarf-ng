@@ -283,11 +283,11 @@ void do_print_expr(struct _fmt *fmt,off_t x)
 	printf("\n");
 }
 void do_print_offset(struct _fmt *fmt,off_t x){
-	char *c;
+	uint8_t *c;
 	if(!fmt) {fprintf(stderr,"error no fmt.\n"); return;}
 	if(!fc_ptr){fprintf(stderr,"no file is open.\n"); return;}
 	do{
-		c=fc_ptr->faddr+x;
+		c=(uint8_t*)fc_ptr->faddr+x;
 		switch(fmt->type){
 			case 'x':
 				printf("0x%x ",(unsigned int)*c);
@@ -438,6 +438,7 @@ void show_help_print(void){
 	printf("| pxl %sn%s                   %shex print n lines.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| pxx %s[%%n][x]%s             %shex pretty print of n bytes from offset x.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| ps %s[%%n][x]%s              %sprint a string at offset x of n len.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
+	printf("| pn %s[%%x] [offs] [!%%z]%s    %sprint number (cC=char, sS=short(little, big endian), wW=word(little,big endian), qQ=quad) from offset in z format (d=decimal,x=hex) .%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| x  %s[%%n][x]%s              %ssame as px.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| xl  %sn%s                   %ssame as pxl.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
 	printf("| xx %s[%%n][x]%s              %ssame as pxx.%s\n",ptr_colors[C_YELLOW],ptr_colors[C_RESET],ptr_colors[C_GREEN],ptr_colors[C_RESET]);
@@ -504,4 +505,74 @@ void do_dump_string(struct _fmt *fmt,off_t x,int b){
 		m_count++;
 	}while(m_count<fmt->rep);
 	printf("\n");
+}
+void dw_print_number(struct _fmt *fmt,off_t x,int xb,struct _fmt *fmt2,int fmtb){
+	//uint8_t *mem8;
+	uint16_t *mem16;
+	uint32_t *mem32;
+	uint64_t *mem64;
+	uint8_t *c;
+	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
+	if(!xb) x=fc_ptr->seek;
+	if(!fmtb) {fmt2->rep=1;fmt2->type='x';}
+	switch(fmt->type){
+		case 'c':
+		case 'C':
+			fmt->rep=1;
+			break;
+		case 's':
+		case 'S':
+			fmt->rep=2;
+			break;
+		case 'w':
+		case 'W':
+			fmt->rep=4;
+			break;
+		case 'q':
+		case 'Q':
+			fmt->rep=8;
+			break;
+		default:
+			fprintf(stderr,"invalid number type.\n");
+			return;
+			break;
+	}
+	c=(uint8_t*)fc_ptr->faddr+x;
+	if(fmt->type=='c' || fmt->type=='C'){
+		//num=(off_t)*c;
+		do_print_expr(fmt2,(off_t)*c);
+	}
+	if(fmt->type=='s' || fmt->type=='S'){
+		uint16_t num16;
+		mem16=(uint16_t*)c;
+		num16=*mem16;
+		if(fmt->type=='s'){
+			if(fc_ptr->cpu_endian==big_endian) endian_swap_16(&num16);
+		}else{
+			if(fc_ptr->cpu_endian==little_endian) endian_swap_16(&num16);
+		}
+		do_print_expr(fmt2,(off_t)num16);
+	}
+	if(fmt->type=='w' || fmt->type=='W'){
+		uint32_t num32;
+		mem32=(uint32_t*)c;
+		num32=*mem32;
+		if(fmt->type=='w'){
+			if(fc_ptr->cpu_endian==big_endian) endian_swap_32(&num32);
+		}else{
+			if(fc_ptr->cpu_endian==little_endian) endian_swap_32(&num32);
+		}
+		do_print_expr(fmt2,(off_t)num32);
+	}
+	if(fmt->type=='q' || fmt->type=='Q'){
+		uint64_t num64;
+		mem64=(uint64_t*)c;
+		num64=*mem64;
+		if(fmt->type=='q'){
+			if(fc_ptr->cpu_endian==big_endian) endian_swap_64(&num64);
+		}else{
+			if(fc_ptr->cpu_endian==little_endian) endian_swap_64(&num64);
+		}
+		do_print_expr(fmt2,(off_t)num64);
+	}
 }

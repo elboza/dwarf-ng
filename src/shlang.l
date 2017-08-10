@@ -148,6 +148,7 @@ newline \n
 "oO"		return DW_OPEN_LIGHT;
 "oP"		return DW_OPEN_PROBE;
 "oL"		return DW_OPEN_PROBE;
+"pn"		return DW_PRINT_NUMBER;
 
 
 
