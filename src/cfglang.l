@@ -36,9 +36,11 @@ comment #
 eq =
 identifier {letter}({letter}|{digit})*
 filename [0-9a-zA-Z_./]+
-qstring \"[^"\n]*["\n]
+qstring \'[^'\n]*['\n]
+qqstring \"[^"\n]*["\n]
 ws [ \t\r]+
 newline \n
+%x INCOMMENT
 
 %%
 
@@ -82,6 +84,14 @@ newline \n
                 return FILENAME;
 			}
 {qstring}	{ 
+				cfgyylval.sWord = strdup(yytext+1); 
+				if (cfgyylval.sWord[yyleng-2] != '\'') 
+				die("improperly terminated string"); 
+				else 
+				cfgyylval.sWord[yyleng-2] = 0;
+				return STRING;
+			}
+{qqstring}	{ 
 				cfgyylval.sWord = strdup(cfgyytext+1); 
 				if (cfgyylval.sWord[yyleng-2] != '"') 
 				die("improperly terminated string"); 
@@ -97,7 +107,10 @@ newline \n
 			//ungetc('\n',cfgyyin);
 			unput('\n');
 			cfgyylineno++;
+			//BEGIN(INCOMMENT);
 		}
+<INCOMMENT>\n BEGIN(INITIAL);
+<INCOMMENT>. ;
 <<EOF>>		yyterminate();
 {ws}		;	/* ignore whitespace */
 {newline}	{cfgyylineno++;return NEWLINE;}

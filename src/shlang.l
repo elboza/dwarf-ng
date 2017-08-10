@@ -29,6 +29,8 @@ digit [0-9]
 letter [a-zA-Z_]
 hexletter [a-fA-F]
 comment #
+mlcomment "/*"
+mlcomment_e "*/"
 cfmt %
 identifier {letter}({letter}|{digit})*
 filename [0-9a-zA-Z_./]+
@@ -36,6 +38,8 @@ qstring \'[^'\n]*['\n]
 qqstring \"[^"\n]*["\n]
 ws [ \t\r]+
 newline \n
+%x INCOMMENT
+%x MLCOMMENT
 
 %%
 
@@ -186,13 +190,20 @@ newline \n
 				return STRING;
 			}
 {comment}	{
-			//printf("comment:");
-			register int c;
-			while((c=input())!='\n')
-			{if(c==EOF) {/*printf("EOF!\n");*/yyterminate();}}
-			//printf("::%x\n",ungetc(' ',yyin));
-			yylineno++;
+			////printf("comment:");
+			//register int c;
+			//while((c=input())!='\n')
+			//{if(c==EOF) {/*printf("EOF!\n");*/yyterminate();}}
+			////printf("::%x\n",ungetc(' ',yyin));
+			//++yylineno;
+			BEGIN(INCOMMENT);
 		}
+<INCOMMENT>. ;
+<INCOMMENT>{newline} {++yylineno;BEGIN(INITIAL);}
+{mlcomment} {BEGIN(MLCOMMENT);}
+<MLCOMMENT>. ;
+<MLCOMMENT>\n ++yylineno;
+<MLCOMMENT>{mlcomment_e} {BEGIN(INITIAL);}
 <<EOF>>		yyterminate();
 {ws}		;	/* ignore whitespace */
 {newline}	yylineno++;

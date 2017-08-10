@@ -167,34 +167,46 @@ void dw_create_section(char *s,off_t x,int xb){
 	int sect;
 	sect=SECT_NULL;
 	if(!fc_ptr) {fprintf(stderr,"no file open\n"); return;}
-	printf("create sect....\n");
+	if(!xb) x=fc_ptr->seek;
+	//printf("create sect....\n");
 	switch(fc_ptr->file_type) {
 		case FT_ELF:
 			if((strcmp(s,"elf"))==0) sect=SECT_ELF;
 			if((strcmp(s,"ph"))==0) sect=SECT_PH;
 			if((strcmp(s,"sh"))==0) sect=SECT_SH;
 			//create_elf_hdr(sect,offs,grow,update);
+			create_elf_hdr(sect,x,true,true);
+			if(sect==SECT_NULL) fprintf(stderr,"unknown section name\n");
+			break;
 			break;
 		case FT_FATMACHO:
 			if((strcmp(s,"fat"))==0) sect=SECT_FATMACHO;
 			if((strcmp(s,"arch"))==0) sect=SECT_FATARCH;
 			//create_fatmacho_hdr(sect,offs,grow,update);
+			create_fatmacho_hdr(sect,x,true,true);
+			if(sect==SECT_NULL) fprintf(stderr,"unknown section name\n");
+			break;
 			break;
 		case FT_MACHO:
 			if((strcmp(s,"mac"))==0) sect=SECT_MAC;
 			if((strcmp(s,"lc"))==0) sect=SECT_LC;
 			if((strcmp(s,"sect"))==0) sect=SECT_MACSECT;
 			//create_macho_hdr(sect,offs,grow,update);
+			create_macho_hdr(sect,x,true,true);
+			if(sect==SECT_NULL) fprintf(stderr,"unknown section name\n");
+			break;
 			break;
 		case FT_PE:
 			if((strcmp(s,"mz"))==0) sect=SECT_MZ;
 			if((strcmp(s,"pe"))==0) sect=SECT_PE;
 			if((strcmp(s,"sect"))==0) sect=SECT_PESECT;
 			//create_pe_hdr(sect,offs,grow,update);
+			create_pe_hdr(sect,x,true,true);
+			if(sect==SECT_NULL) fprintf(stderr,"unknown section name\n");
 			break;
 		default:
 			printf("unknown file type, cannot create header.\n");
 			break;
 	}
-	printf("%s %lld\n",s,(long long)x);
+	//printf("%s %lld\n",s,(long long)x);
 }
