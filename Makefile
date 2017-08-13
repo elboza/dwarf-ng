@@ -29,6 +29,7 @@ install:
 	mkdir -p ${DESTDIR}${MANDIR}
 	cp -p ${MANSRC} ${DESTDIR}${MANDIR}/${MANTARGET}
 	chmod 644 ${DESTDIR}${MANDIR}/${MANTARGET}
+	if [ ! -f $(wildcard ~/.dwarfrc) ]; then cp src/dwarfrc ~/.dwarfrc ;echo ".."; fi
 	
 uninstall:
 	rm -f ${DESTDIR}${BINDIR}/${TARGET}
