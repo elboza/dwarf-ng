@@ -205,8 +205,6 @@ int main(int argc,char **argv)
 	//execute(cmd);
 	if(action.file)
 	{
-		//sprintf(fileopen,"open %s",filename);
-		//execute(fileopen);
 		file_open(NULL,filename,true);
 		//free_completion();
 		add_sh_completion();
@@ -228,10 +226,7 @@ int main(int argc,char **argv)
 	if(action.shell)
 	{
 		shell();
+		printf("Bye.\n");
 	}
-	
-	printf("Bye.\n");
-	//free(cmd);
-	//file_close();
 	return 0;
 }

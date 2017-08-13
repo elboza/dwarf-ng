@@ -1,8 +1,9 @@
 #dwarfrc config file template
 
-work_on_tmpcopy=false
+work_on_tmpcopy=yes
 verbose=0
 tmpdir="/tmp"
 tmpname="dw_temp_file"
 colors=yes
+#theme=2
 

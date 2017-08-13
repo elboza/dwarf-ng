@@ -28,6 +28,10 @@
 #include<math.h>
 #include"libdwarf.h"
 
+#ifndef MAP_ANONYMOUS
+//for old osx compatibility
+#define MAP_ANONYMOUS MAP_ANON
+#endif
 extern FILE *cfgyyin;
 extern int errno,cfgyydebug,cfgyyparse(void);
 
