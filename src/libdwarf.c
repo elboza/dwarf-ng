@@ -88,6 +88,7 @@ void cfg_reset(void)
 	cfg.block=0x100;
 	cfg.colors=false;
 	cfg.theme=E_THEME_NONE;
+	cfg.inshell=0;
 	strcpy(cfg.copydir,"/tmp");
 	strcpy(cfg.copyname,"dw_temp_file");
 	cfg.next=NULL;
@@ -116,6 +117,7 @@ struct _cfg* newfilecfg(void)
 	ptr->block=cfg.block;
 	ptr->colors=cfg.colors;
 	ptr->theme=cfg.theme;
+	ptr->inshell=cfg.inshell;
 	strcpy(ptr->copydir,cfg.copydir);
 	strcpy(ptr->copyname,cfg.copyname);
 	ptr->prev=NULL;
@@ -188,7 +190,7 @@ void file_open(struct _fmt *fmt,char *s,int probeb)
 	enum{opencpspec,opencpnorm,opennorm,noopen};
 	struct stat st;
 	int x,opentype;
-	char openstr[1024],execstr[4096];
+	char openstr[1024],execstr[4096],nooutput[255];
 	off_t filesize;
 	x=stat(s,&st);
 	if(x==-1) {warn("error obtaining stat info");return;}
@@ -229,7 +231,9 @@ void file_open(struct _fmt *fmt,char *s,int probeb)
 			fc_ptr->can_grow=true;
 			fc_ptr->writable=true;
 		}
-		sprintf(execstr,"dd if=%s of=%s %s",s,fc_ptr->copyname,openstr);
+		strcpy(nooutput,"");
+		if(fc_ptr) if(!fc_ptr->inshell) strcpy(nooutput,"> /dev/null 2> /dev/null");
+		sprintf(execstr,"dd if=%s of=%s %s %s",s,fc_ptr->copyname,openstr,nooutput);
 		x=system(execstr);
 		if(x==-1) {warn("error making copyfile");rmfilecfg(fc_ptr);return;}
 		fc_ptr->fd=open(fc_ptr->copyname,O_RDWR);
@@ -254,7 +258,7 @@ void file_open(struct _fmt *fmt,char *s,int probeb)
 	fc_ptr->faddr=(char*)mmap(NULL,(size_t)filesize,PROT_READ|PROT_WRITE,MAP_FILE|MAP_SHARED,fc_ptr->fd,(off_t)0);
 	if(fc_ptr->faddr==MAP_FAILED) {warn("error on mmap(ing) the file");close(fc_ptr->fd);rmfilecfg(fc_ptr);return;}
 	if(probeb) file_probe();
-	printf("%s opened\n",s);
+	if(fc_ptr) if(fc_ptr->inshell) printf("%s opened\n",s);
 }
 void open_stdin(void){
 	size_t buffsize=sizeof(char)*4096;

@@ -66,6 +66,7 @@ struct _cfg {
 	off_t block;
 	int colors;
 	int theme;
+	int inshell;
 	struct _cfg *prev,*next;
 }cfg,*filecfg_first,*filecfg_last,*fc_ptr;
 

@@ -38,6 +38,9 @@ show dwarf-ng's version number
 .B -f <file>, --file <file>
 open file
 .TP
+.B -p, --probe
+probe file and print file type and info
+.TP
 .B -C [n], --colors [n]
 colored output (n=theme num)
 .TP

@@ -64,6 +64,7 @@ valid options:
 -x <file>       --execute <file>        execute file script
 -v              --version               show dwarf-ng's version number
 -f <file>       --file <file>           open file
+-p              --probe                 probe file and print file type and info
 -C [n]          --colors [n]            colored output (n=theme num)
 -B              --nocolors              nocolored output
 -T [n]          --theme [n]             theme 2 colored output (n=theme num)

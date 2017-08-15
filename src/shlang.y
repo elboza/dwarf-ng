@@ -211,7 +211,7 @@ command: /*empty*/
 		|DW_OPEN_NEW fmt filename {dw_open_create($2,$3,NULL);}
 		|DW_OPEN_NEW fmt filename '!' WORD {dw_open_create($2,$3,$5);}
 		|DW_OPEN_NEW fmt '!' WORD {dw_open_create($2,NULL,$4);}
-		|DW_OPEN_TYPE filename {dw_open_type($2);}
+		|DW_OPEN_TYPE filename {dw_open_type($2);free_completion();add_sh_completion();}
 		|DW_OPEN_LIGHT fmt filename {file_open($2,$3,false);}
 		|DW_OPEN_PROBE {free_completion();file_probe();add_sh_completion();}
 		|DW_PRINT_NUMBER fmt fmt {dw_print_number($2,0,false,$3,false);}

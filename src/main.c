@@ -35,6 +35,7 @@ struct m_action{
 	int script;
 	int exec;
 	int stdin;
+	int probe;
 };
 void usage()
 {
@@ -50,6 +51,7 @@ void usage()
 	printf("-x <file>       --execute <file>        execute file script\n");
 	printf("-v              --version               show dwarf-ng's version number\n");
 	printf("-f <file>       --file <file>           open file\n");
+	printf("-p              --probe                 probe file and print file type and info\n");
 	printf("-C [n]          --colors [n]            colored output (n=theme num)\n");
 	printf("-B              --nocolors              nocolored output\n");
 	printf("-T [n]          --theme [n]             theme 2 colored output (n=theme num)\n");
@@ -84,6 +86,7 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 	action->file=0;
 	action->exec=0;
 	action->stdin=0;
+	action->probe=0;
 	while (1)
 	{
 		static struct option long_options[] =
@@ -106,16 +109,18 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			{"seek",required_argument,0,'S'},
 			{"block",required_argument,0,'b'},
 			{"file",required_argument,0,'f'},
+			{"probe",required_argument,0,'p'},
 			{0,0,0,0,}
 			
 		};
 		int option_index = 0;
-		c = getopt_long (argc, argv, "PT::C::Bsvhie:c:x:WD:N:S:b:f:",long_options, &option_index);
+		c = getopt_long (argc, argv, "pPT::C::Bsvhie:c:x:WD:N:S:b:f:",long_options, &option_index);
 		if (c == -1) break;
 		switch(c)
 		{
 			case 'i':
 				action->shell=1;
+				cfg.inshell=1;
 				//shell();
 				//strncpy(cmd,"quit;",1024);
 				break;
@@ -141,6 +146,9 @@ void parse_args(int argc,char **argv,struct m_action *action,char *f2,char *cmds
 			case 'f':
 				strncpy(filename,optarg,FILENAME_LEN);
 				action->file=1;
+				break;
+			case 'p':
+				action->probe=1;
 				break;
 			case 'T':
 				cfg.colors=true;
@@ -214,6 +222,9 @@ int main(int argc,char **argv)
 		open_stdin();
 		reset_stdin();
 		add_sh_completion();
+	}
+	if(action.probe){
+		sw_do_info();
 	}
 	if(action.script)
 	{
