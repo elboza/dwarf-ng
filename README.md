@@ -104,7 +104,7 @@ command[?][+] [%nx] [data] [offset]    n=times,x=format
 ##### open/opened file help
 ```
 open/opened files commands:
-| o [%x] file [!type]       open file (o foo !elf ;open foo as elf file)(o foo !! ;open foo as generic no type)(x=w write-on-copy, x=f no write-on-copy).
+| o [%x] file               open file (o foo) (o %%w foo)(x=w write-on-copy, x=f no write-on-copy).
 | oc                        close opened file.
 | ol                        show opened files list.
 | os                        show opened file size.
@@ -116,7 +116,7 @@ open/opened files commands:
 | oT type                   change file type to 'type' (oT elf).
 | oN [%x] [filename] [!type] open new empty file [named filename] x=w (work-on-copy) x=f (no-work-on-copy).
 | oP                        probe opened file type and load data struct.
-| oL                        (probe (oP) alias).
+| oL                        probe opened file type and load data struct.(probe (oP) alias).
 | oO  [%x] filename         open filename without probing filetype and without loading data structures (x=w write-on-copy, x=f no-write-on-copy).
 ```
 
@@ -224,7 +224,54 @@ $pe::FileHeader
 $pe::OptionalHeader
 PE section: $sect[0..n]
 ```
+#### EXAMPLES
 
+##### var assignment
+```
+a=5; pp a
+a=7
+pp a
+b=3
+c=a+b+7
+pp c
+pp %x c		#prints c variable in hexadecimal format
+```
+
+##### structured variable
+```
+o myfile              #open the file
+i                     #prints file's main structures
+pp $elf               #prints the main elf structure (assuming an elf file :) )
+pp $elf::ph_num       #prints program header's number
+$elf::ph_num=7        #sets program header number
+a=$sh[7]::offset      #puts into 'a' variable the 'offset' member of the 8th section header
+pp $ph                #prints a list of all program header
+pp $sh[0]             #prints the 1st section header details
+```
+
+##### offsets
+```
+pp @<       #prints the offset of the beginnig of the opened file (zero ;) )
+pp @>       #prints the offset of the end of size (filesize ;) )
+os          #equivalent to print @>
+a=@sh[1]    #a is the offset of the beginning of the 2nd section header
+c=@sh[1]<   #c=a
+b=@sh[1]>   #b is the offset of the end of the 2nd section header
+wx %10 '0' $sh[4]::offset   #inject 10 times the value 0 (zero) from '$sh[4]::offset' offset
+wf ./vir.bin @ph[4]>        #inject the content of "vir.bin" file from the end of the 5th program header
+```
+
+##### header create
+```
+Sc+ ph @ph[2]>         #create a program header from the end of the 3rd program header's section 
+Sc+ sh @sh[4]          #create a section header from the beginning of the 5th section and shift file so it won't overwrite data. 
+                       #old $sh[4] is now $sh[5] and the section created is $sh[4]
+$elf::sh_num=$elf::sh_num+1 #remember to increase the section number from the main elf header
+```
+##### hex editor && generic file operations
+```
+TODO
+```
 
 #### LICENSE
 
