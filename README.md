@@ -75,6 +75,12 @@ valid options:
 -s <offs>       --seek <offs>           set seek offset
 -b <size>       --block <size>          set block size
 ```
+### demo
+
+![Demo1](media/demo1.gif)
+
+![Demo2](media/demo2.gif)
+
 ### dwarf-ng general commands
 
 dwarf-ng is a powerful command line hex editor in the spirit of gdb.
@@ -272,6 +278,9 @@ $elf::sh_num=$elf::sh_num+1 #remember to increase the section number from the ma
 ```
 TODO
 ```
+
+### dwarf
+![dwarf](media/the-white-dwarf.jpg)
 
 #### LICENSE
 
