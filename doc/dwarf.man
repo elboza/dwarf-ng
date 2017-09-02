@@ -42,13 +42,13 @@ open file
 probe file and print file type and info
 .TP
 .B -C [n], --colors [n]
-colored output (n=theme num)
+colored output (n=theme num (optional))
 .TP
 .B -B, --nocolors
 nocolored output
 .TP
 .B -T [n], --theme [n]
-theme 2 colored output (n=theme num)
+theme 2 colored output (n=theme num (optional))
 .TP
 .B -W, --work-on-copy
 work on copy file

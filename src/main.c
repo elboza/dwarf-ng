@@ -52,9 +52,9 @@ void usage()
 	printf("-v              --version               show dwarf-ng's version number\n");
 	printf("-f <file>       --file <file>           open file\n");
 	printf("-p              --probe                 probe file and print file type and info\n");
-	printf("-C [n]          --colors [n]            colored output (n=theme num)\n");
+	printf("-C [n]          --colors [n]            colored output (n=theme num (opt.))\n");
 	printf("-B              --nocolors              nocolored output\n");
-	printf("-T [n]          --theme [n]             theme 2 colored output (n=theme num)\n");
+	printf("-T [n]          --theme [n]             theme 2 colored output (n=theme num (opt.))\n");
 	printf("-W              --work-on-copy          work on copy file\n");
 	printf("-P              --no-work-on-copy       no work on copy file\n");
 	printf("-D <name>       --tmpdir <name>         set tmp dir path\n");
