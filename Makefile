@@ -29,8 +29,8 @@ install:
 	mkdir -p ${DESTDIR}${MANDIR}
 	cp -p ${MANSRC} ${DESTDIR}${MANDIR}/${MANTARGET}
 	chmod 644 ${DESTDIR}${MANDIR}/${MANTARGET}
-	if [ ! -f /etc/dwarfrc ]; then cp src/dwarfrc /etc/dwarfrc ; echo "to modify your dwarfrc make a copy on your local folder: cp /etc/dwarfrc ~/.dwarfrc" ; fi
 	#if [ ! -f $(wildcard ~/.dwarfrc) ]; then echo ".." ; fi
+	if [ ! -f /etc/dwarfrc ]; then cp src/dwarfrc /etc/dwarfrc ; echo "to modify your dwarfrc make a copy on your local folder: cp /etc/dwarfrc ~/.dwarfrc" ; fi
 	
 uninstall:
 	rm -f ${DESTDIR}${BINDIR}/${TARGET}

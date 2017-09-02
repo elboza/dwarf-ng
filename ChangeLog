@@ -1,6 +1,15 @@
 
 ChangeLog:
 
+******    dwarf-ng, Version 0.4.0
+
+* added generic file editing.
+* added cmd line Hex Editor commands.
+* rewritten parser. new dwarf language/commands.
+* added term Colors.
+* added new features.
+* fixed some code bugs.
+
 ******    dwarf-ng, Version 0.3.2
 
 * fixed reduce conflicts in cfg parser. fixed type warnings in shlang parser.
