@@ -276,7 +276,27 @@ $elf::sh_num=$elf::sh_num+1 #remember to increase the section number from the ma
 ```
 ##### hex editor && generic file operations
 ```
-TODO
+o myfile      #open the file
+oO myfile     #open the file without loading data
+oP            #probe file type and loads file data
+x             #hexdump from actual offset
+x 0x100       #hexdump from offset 0x100
+s             #show current offset
+s 0x100       #set offset at 0x100
+b 0x33        #set block size eq 0x33
+pp %x 10+2    #print 10+2 expression result in hex
+pp %3 1       #print 3 times '1'
+pp %3x @0x100 #print 3 bytes nin hex format starting al 0x100 offset
+pp %3c @0     #print 3 char from offset 0
+ps %3         #print 3 chat from current offset
+oR+ 10        #resize file increase 10 bytes
+M 0 +10 0x100 #move 10 bytes block from offset 0 to offset 0x100
+M 0 0x23 0x44 #move bytes from 0 to 0x23 at new offset 0x44
+
+...
+
+(and many more....)
+
 ```
 
 ### dwarf
