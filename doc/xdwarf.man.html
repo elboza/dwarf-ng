@@ -1,259 +1,425 @@
-<HTML>
-<BODY>
-<PRE>
-<!-- Manpage converted by man2html 3.0.1 -->
-is a powerful object file manipulation tool and hex editor in the spirit of \fIgdb\fP. with \fIdwarf-ng\fP you can read and edit all the file's section headers as well as the raw data. With \fIdwarf-ng\fP you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. \fIdwarf-ng\fP also permits to inject easily new headers and pieces of code/data into the file.
-\fIdwarf-ng\fP currently handles \fIRaw\fP, \fIelf\fP (Elf32 and Elf64), \fIPE\fP (Portable executables, PE32 and PE+) and \fIMach-O (32 and 64 bit)\fP files format. In the future new files type will be added.
-.SH OPTIONS
-.TP
-.B -s, --stdin
+Content-type: text/html; charset=UTF-8
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML><HEAD><TITLE>Man page of dwarf-ng</TITLE>
+</HEAD><BODY>
+<H1>dwarf-ng</H1>
+Section: User Commands  (1)<BR>Updated: (c) 2007-2013-2017 Fernando Iazeolla<BR><A HREF="#index">Index</A>
+<A HREF="/cgi-bin/man/man2html">Return to Main Contents</A><HR>
+
+<A NAME="lbAB">&nbsp;</A>
+<H2>NAME</H2>
+
+dwarf-ng - a little and powerful object file manipulation tool and hex editor.
+<A NAME="lbAC">&nbsp;</A>
+<H2>SYNOPSIS</H2>
+
+<B>dwarf [ options ] [ file ]</B>
+
+<A NAME="lbAD">&nbsp;</A>
+<H2>DESCRIPTION</H2>
+
+<B>dwarf-ng</B>
+
+is a powerful object file manipulation tool and hex editor in the spirit of <I>gdb</I>. with <I>dwarf-ng</I> you can read and edit all the file's section headers as well as the raw data. With <I>dwarf-ng</I> you can create and customize new file's header and it can be used as a compiler back-end to create executables/object files. <I>dwarf-ng</I> also permits to inject easily new headers and pieces of code/data into the file.
+<I>dwarf-ng</I> currently handles <I>Raw</I>, <I>elf</I> (Elf32 and Elf64), <I>PE</I> (Portable executables, PE32 and PE+) and <I>Mach-O (32 and 64 bit)</I> files format. In the future new files type will be added.
+<A NAME="lbAE">&nbsp;</A>
+<H2>OPTIONS</H2>
+
+<DL COMPACT>
+<DT><B>-s, --stdin</B>
+
+<DD>
 file from stdin
-.TP
-.B -i, --shell --interactive
+<DT><B>-i, --shell --interactive</B>
+
+<DD>
 interactive (shell mode)
-.TP
-.B -h, --help
+<DT><B>-h, --help</B>
+
+<DD>
 show this help
-.TP
-.B -c '&lt;commands&gt;', --command '&lt;commands&gt;'
+<DT><B>-c '&lt;commands&gt;', --command '&lt;commands&gt;'</B>
+
+<DD>
 command  mode (execute commands)
-.P
+</DL>
+<P>
+
 For example,
-.B dwarf -c 'print 2+2'
+<B>dwarf -c 'print 2+2'</B>
+
 will output:
 4
-.TP
-.B -e '&lt;commands&gt;', --command '&lt;commands&gt;'
+<DL COMPACT>
+<DT><B>-e '&lt;commands&gt;', --command '&lt;commands&gt;'</B>
+
+<DD>
 command  mode alias (execute commands)
-.TP
-.B -x &lt;file&gt;, --execute &lt;file&gt;
+<DT><B>-x &lt;file&gt;, --execute &lt;file&gt;</B>
+
+<DD>
 execute file script
-.TP
-.B -v, --version
+<DT><B>-v, --version</B>
+
+<DD>
 show dwarf-ng's version number
-.TP
-.B -f &lt;file&gt;, --file &lt;file&gt;
+<DT><B>-f &lt;file&gt;, --file &lt;file&gt;</B>
+
+<DD>
 open file
-.TP
-.B -C [n], --colors [n]
-colored output (n=theme num)
-.TP
-.B -B, --nocolors
+<DT><B>-p, --probe</B>
+
+<DD>
+probe file and print file type and info
+<DT><B>-C [n], --colors [n]</B>
+
+<DD>
+colored output (n=theme num (optional))
+<DT><B>-B, --nocolors</B>
+
+<DD>
 nocolored output
-.TP
-.B -T [n], --theme [n]
-theme 2 colored output (n=theme num)
-.TP
-.B -W, --work-on-copy
+<DT><B>-T [n], --theme [n]</B>
+
+<DD>
+theme 2 colored output (n=theme num (optional))
+<DT><B>-W, --work-on-copy</B>
+
+<DD>
 work on copy file
-.TP
-.B -P, --no-work-on-copy
+<DT><B>-P, --no-work-on-copy</B>
+
+<DD>
 no work on copy file
-.TP
-.B -D &lt;name&gt;, --tmpdir &lt;name&gt;
+<DT><B>-D &lt;name&gt;, --tmpdir &lt;name&gt;</B>
+
+<DD>
 set tmp dir path
-.TP
-.B -N &lt;name&gt;, --tmpname &lt;name&gt;
-.TP
-.B COMMENTS
+<DT><B>-N &lt;name&gt;, --tmpname &lt;name&gt;</B>
+
+<DD>
+set tmp filename
+<DT><B>-s &lt;offs&gt;, --seek &lt;offs&gt;</B>
+
+<DD>
+set seek offset
+<DT><B>-b &lt;size&gt;, --block &lt;size&gt;</B>
+
+<DD>
+set block size
+<DT>If more than one or all options are given at the same time the execution order will be: 1)open the file in the command line, 2)loads file structures, 3)execute the script file(-x), 4)executes commands from command line(-c), 5)enter the shell(-i)<DD>
+</DL>
+<A NAME="lbAF">&nbsp;</A>
+<H2>THE DWARF'S LANGUAGE</H2>
+
+<DL COMPACT>
+<DT><B>COMMAND SEPARATOR</B>
+
+<DD>
+the command separator is the semicolon character '<B>;</B>' .
+{cmd};{cmd}
+<DT><B>COMMENTS</B>
+
+<DD>
 a comment begins with the '#' symbol and ends at the end of the line (CRLF)
-.TP
-.B VARIABLES
-.B dwarf-ng 
+<DT><B>VARIABLES</B>
+
+<DD>
+<B>dwarf-ng </B>
+
 recognizes two types of variables: the normal variables (simply called variables) and the structured variables.
-The normal \fBvariables\fP are litteral words and are created by the user for normal variable operation (\fIi.e. a=5; b=a+3; print b\fP ).
-The \fBstructured variables\fP are created by \fBdwarf\fP when it loads a file into memory and are preceded by the dollar symbol (\fB$\fP). The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
-\fIprint $elf::ph_num\fP will print the ph_num variable of the main header ($elf) of a Elf file.
-\fI$elf::sh_num=3\fP will modify the sh_num (number of section headers) in the main header ($elf) of the Elf file.
-.TP
-.B EXPRESSIONS
-Expressions \fBEXPR\fP are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a \fB0x\fP...example: a=0x10 (a is 16 decimal!).
-.TP
-.B OFFSETS
-offsets syntax is \fI @foo&lt; \fP or \fI @foo&gt; \fP where \fIfoo\fP is a symbol referring to a specific file data structure. The major (&gt;) or minor (&lt;) symbol indicate if the offset point to the end (&gt;) or the beginning (&lt;) of the specified data structure. whith \fB@&lt;\fP we indicate the beginning of the file. Whith \fB@&gt;\fP wh indicate the end of the file. For example \fIprint @&gt;\fP will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. a=@&gt;+3 will assign to the variable a the length of the file plus 3).
-.SH GENERAL COMMANDS
-.TP
-.B MAIN COMMANDS SECTION
- Append '?' to any char command to get detailed help.
- general command syntax:
- command[?][+] [%nx] [data] [offset]    n=times,x=format
- | ?                this help
- | q                exit dwarf-ng interpreter
- | i                show file info and headers info.
- | o[?]             open/opened file commands.
- | b[?]             See / change block size.
- | s[?] [addr]      seek to address.
- | e[?]             show config vars.
- | M[?]             move block of file around.
- | p[?]             print commands.
- | x[?]             just an alias for px (print hex).
- | w[?]             write operations.
- | S[?]             section headers operations.
- | !'commands'      execute commands into shell (bash).
-.TP
-.B open/opened file commands
- open/opened files commands:
- | o [%x] file [!type]       open file (o foo !elf ;open foo as elf file)(o foo !! ;open foo as generic no type)(x=w write-on-copy, x=f no write-on-copy).
- | oc                        close opened file.
- | ol                        show opened files list.
- | os                        show opened file size.
- | ou  n                     switch to opened file number n
- | oR  [+ -]n                resize opened file of [+ -]n bytes.
- | oR+ n                     increaes size of opened file of n bytes.
- | oR- n                     decreasesize of opened file of n bytes.
- | oS [filename]             save file (to filename).
- | oT type                   change file type to 'type' (oT elf).
- | oN [%x] [filename] [!type] open new empty file [named filename] x=w (work-on-copy) x=f (no-work-on-copy).
- | oP                        probe opened file type and load data struct.
- | oL                        (probe (oP) alias).
- | s+            Redo seek
- | s- n          Seek n bytes backward
- | s+ n          Seek n bytes forward
- | s--           Seek blocksize bytes backward
- | s++           Seek blocksize bytes forward
- | s*            List undo seek history
- | s/ DATA       Search for next occurrence of 'DATA'
- | s/x 9091      Search for next occurrence of \x90\x91
- | ss            Seek silently (without adding an entry to the seek history)
- | s             Print current address
-.TP
-.B print commands
- | pp[?] [%nx] [@]expr     generic print function.
- | px [%n][x]              hex print of n bytes from offset x.
- | pxl n                   hex print n lines.
- | pxx [%n][x]             hex pretty print of n bytes from offset x.
- | ps [%n][x]              print a string at offset x of n len.
- | pn [%x] [offs] [!%z]    print number (cC=char, sS=short(little, big endian), wW=word(little,big endian), qQ=quad) from offset in z format (d=decimal,x=hex) .
- | x  [%n][x]              same as px.
- | xl  n                   same as pxl.
- | xx [%n][x]              same as pxx.
-.TP
-.B write commands
-write operations commands.
-append '+' to the commands to perform the operation increasing the file size (not overwriting operations).
- | wx[+] [%n] '9190' [offset]          write hex 0x91 0x90 at offset max n bytes.
- | ws[+] [%n] 'foo' [offset]           write string foo at offset max n chars.
- | wz[+] [%n] 'foo' [offset]           write string zero terminated at offset max n chars.
- | wps[+] [%np|b] 'pattern' [offset]   write string pattern n times at offset (p repeats n times the string, b repeats n times the bytes[can trunc string]).
- | wpx[+] [%np|b] 'pattern' [offset]   write hex pattern n times at offset (p repeats n times the string, b repeats n times the bytes[can trunc string]).
- | wf[+] [%n] ./myfile [offset]        write myfile at offset max n bytes.
- | wr[+] [%n][offset]                  write random bytes at offset max n times.
- | wle[+] [%1|2|4|8] number [offset]   write little endian number of 1,2,4,8 bytes at offset.
- | wbe[+] [%1|2|4|8] number [offset]   write big endian number of 1,2,4,8 bytes at offset.
- | wn[+] [%cCsSwWqQ] number [offset]   write number at offset (c C=1byte, s=le short(little endian 2 bytes), S=be short, w=le word, W=be word(big endian 4 bytes), q=le quad(little endian 8 bytes), Q=be quad).
- | wo[?]                               write over operations commands.
-.TP
-.B write over commands
+The normal <B>variables</B> are litteral words and are created by the user for normal variable operation (<I>i.e. a=5; b=a+3; print b</I> ).
+The <B>structured variables</B> are created by <B>dwarf</B> when it loads a file into memory and are preceded by the dollar symbol (<B>$</B>). The structured variables reflects the opened file structure and they depends on the file type opened. So, for example,  the Elf structured variables are different from the PE structured variables. Structured variables can be accessed in read or write mode like the normal variables. Structured variables syntax is similar to a C struct:
+<I>print $elf::ph_num</I> will print the ph_num variable of the main header ($elf) of a Elf file.
+<I>$elf::sh_num=3</I> will modify the sh_num (number of section headers) in the main header ($elf) of the Elf file.
+<DT><B>EXPRESSIONS</B>
+
+<DD>
+Expressions <B>EXPR</B> are in the form : EXPR + EXPR, or EXPR - EXPR, or EXPR * EXPR, or EXPR / EXPR, or EXPR %EXPR. a single expression item can be a number (in decimal or hex form 10=0xa) or an offset. hex values are preceded by a <B>0x</B>...example: a=0x10 (a is 16 decimal!).
+<DT><B>OFFSETS</B>
+
+<DD>
+offsets syntax is <I> @foo&lt; </I> or <I> @foo&gt; </I> where <I>foo</I> is a symbol referring to a specific file data structure. The major (&gt;) or minor (&lt;) symbol indicate if the offset point to the end (&gt;) or the beginning (&lt;) of the specified data structure. whith <B>@&lt;</B> we indicate the beginning of the file. Whith <B>@&gt;</B> wh indicate the end of the file. For example <I>print @&gt;</I> will output the lenth of the file. Offsets return an integer and can be combined in any expressions EXPR (i.e. a=@&gt;+3 will assign to the variable a the length of the file plus 3).
+</DL>
+<A NAME="lbAG">&nbsp;</A>
+<H2>GENERAL COMMANDS</H2>
+
+<DL COMPACT>
+<DT><B>MAIN COMMANDS SECTION</B>
+
+<DD>
+<BR>&nbsp;Append&nbsp;'?'&nbsp;to&nbsp;any&nbsp;char&nbsp;command&nbsp;to&nbsp;get&nbsp;detailed&nbsp;help.
+<BR>&nbsp;general&nbsp;command&nbsp;syntax:
+<BR>&nbsp;command[?][+]&nbsp;[%nx]&nbsp;[data]&nbsp;[offset]&nbsp;&nbsp;&nbsp;&nbsp;n=times,x=format
+<BR>&nbsp;|&nbsp;?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this&nbsp;help
+<BR>&nbsp;|&nbsp;q&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit&nbsp;dwarf-ng&nbsp;interpreter
+<BR>&nbsp;|&nbsp;i&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show&nbsp;file&nbsp;info&nbsp;and&nbsp;headers&nbsp;info.
+<BR>&nbsp;|&nbsp;o[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open/opened&nbsp;file&nbsp;commands.
+<BR>&nbsp;|&nbsp;b[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;See&nbsp;/&nbsp;change&nbsp;block&nbsp;size.
+<BR>&nbsp;|&nbsp;s[?]&nbsp;[addr]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;seek&nbsp;to&nbsp;address.
+<BR>&nbsp;|&nbsp;e[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show&nbsp;config&nbsp;vars.
+<BR>&nbsp;|&nbsp;M[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move&nbsp;block&nbsp;of&nbsp;file&nbsp;around.
+<BR>&nbsp;|&nbsp;p[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;commands.
+<BR>&nbsp;|&nbsp;x[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;just&nbsp;an&nbsp;alias&nbsp;for&nbsp;px&nbsp;(print&nbsp;hex).
+<BR>&nbsp;|&nbsp;w[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;operations.
+<BR>&nbsp;|&nbsp;S[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;section&nbsp;headers&nbsp;operations.
+<BR>&nbsp;|&nbsp;!'commands'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;execute&nbsp;commands&nbsp;into&nbsp;shell&nbsp;(bash).
+<DT><B>open/opened file commands</B>
+
+<DD>
+<BR>&nbsp;open/opened&nbsp;files&nbsp;commands:
+<BR>&nbsp;|&nbsp;o&nbsp;[%x]&nbsp;file&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;file&nbsp;(o&nbsp;foo)&nbsp;(o&nbsp;%%w&nbsp;foo)(x=w&nbsp;write-on-copy,&nbsp;x=f&nbsp;no&nbsp;write-on-copy).
+<BR>&nbsp;|&nbsp;oc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;close&nbsp;opened&nbsp;file.
+<BR>&nbsp;|&nbsp;ol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show&nbsp;opened&nbsp;files&nbsp;list.
+<BR>&nbsp;|&nbsp;os&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show&nbsp;opened&nbsp;file&nbsp;size.
+<BR>&nbsp;|&nbsp;ou&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch&nbsp;to&nbsp;opened&nbsp;file&nbsp;number&nbsp;n
+<BR>&nbsp;|&nbsp;oR&nbsp;&nbsp;[+&nbsp;-]n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resize&nbsp;opened&nbsp;file&nbsp;of&nbsp;[+&nbsp;-]n&nbsp;bytes.
+<BR>&nbsp;|&nbsp;oR+&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increaes&nbsp;size&nbsp;of&nbsp;opened&nbsp;file&nbsp;of&nbsp;n&nbsp;bytes.
+<BR>&nbsp;|&nbsp;oR-&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decreasesize&nbsp;of&nbsp;opened&nbsp;file&nbsp;of&nbsp;n&nbsp;bytes.
+<BR>&nbsp;|&nbsp;oS&nbsp;[filename]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;save&nbsp;file&nbsp;(to&nbsp;filename).
+<BR>&nbsp;|&nbsp;oT&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;change&nbsp;file&nbsp;type&nbsp;to&nbsp;'type'&nbsp;(oT&nbsp;elf).
+<BR>&nbsp;|&nbsp;oN&nbsp;[%x]&nbsp;[filename]&nbsp;[!type]&nbsp;open&nbsp;new&nbsp;empty&nbsp;file&nbsp;[named&nbsp;filename]&nbsp;x=w&nbsp;(work-on-copy)&nbsp;x=f&nbsp;(no-work-on-copy).
+<BR>&nbsp;|&nbsp;oP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;probe&nbsp;opened&nbsp;file&nbsp;type&nbsp;and&nbsp;load&nbsp;data&nbsp;struct.
+<BR>&nbsp;|&nbsp;oL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;probe&nbsp;opened&nbsp;file&nbsp;type&nbsp;and&nbsp;load&nbsp;data&nbsp;struct.(probe&nbsp;(oP)&nbsp;alias).
+<BR>&nbsp;|&nbsp;oO&nbsp;&nbsp;[%x]&nbsp;filename&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open&nbsp;filename&nbsp;without&nbsp;probing&nbsp;filetype&nbsp;and&nbsp;without&nbsp;loading&nbsp;data&nbsp;structures&nbsp;(x=w&nbsp;write-on-copy,&nbsp;x=f&nbsp;no-write-on-copy).
+<DT><B>block size commands</B>
+
+<DD>
+<BR>&nbsp;Get/Set&nbsp;block&nbsp;size
+<BR>&nbsp;|&nbsp;b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display&nbsp;current&nbsp;block&nbsp;size
+<BR>&nbsp;|&nbsp;b&nbsp;&nbsp;33&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set&nbsp;block&nbsp;size&nbsp;to&nbsp;33
+<BR>&nbsp;|&nbsp;b+&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increase&nbsp;blocksize&nbsp;by&nbsp;3
+<BR>&nbsp;|&nbsp;b-&nbsp;16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrease&nbsp;blocksize&nbsp;by&nbsp;16
+<BR>&nbsp;|&nbsp;b&nbsp;&nbsp;0xfa+4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numeric&nbsp;argument&nbsp;can&nbsp;be&nbsp;an&nbsp;expression
+<DT><B>seek commands</B>
+
+<DD>
+<BR>&nbsp;|&nbsp;s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Print&nbsp;current&nbsp;address
+<BR>&nbsp;|&nbsp;s&nbsp;&nbsp;addr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seek&nbsp;to&nbsp;address
+<BR>&nbsp;|&nbsp;s-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Undo&nbsp;seek
+<BR>&nbsp;|&nbsp;s+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Redo&nbsp;seek
+<BR>&nbsp;|&nbsp;s-&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seek&nbsp;n&nbsp;bytes&nbsp;backward
+<BR>&nbsp;|&nbsp;s+&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seek&nbsp;n&nbsp;bytes&nbsp;forward
+<BR>&nbsp;|&nbsp;s--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seek&nbsp;blocksize&nbsp;bytes&nbsp;backward
+<BR>&nbsp;|&nbsp;s++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seek&nbsp;blocksize&nbsp;bytes&nbsp;forward
+<BR>&nbsp;|&nbsp;s*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;undo&nbsp;seek&nbsp;history
+<BR>&nbsp;|&nbsp;s/&nbsp;DATA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;for&nbsp;next&nbsp;occurrence&nbsp;of&nbsp;'DATA'
+<BR>&nbsp;|&nbsp;s/x&nbsp;9091&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Search&nbsp;for&nbsp;next&nbsp;occurrence&nbsp;of&nbsp;0'&nbsp;[offset]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;hex&nbsp;0x91&nbsp;0x90&nbsp;at&nbsp;offset&nbsp;max&nbsp;n&nbsp;bytes.
+<BR>&nbsp;|&nbsp;ws[+]&nbsp;[%n]&nbsp;'foo'&nbsp;[offset]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;string&nbsp;foo&nbsp;at&nbsp;offset&nbsp;max&nbsp;n&nbsp;chars.
+<BR>&nbsp;|&nbsp;wz[+]&nbsp;[%n]&nbsp;'foo'&nbsp;[offset]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;string&nbsp;zero&nbsp;terminated&nbsp;at&nbsp;offset&nbsp;max&nbsp;n&nbsp;chars.
+<BR>&nbsp;|&nbsp;wps[+]&nbsp;[%np|b]&nbsp;'pattern'&nbsp;[offset]&nbsp;&nbsp;&nbsp;write&nbsp;string&nbsp;pattern&nbsp;n&nbsp;times&nbsp;at&nbsp;offset&nbsp;(p&nbsp;repeats&nbsp;n&nbsp;times&nbsp;the&nbsp;string,&nbsp;b&nbsp;repeats&nbsp;n&nbsp;times&nbsp;the&nbsp;bytes[can&nbsp;trunc&nbsp;string]).
+<BR>&nbsp;|&nbsp;wpx[+]&nbsp;[%np|b]&nbsp;'pattern'&nbsp;[offset]&nbsp;&nbsp;&nbsp;write&nbsp;hex&nbsp;pattern&nbsp;n&nbsp;times&nbsp;at&nbsp;offset&nbsp;(p&nbsp;repeats&nbsp;n&nbsp;times&nbsp;the&nbsp;string,&nbsp;b&nbsp;repeats&nbsp;n&nbsp;times&nbsp;the&nbsp;bytes[can&nbsp;trunc&nbsp;string]).
+<BR>&nbsp;|&nbsp;wf[+]&nbsp;[%n]&nbsp;./myfile&nbsp;[offset]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;myfile&nbsp;at&nbsp;offset&nbsp;max&nbsp;n&nbsp;bytes.
+<BR>&nbsp;|&nbsp;wr[+]&nbsp;[%n][offset]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;random&nbsp;bytes&nbsp;at&nbsp;offset&nbsp;max&nbsp;n&nbsp;times.
+<BR>&nbsp;|&nbsp;wle[+]&nbsp;[%1|2|4|8]&nbsp;number&nbsp;[offset]&nbsp;&nbsp;&nbsp;write&nbsp;little&nbsp;endian&nbsp;number&nbsp;of&nbsp;1,2,4,8&nbsp;bytes&nbsp;at&nbsp;offset.
+<BR>&nbsp;|&nbsp;wbe[+]&nbsp;[%1|2|4|8]&nbsp;number&nbsp;[offset]&nbsp;&nbsp;&nbsp;write&nbsp;big&nbsp;endian&nbsp;number&nbsp;of&nbsp;1,2,4,8&nbsp;bytes&nbsp;at&nbsp;offset.
+<BR>&nbsp;|&nbsp;wn[+]&nbsp;[%cCsSwWqQ]&nbsp;number&nbsp;[offset]&nbsp;&nbsp;&nbsp;write&nbsp;number&nbsp;at&nbsp;offset&nbsp;(c&nbsp;C=1byte,&nbsp;s=le&nbsp;short(little&nbsp;endian&nbsp;2&nbsp;bytes),&nbsp;S=be&nbsp;short,&nbsp;w=le&nbsp;word,&nbsp;W=be&nbsp;word(big&nbsp;endian&nbsp;4&nbsp;bytes),&nbsp;q=le&nbsp;quad(little&nbsp;endian&nbsp;8&nbsp;bytes),&nbsp;Q=be&nbsp;quad).
+<BR>&nbsp;|&nbsp;wo[?]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write&nbsp;over&nbsp;operations&nbsp;commands.
+<DT><B>write over commands</B>
+
+<DD>
 write over operations commands (n=times [bytes repeated], offs=offset)
- | woa [%n] expr [offs]        +=  addition (f.ex: woa 0x0102)
- | woA [%n] expr [offs]        &amp;=  and
- | wos [%n] expr [offs]        -=  substraction
- | wol [%n] expr [offs]        &lt;&lt;= shift left
- | wom [%n] expr [offs]        *=  multiply
- | wor [%n] expr [offs]        &gt;&gt;= shift right
- | woo [%n] expr [offs]        |=  or
- | wox [%n] expr [offs]        ^=  xor  (f.ex: wox %4 0x90 0x100)
- | wo2 [offs]                  2=  2 byte endian swap
- | wo4 [offs]                  4=  4 byte endian swap
- | wo8 [offs]                  8=  8 byte endian swap
-.SH CONFIG FILE
-.TP
-.SH FILE TYPES
-.TP
-.B ELF
-.nf
+<BR>&nbsp;|&nbsp;woa&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+=&nbsp;&nbsp;addition&nbsp;(f.ex:&nbsp;woa&nbsp;0x0102)
+<BR>&nbsp;|&nbsp;woA&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&amp;=&nbsp;&nbsp;and
+<BR>&nbsp;|&nbsp;wos&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-=&nbsp;&nbsp;substraction
+<BR>&nbsp;|&nbsp;wol&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&lt;=&nbsp;shift&nbsp;left
+<BR>&nbsp;|&nbsp;wom&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*=&nbsp;&nbsp;multiply
+<BR>&nbsp;|&nbsp;wor&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;&gt;=&nbsp;shift&nbsp;right
+<BR>&nbsp;|&nbsp;woo&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|=&nbsp;&nbsp;or
+<BR>&nbsp;|&nbsp;wox&nbsp;[%n]&nbsp;expr&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^=&nbsp;&nbsp;xor&nbsp;&nbsp;(f.ex:&nbsp;wox&nbsp;%4&nbsp;0x90&nbsp;0x100)
+<BR>&nbsp;|&nbsp;wo2&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2=&nbsp;&nbsp;2&nbsp;byte&nbsp;endian&nbsp;swap
+<BR>&nbsp;|&nbsp;wo4&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4=&nbsp;&nbsp;4&nbsp;byte&nbsp;endian&nbsp;swap
+<BR>&nbsp;|&nbsp;wo8&nbsp;[offs]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8=&nbsp;&nbsp;8&nbsp;byte&nbsp;endian&nbsp;swap
+</DL>
+<A NAME="lbAH">&nbsp;</A>
+<H2>CONFIG FILE</H2>
+
+<DL COMPACT>
+<DT><B>dwarfrc</B>
+
+<DD>
+<B>dwarf-ng</B> look for config files: <I>/etc/dwarfrc</I> first and then <I>.dwarfrc</I> in the $HOME directory. If no config file is founded dwarf-ng runs with default values. A snapshot of a config file il listed below:
+<PRE>
+#dwarf config file.
+work_on_tmpcopy=yes #(yes|no)
+verbose=0 #this is a comment
+tmpdir=&quot;/tmp&quot;
+tmpname=&quot;dw_temp_filex&quot;
+colors=yes #(yes|no)
+#theme=2 #(0=nocolors, 1=normalcolors, 2=boldcolors)
+
+</PRE>
+
+where a comment line begins with a <B>#</B>.
+<P>
+</DL>
+<A NAME="lbAI">&nbsp;</A>
+<H2>FILE TYPES</H2>
+
+<DL COMPACT>
+<DT><B>ELF</B>
+
+<DD>
+<PRE>
 main elf struct: $elf
 program header: $ph[0..n]
 section header: $sh[0..n]
-.fi
-.TP
-.B PE
-.nf
+</PRE>
+
+<DT><B>PE</B>
+
+<DD>
+<PRE>
 MZEXE struct: $mz
 pe main header: $pe
 $pe::FileHeader
 $pe::OptionalHeader
 PE section: $sect[0..n]
-.fi
-.TP
-.B MACH-O
-.nf
+</PRE>
+
+<DT><B>MACH-O</B>
+
+<DD>
+<PRE>
 Macho main header: $mac
 load command: $lc[0..n]
 Macho section: $lc::sect[0..n]
-.fi
-.TP
-.B MACH-O FAT BINARY (UNIVERSAL BINARY)
-.nf
+</PRE>
+
+<DT><B>MACH-O FAT BINARY (UNIVERSAL BINARY)</B>
+
+<DD>
+<PRE>
 main fat header: $fat
 file's architectures: $arch[0..n]
-.fi
-.SH EXAMPLES
-.B #//var assignment
-.nf
-a=5; print a
+</PRE>
+
+</DL>
+<A NAME="lbAJ">&nbsp;</A>
+<H2>EXAMPLES</H2>
+
+<B>#//var assignment</B>
+
+<PRE>
+a=5; pp a
 a=7
-print a
+pp a
 b=3
 c=a+b+7
-print c
-print %x c		#prints c variable in hexadecimal format
-.fi
+pp c
+pp %x c         #prints c variable in hexadecimal format
+</PRE>
 
-.B #//structured variable
-.nf
-open myfile			#open the file
-info				#prints file's main structures
-print $elf			#prints the main elf structure (assuming an elf file :) )
-print $elf::ph_num	#prints program header's number
-$elf::ph_num=7		#sets program header number
-a=$sh[7]::offset	#puts into 'a' variable the 'offset' member of the 8th section header
-print $ph			#prints a list of all program header
-print $sh[0]		#prints the 1st section header details
-.B #//header create
-.nf
-create "ph" @ph[2]&gt; !&gt;&gt;		#create a program header from the end of the 3rd program header's section 
-				#and don't expand the file (it will overwrite data)
-create "sh" @sh[4] &gt;&gt;		#create a section header from the beginning of the 5th section and shift file so it won't overwrite data. 
-				#old $sh[4] is now $sh[5] and the section created is $sh[4]
-$elf::sh_num=$elf::sh_num+1	#remember to increase the section number from the main elf header
-create "sh" @sh[4] &gt;&gt; ++	#the '++' option at the end updates automatically the number of section from the main header
-.fi
-and remember also to update the offset of the shifted sections manually
-.nf
-a=5
-while(a&lt;=$elf::sh_num)
-{
-	$sh[a]::offset=$sh[a]::offset+$elf::sh_entsize
-	a=a+1
-}
-.fi
-.SH SEE ALSO
-<B>readelf(1)</B>, <B>objdump(1)</B>, <B>ht(1)</B>, <B>otool(1)</B>, <B>gdb(1)</B>, <B>elf(5)</B>, <B>elfsh(1)</B>, <B>elfdump(1)</B>
-.SH AUTHOR
-.nf
+<P>
+<B>#//structured variable</B>
+
+<PRE>
+o myfile              #open the file
+i                     #prints file's main structures
+pp $elf               #prints the main elf structure (assuming an elf file :) )
+pp $elf::ph_num       #prints program header's number
+$elf::ph_num=7        #sets program header number
+a=$sh[7]::offset      #puts into 'a' variable the 'offset' member of the 8th section header
+pp $ph                #prints a list of all program header
+pp $sh[0]             #prints the 1st section header details
+</PRE>
+
+<P>
+<B>#//offsets</B>
+
+<PRE>
+pp @&lt;       #prints the offset of the beginnig of the opened file (zero ;) )
+pp @&gt;       #prints the offset of the end of size (filesize ;) )
+os          #equivalent to print @&gt;
+a=@sh[1]    #a is the offset of the beginning of the 2nd section header
+c=@sh[1]&lt;   #c=a
+b=@sh[1]&gt;   #b is the offset of the end of the 2nd section header
+wx %10 '0' $sh[4]::offset   #inject 10 times the value 0 (zero) from '$sh[4]::offset' offset
+wf ./vir.bin @ph[4]&gt;        #inject the content of &quot;vir.bin&quot; file from the end of the 5th program header
+</PRE>
+
+<P>
+<B>#//header create</B>
+
+<PRE>
+Sc+ ph @ph[2]&gt;         #create a program header from the end of the 3rd program header's section 
+Sc+ sh @sh[4]          #create a section header from the beginning of the 5th section and shift file so it won't overwrite data. 
+                       #old $sh[4] is now $sh[5] and the section created is $sh[4]
+$elf::sh_num=$elf::sh_num+1 #remember to increase the section number from the main elf header
+</PRE>
+
+<B>#//hex editor &amp;&amp; generic file operations</B>
+
+<PRE>
+o myfile      #open the file
+oO myfile     #open the file without loading data
+oP            #probe file type and loads file data
+x             #hexdump from actual offset
+x 0x100       #hexdump from offset 0x100
+s             #show current offset
+s 0x100       #set offset at 0x100
+b 0x33        #set block size eq 0x33
+pp %x 10+2    #print 10+2 expression result in hex
+pp %3 1       #print 3 times '1'
+pp %3x @0x100 #print 3 bytes nin hex format starting al 0x100 offset
+pp %3c @0     #print 3 char from offset 0
+ps %3         #print 3 chat from current offset
+oR+ 10        #resize file increase 10 bytes
+M 0 +10 0x100 #move 10 bytes block from offset 0 to offset 0x100
+M 0 0x23 0x44 #move bytes from 0 to 0x23 at new offset 0x44
+
+
+(and many more....)
+</PRE><A NAME="lbAK">&nbsp;</A>
+<H2>SEE ALSO</H2>
+
+<A HREF="/cgi-bin/man/man2html?1+readelf">readelf</A>(1), <A HREF="/cgi-bin/man/man2html?1+objdump">objdump</A>(1), <A HREF="/cgi-bin/man/man2html?1+ht">ht</A>(1), <A HREF="/cgi-bin/man/man2html?1+otool">otool</A>(1), <A HREF="/cgi-bin/man/man2html?1+gdb">gdb</A>(1), <A HREF="/cgi-bin/man/man2html?5+elf">elf</A>(5), <A HREF="/cgi-bin/man/man2html?1+elfsh">elfsh</A>(1), <A HREF="/cgi-bin/man/man2html?1+elfdump">elfdump</A>(1)
+<A NAME="lbAL">&nbsp;</A>
+<H2>AUTHOR</H2>
+
+<PRE>
 Fernando Iazeolla &lt; fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . &gt; - founder &amp; core developer.
-.SH COPYRIGHT
-.nf
+</PRE><A NAME="lbAM">&nbsp;</A>
+<H2>COPYRIGHT</H2>
+
+<PRE>
 Copyright (C) 2007-2013-2017 Fernando Iazeolla &lt; fernando.iazeolla_FOobAr_gmail_Baz_com, by replacing _fOoBar_ with a @ and _Baz_ with a . &gt;
-.P
+
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
-.P
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-.P
+
 You should have received a copy of the GNU General Public License
-along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+along with this program. If not, see &lt;<A HREF="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</A>&gt;.
+
 </PRE>
 <HR>
-<ADDRESS>
-Man(1) output converted with
-<a href="http://www.oac.uci.edu/indiv/ehood/man2html.html">man2html</a>
-</ADDRESS>
+<A NAME="index">&nbsp;</A><H2>Index</H2>
+<DL>
+<DT><A HREF="#lbAB">NAME</A><DD>
+<DT><A HREF="#lbAC">SYNOPSIS</A><DD>
+<DT><A HREF="#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="#lbAE">OPTIONS</A><DD>
+<DT><A HREF="#lbAF">THE DWARF'S LANGUAGE</A><DD>
+<DT><A HREF="#lbAG">GENERAL COMMANDS</A><DD>
+<DT><A HREF="#lbAH">CONFIG FILE</A><DD>
+<DT><A HREF="#lbAI">FILE TYPES</A><DD>
+<DT><A HREF="#lbAJ">EXAMPLES</A><DD>
+<DT><A HREF="#lbAK">SEE ALSO</A><DD>
+<DT><A HREF="#lbAL">AUTHOR</A><DD>
+<DT><A HREF="#lbAM">COPYRIGHT</A><DD>
+</DL>
+<HR>
+This document was created by
+<A HREF="/cgi-bin/man/man2html">man2html</A>,
+using the manual pages.<BR>
+Time: 19:53:22 GMT, September 27, 2017
 </BODY>
 </HTML>

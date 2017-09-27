@@ -42,6 +42,7 @@ dist:
 	cp Makefile ${DIST_DIR}/
 	cp VERSION ${DIST_DIR}/
 	cp README.md ${DIST_DIR}/
+	cp AUTHORS ${DIST_DIR}/
 	cp ChangeLog ${DIST_DIR}/
 	cp LICENCE ${DIST_DIR}/
 	mkdir -p ${DIST_DIR}/media
