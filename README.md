@@ -116,8 +116,8 @@ open/opened files commands:
 | os                        show opened file size.
 | ou  n                     switch to opened file number n
 | oR  [+ -]n                resize opened file of [+ -]n bytes.
-| oR+ n                     increaes size of opened file of n bytes.
-| oR- n                     decreasesize of opened file of n bytes.
+| oR+ n                     increase size of opened file of n bytes.
+| oR- n                     decrease size of opened file of n bytes.
 | oS [filename]             save file (to filename).
 | oT type                   change file type to 'type' (oT elf).
 | oN [%x] [filename] [!type] open new empty file [named filename] x=w (work-on-copy) x=f (no-work-on-copy).
